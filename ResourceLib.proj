@@ -2,6 +2,8 @@
  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
  <PropertyGroup Condition="'$(Configuration)'==''">
   <Configuration>Debug</Configuration>
+ </PropertyGroup>
+ <PropertyGroup>
   <ReleaseDir>Vestris.ResourceLib</ReleaseDir>
  </PropertyGroup>
  <Target Name="all">
@@ -34,6 +36,9 @@
   <MSBuild Projects="ResourceLib.sln" />
  </Target>
  <ItemGroup>
+  <SourceCodeFiles Include="*.sln" />
+  <SourceCodeFiles Include="*.proj" />
+  <SourceCodeFiles Include="*.cmd" />
   <SourceCodeFiles Include="Source/**/*.cs" />
   <SourceCodeFiles Include="Source/**/*.csproj" />
   <SourceCodeFiles Include="Source/**/License.txt" />
