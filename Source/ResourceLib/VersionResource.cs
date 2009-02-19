@@ -38,7 +38,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// A version resource
         /// </summary>
-        public VersionResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)
+        public VersionResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
             : base(hModule, hResource, type, name, wIDLanguage, size)
         {
             IntPtr lpRes = Kernel32.LockResource(hResource);
@@ -52,7 +52,7 @@ namespace Vestris.ResourceLib
         public VersionResource()
             : base(IntPtr.Zero, IntPtr.Zero, new IntPtr((int) Kernel32.ResourceTypes.RT_VERSION), new IntPtr(1), ResourceUtil.USENGLISHLANGID, 0)
         {
-            _header.Header = new Kernel32.RESOURCE_HEADER((ushort) Marshal.SizeOf(_fixedfileinfo));
+            _header.Header = new Kernel32.RESOURCE_HEADER((UInt16) Marshal.SizeOf(_fixedfileinfo));
         }
 
         public void LoadFrom(string filename)
@@ -60,7 +60,7 @@ namespace Vestris.ResourceLib
             LoadFrom(filename, ResourceUtil.NEUTRALLANGID);
         }
 
-        public void LoadFrom(string filename, ushort lang)
+        public void LoadFrom(string filename, UInt16 lang)
         {
             base.LoadFrom(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), lang);
         }
@@ -70,7 +70,7 @@ namespace Vestris.ResourceLib
             return LoadBytesFrom(filename, ResourceUtil.NEUTRALLANGID);
         }
 
-        public static byte[] LoadBytesFrom(string filename, ushort lang)
+        public static byte[] LoadBytesFrom(string filename, UInt16 lang)
         {
             return Resource.LoadBytesFrom(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), lang);
         }

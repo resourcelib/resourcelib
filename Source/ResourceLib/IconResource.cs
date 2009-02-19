@@ -43,7 +43,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// An icon resource
         /// </summary>
-        public IconResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)
+        public IconResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
             : base(hModule, hResource, type, name, wIDLanguage, size)
         {
             IntPtr lpRes = Kernel32.LockResource(hResource);

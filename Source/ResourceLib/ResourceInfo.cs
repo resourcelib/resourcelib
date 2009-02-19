@@ -108,7 +108,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Enumerate resource languages within a resource by name
         /// </summary>
-        private bool EnumResourceLanguages(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, ushort wIDLanguage, IntPtr lParam)
+        private bool EnumResourceLanguages(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, UInt16 wIDLanguage, IntPtr lParam)
         {
             string type = ResourceUtil.GetResourceName(lpszType);
 

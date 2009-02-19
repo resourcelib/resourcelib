@@ -10,7 +10,7 @@ namespace Vestris.ResourceLib
     {
         public static bool IsIntResource(IntPtr value)
         {
-            if (((uint)value) > ushort.MaxValue)
+            if (((uint)value) > UInt16.MaxValue)
                 return false;
 
             return true;
@@ -49,7 +49,7 @@ namespace Vestris.ResourceLib
             if (pos % 2 != 0)
             {
                 long count = 2 - pos % 2;
-                Pad(w, (ushort)count);
+                Pad(w, (UInt16)count);
                 pos += count;
             }
 
@@ -63,7 +63,7 @@ namespace Vestris.ResourceLib
             if (pos % 4 != 0)
             {
                 long count = 4 - pos % 4;
-                Pad(w, (ushort) count);
+                Pad(w, (UInt16) count);
                 pos += count;
             }
 
@@ -81,14 +81,14 @@ namespace Vestris.ResourceLib
             w.Seek((int) cur, SeekOrigin.Begin);
         }
 
-        public static long Pad(BinaryWriter w, ushort len)
+        public static long Pad(BinaryWriter w, UInt16 len)
         {
             while (len-- > 0)
                 w.Write((byte) 0);
             return w.BaseStream.Position;
         }
 
-        public static ushort NEUTRALLANGID
+        public static UInt16 NEUTRALLANGID
         {
             get
             {
@@ -96,7 +96,7 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public static ushort USENGLISHLANGID
+        public static UInt16 USENGLISHLANGID
         {
             get
             {
@@ -104,19 +104,19 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public static ushort MAKELANGID(int primary, int sub)
+        public static UInt16 MAKELANGID(int primary, int sub)
         {
-            return (ushort) ((((ushort)sub) << 10) | ((ushort)primary));
+            return (UInt16) ((((UInt16)sub) << 10) | ((UInt16)primary));
         }
 
-        public static ushort PRIMARYLANGID(ushort lcid)
+        public static UInt16 PRIMARYLANGID(UInt16 lcid)
         {
-            return (ushort) (((ushort)lcid) & 0x3ff);
+            return (UInt16) (((UInt16)lcid) & 0x3ff);
         }
 
-        public static ushort SUBLANGID(ushort lcid)
+        public static UInt16 SUBLANGID(UInt16 lcid)
         {
-            return (ushort) (((ushort)lcid) >> 10);
+            return (UInt16) (((UInt16)lcid) >> 10);
         }
 
         public static byte[] GetBytes<T>(T anything)

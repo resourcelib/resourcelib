@@ -14,7 +14,7 @@ namespace Vestris.ResourceLib
     {
         protected IntPtr _type;
         protected IntPtr _name;
-        protected ushort _language;
+        protected UInt16 _language;
         protected IntPtr _hModule = IntPtr.Zero;
         protected IntPtr _hResource = IntPtr.Zero;
         protected int _size = 0;
@@ -27,7 +27,7 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public ushort Language
+        public UInt16 Language
         {
             get
             {
@@ -60,7 +60,7 @@ namespace Vestris.ResourceLib
 
         }
 
-        public Resource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)
+        public Resource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
         {
             _hModule = hModule;
             _type = type;
@@ -70,7 +70,7 @@ namespace Vestris.ResourceLib
             _size = size;
         }
 
-        public static byte[] LoadBytesFrom(string filename, IntPtr name, IntPtr type, ushort lang)
+        public static byte[] LoadBytesFrom(string filename, IntPtr name, IntPtr type, UInt16 lang)
         {
             IntPtr hModule = IntPtr.Zero;
 
@@ -111,7 +111,7 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public void LoadFrom(string filename, IntPtr name, IntPtr type, ushort lang)
+        public void LoadFrom(string filename, IntPtr name, IntPtr type, UInt16 lang)
         {
             IntPtr hModule = IntPtr.Zero;
 
@@ -172,7 +172,7 @@ namespace Vestris.ResourceLib
             return ms.ToArray();
         }
 
-        public void SaveTo(string filename, IntPtr name, IntPtr type, ushort langid)
+        public void SaveTo(string filename, IntPtr name, IntPtr type, UInt16 langid)
         {
             byte[] data = WriteAndGetBytes();
             SaveTo(filename, name, type, langid, data);
@@ -186,12 +186,12 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Delete a resource.
         /// </summary>
-        public static void Delete(string filename, IntPtr name, IntPtr type, ushort lang)
+        public static void Delete(string filename, IntPtr name, IntPtr type, UInt16 lang)
         {
             SaveTo(filename, name, type, lang, null);
         }
 
-        public static void SaveTo(string filename, IntPtr name, IntPtr type, ushort lang, byte[] data)
+        public static void SaveTo(string filename, IntPtr name, IntPtr type, UInt16 lang, byte[] data)
         {
             IntPtr h = Kernel32.BeginUpdateResource(filename, false);
 

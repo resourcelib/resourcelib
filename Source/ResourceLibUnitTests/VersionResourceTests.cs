@@ -52,7 +52,7 @@ namespace Vestris.ResourceLibUnitTests
             stringFileInfo["NewValue"] = string.Format("{0}\0", Guid.NewGuid());
 
             VarFileInfo varFileInfo = (VarFileInfo)versionResource["VarFileInfo"];
-            varFileInfo[0x409] = 1300;
+            varFileInfo[ResourceUtil.USENGLISHLANGID] = 1300;
 
             string targetFilename = Path.Combine(Path.GetTempPath(), "test.dll");
             File.Copy(filename, targetFilename, true);
@@ -108,7 +108,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [Test]
-        public void TestVersionConstructorBytes()
+        public void TestDeepCopyBytes()
         {
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
             Assert.IsTrue(File.Exists(filename));
@@ -152,7 +152,7 @@ namespace Vestris.ResourceLibUnitTests
                 {
                     VarTable varTable = new VarTable(enumerator.Current.Key);
                     varFileInfo.Vars.Add(enumerator.Current.Key, varTable);
-                    Dictionary<ushort, ushort>.Enumerator translationEnumerator = enumerator.Current.Value.Languages.GetEnumerator();
+                    Dictionary<UInt16, UInt16>.Enumerator translationEnumerator = enumerator.Current.Value.Languages.GetEnumerator();
                     while (translationEnumerator.MoveNext())
                     {
                         varTable.Languages.Add(translationEnumerator.Current.Key, translationEnumerator.Current.Value);
@@ -164,7 +164,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [Test]
-        public void TestDeleteAndSaveVersionResource()
+        public void TestDeleteDeepCopyAndSaveVersionResource()
         {
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
             Assert.IsTrue(File.Exists(filename));
@@ -211,7 +211,7 @@ namespace Vestris.ResourceLibUnitTests
                 {
                     VarTable varTable = new VarTable(enumerator.Current.Key);
                     varFileInfo.Vars.Add(enumerator.Current.Key, varTable);
-                    Dictionary<ushort, ushort>.Enumerator translationEnumerator = enumerator.Current.Value.Languages.GetEnumerator();
+                    Dictionary<UInt16, UInt16>.Enumerator translationEnumerator = enumerator.Current.Value.Languages.GetEnumerator();
                     while (translationEnumerator.MoveNext())
                     {
                         varTable.Languages.Add(translationEnumerator.Current.Key, translationEnumerator.Current.Value);
@@ -240,6 +240,49 @@ namespace Vestris.ResourceLibUnitTests
             {
                 Assert.AreEqual(varResource.Value, varFileInfo[varResource.Key]);
             }
+        }
+
+        [Test]
+        public void TestDeleteAndSaveVersionResource()
+        {
+            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Assert.IsTrue(File.Exists(filename));
+            string targetFilename = Path.Combine(Path.GetTempPath(), "atl.dll");
+            File.Copy(filename, targetFilename, true);
+            Console.WriteLine(targetFilename);
+            VersionResource existingVersionResource = new VersionResource();
+            existingVersionResource.DeleteFrom(targetFilename);
+
+            VersionResource versionResource = new VersionResource();
+            versionResource.FileVersion = "1.2.3.4";
+            versionResource.ProductVersion = "4.5.6.7";
+
+            StringFileInfo stringFileInfo = new StringFileInfo();
+            versionResource[stringFileInfo.Key] = stringFileInfo;
+            StringTable stringFileInfoStrings = new StringTable("040904b0");
+            stringFileInfo.Strings.Add(stringFileInfoStrings.Key, stringFileInfoStrings);
+            stringFileInfoStrings["ProductName"] = "ResourceLib\0";
+            stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib\0";
+            stringFileInfoStrings["CompanyName"] = "Vestris Inc.\0";
+            stringFileInfoStrings["LegalCopyright"] = "All Rights Reserved\0";
+            stringFileInfoStrings["Comments"] = string.Format("{0}\0", Guid.NewGuid());
+            stringFileInfoStrings["ProductVersion"] = string.Format("{0}\0", versionResource.ProductVersion);
+
+            VarFileInfo varFileInfo = new VarFileInfo();
+            versionResource[varFileInfo.Key] = varFileInfo;
+            VarTable varFileInfoTranslation = new VarTable("Translation");
+            varFileInfo.Vars.Add(varFileInfoTranslation.Key, varFileInfoTranslation);
+            varFileInfoTranslation[ResourceUtil.USENGLISHLANGID] = 1300;
+
+            versionResource.SaveTo(targetFilename);
+            Console.WriteLine("Reloading {0}", targetFilename);
+
+            VersionResource newVersionResource = new VersionResource();
+            newVersionResource.LoadFrom(targetFilename);
+            DumpResource.Dump(newVersionResource);
+
+            Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
+            Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
         }
 
         [Test]

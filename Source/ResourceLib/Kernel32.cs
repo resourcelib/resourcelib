@@ -185,13 +185,13 @@ namespace Vestris.ResourceLib
         [DllImport("kernel32.dll", EntryPoint = "EnumResourceLanguagesW", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern bool EnumResourceLanguages(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, EnumResourceLanguagesDelegate lpEnumFunc, IntPtr lParam);
 
-        public delegate bool EnumResourceLanguagesDelegate(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, ushort wIDLanguage, IntPtr lParam);
+        public delegate bool EnumResourceLanguagesDelegate(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, UInt16 wIDLanguage, IntPtr lParam);
 
         [DllImport("kernel32.dll", EntryPoint = "FindResource", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr FindResource(IntPtr hModule, IntPtr lpszName, IntPtr lpszType);
 
         [DllImport("kernel32.dll", EntryPoint = "FindResourceExW", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr FindResourceEx(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, ushort wLanguage);
+        public static extern IntPtr FindResourceEx(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, UInt16 wLanguage);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr LockResource(IntPtr hResData);
@@ -214,10 +214,10 @@ namespace Vestris.ResourceLib
         [DllImport("kernel32.dll", EntryPoint = "EndUpdateResourceW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         public static extern bool EndUpdateResource(IntPtr hUpdate, bool fDiscard);
 
-        public const ushort LANG_NEUTRAL = 0;
-        public const ushort LANG_ENGLISH = 9;
+        public const UInt16 LANG_NEUTRAL = 0;
+        public const UInt16 LANG_ENGLISH = 9;
 
-        public const ushort SUBLANG_NEUTRAL = 0;
-        public const ushort SUBLANG_ENGLISH_US = 1;
+        public const UInt16 SUBLANG_NEUTRAL = 0;
+        public const UInt16 SUBLANG_ENGLISH_US = 1;
     }
 }
