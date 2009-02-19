@@ -1,0 +1,2 @@
+(c) Daniel Doubrovkine (dblock@dblock.org), Vestris Inc., 2008, All Rights Reserved
+License: Code Project Open License, http://www.codeproject.com/info/cpol10.aspx
