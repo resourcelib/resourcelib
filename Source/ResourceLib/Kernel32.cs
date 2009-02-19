@@ -15,7 +15,7 @@ namespace Vestris.ResourceLib
         /// http://msdn.microsoft.com/en-us/library/aa909192.aspx
         /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct STRING_OR_VAR_INFO_HEADER
+        public struct RESOURCE_HEADER
         {
             public UInt16 wLength;
             public UInt16 wValueLength;

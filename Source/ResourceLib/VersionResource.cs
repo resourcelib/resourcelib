@@ -12,8 +12,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class VersionResource : Resource
     {
-        Kernel32.STRING_OR_VAR_INFO_HEADER _header;
-        private string _key;
+        ResourceTable _header = new ResourceTable();
         Kernel32.VS_FIXEDFILEINFO _fixedfileinfo;
         private Dictionary<string, ResourceTable> _resources = null;
         private byte[] _readBytes = null;
@@ -26,7 +25,7 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public Kernel32.STRING_OR_VAR_INFO_HEADER Header
+        public ResourceTable Header
         {
             get
             {
@@ -102,32 +101,21 @@ namespace Vestris.ResourceLib
         public void Load(IntPtr lpRes)
         {
             _resources = new Dictionary<string, ResourceTable>();
-            _header = (Kernel32.STRING_OR_VAR_INFO_HEADER) Marshal.PtrToStructure(lpRes, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
+            IntPtr pFixedFileInfo = _header.Load(lpRes);
 
             // save bytes for Bytes property
-            _readBytes = new byte[_header.wLength];
-            Marshal.Copy(lpRes, _readBytes, 0, _header.wLength);
-
-            IntPtr pBlockKey = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
-            _key = Marshal.PtrToStringUni(pBlockKey);
-
-            IntPtr pChild = ResourceUtil.Align(pBlockKey.ToInt32() + (_key.Length + 1) * 2);
+            _readBytes = new byte[_header.Header.wLength];
+            Marshal.Copy(lpRes, _readBytes, 0, _header.Header.wLength);
 
             _fixedfileinfo = (Kernel32.VS_FIXEDFILEINFO)Marshal.PtrToStructure(
-                pChild, typeof(Kernel32.VS_FIXEDFILEINFO));
+                pFixedFileInfo, typeof(Kernel32.VS_FIXEDFILEINFO));
 
-            pChild = ResourceUtil.Align(pChild.ToInt32() + _header.wValueLength);
+            IntPtr pChild = ResourceUtil.Align(pFixedFileInfo.ToInt32() + _header.Header.wValueLength);
 
-            Kernel32.STRING_OR_VAR_INFO_HEADER pChildInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER)Marshal.PtrToStructure(
-                pChild, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
-
-            while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))
+            while (pChild.ToInt32() < (lpRes.ToInt32() + _header.Header.wLength))
             {
-                ResourceTable rc = null;
-                IntPtr pKey = new IntPtr(pChild.ToInt32() + Marshal.SizeOf(pChildInfo));
-                string key = Marshal.PtrToStringUni(pKey);
-                IntPtr pData = ResourceUtil.Align(pKey.ToInt32() + (key.Length + 1) * 2);
-                switch (key)
+                ResourceTable rc = new ResourceTable(pChild);
+                switch (rc.Key)
                 {
                     case "StringFileInfo":
                         rc = new StringFileInfo(pChild);
@@ -137,12 +125,8 @@ namespace Vestris.ResourceLib
                         break;
                 }
 
-                _resources.Add(key, rc);
-
-                pChild = ResourceUtil.Align(pChild.ToInt32() + pChildInfo.wLength);
-
-                pChildInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER)Marshal.PtrToStructure(
-                    pChild, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
+                _resources.Add(rc.Key, rc);
+                pChild = ResourceUtil.Align(pChild.ToInt32() + rc.Header.wLength);
             }
         }
 
@@ -200,27 +184,14 @@ namespace Vestris.ResourceLib
 
         public override void Write(BinaryWriter w)
         {
-            // wLength
-            w.Write((UInt16) _header.wLength);
-            // write wValueLength
-            w.Write((UInt16) _header.wValueLength); // Marshal.SizeOf(_fixedfileinfo));
-            // write wType
-            w.Write((UInt16) _header.wType);
-            // write key
-            w.Write(Encoding.Unicode.GetBytes(_key));
-            // write null-terminator
-            w.Write((UInt16) 0);
-            // pad fixed info
-            ResourceUtil.PadToDWORD(w);
-            // write fixed file info
-            long wValuePos = w.BaseStream.Position;
+            _header.Write(w);
+            
             w.Write(ResourceUtil.GetBytes<Kernel32.VS_FIXEDFILEINFO>(_fixedfileinfo));
             ResourceUtil.PadToDWORD(w);
 
             Dictionary<string, ResourceTable>.Enumerator resourceEnum = _resources.GetEnumerator();
             while (resourceEnum.MoveNext())
             {
-                Console.WriteLine("Offset: {0}", w.BaseStream.Position);
                 resourceEnum.Current.Value.Write(w);
             }
         }
