@@ -44,9 +44,11 @@ namespace Vestris.ResourceLib
 
         public override void Write(BinaryWriter w)
         {
+            long headerPos = w.BaseStream.Position;
             base.Write(w);
 
             Dictionary<UInt16, UInt16>.Enumerator languagesEnum = _languages.GetEnumerator();
+            long valuePos = w.BaseStream.Position;
             while (languagesEnum.MoveNext())
             {
                 // id
@@ -54,6 +56,10 @@ namespace Vestris.ResourceLib
                 // code page
                 w.Write((UInt16) languagesEnum.Current.Value);
             }
+
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - valuePos, headerPos + 2);
+            ResourceUtil.PadToDWORD(w);
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
     }
 }

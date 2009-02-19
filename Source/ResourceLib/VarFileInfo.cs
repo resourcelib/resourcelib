@@ -40,6 +40,7 @@ namespace Vestris.ResourceLib
 
         public override void Write(BinaryWriter w)
         {
+            long headerPos = w.BaseStream.Position;
             base.Write(w);
 
             Dictionary<string, VarTable>.Enumerator variablesEnum = _variables.GetEnumerator();
@@ -47,6 +48,7 @@ namespace Vestris.ResourceLib
             {
                 variablesEnum.Current.Value.Write(w);
             }
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
     }
 }

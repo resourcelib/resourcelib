@@ -41,12 +41,31 @@ namespace Vestris.ResourceLib
 
         public override void Write(BinaryWriter w)
         {
+            long headerPos = w.BaseStream.Position;
             base.Write(w);
 
             Dictionary<string, StringTable>.Enumerator stringsEnum = _strings.GetEnumerator();
             while (stringsEnum.MoveNext())
             {
                 stringsEnum.Current.Value.Write(w);
+            }
+
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
+        }
+
+        public string this[string key]
+        {
+            get
+            {
+                Dictionary<string, StringTable>.Enumerator enumerator = _strings.GetEnumerator();
+                enumerator.MoveNext();
+                return enumerator.Current.Value[key];
+            }
+            set
+            {
+                Dictionary<string, StringTable>.Enumerator enumerator = _strings.GetEnumerator();
+                enumerator.MoveNext();
+                enumerator.Current.Value[key] = value;
             }
         }
     }

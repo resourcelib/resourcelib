@@ -40,12 +40,32 @@ namespace Vestris.ResourceLib
 
         public override void Write(BinaryWriter w)
         {
+            long headerPos = w.BaseStream.Position;
             base.Write(w);
 
             Dictionary<string, StringResource>.Enumerator stringsEnum = _strings.GetEnumerator();
             while (stringsEnum.MoveNext())
             {
                 stringsEnum.Current.Value.Write(w);
+            }
+
+            ResourceUtil.PadToDWORD(w);
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
+        }
+
+        public string this[string key]
+        {
+            get
+            {
+                return _strings[key].StringValue;
+            }
+            set
+            {
+                StringResource sr = null;
+                if (!_strings.TryGetValue(key, out sr))
+                    sr = new StringResource(key);
+
+                sr.Value = value;
             }
         }
     }

@@ -56,6 +56,17 @@ namespace Vestris.ResourceLib
             return pos;
         }
 
+        /// <summary>
+        /// Write the difference between current position and pos to address.
+        /// </summary>
+        public static void WriteAt(BinaryWriter w, long value, long address)
+        {
+            long cur = w.BaseStream.Position;
+            w.Seek((int) address, SeekOrigin.Begin);
+            w.Write((UInt16) value);
+            w.Seek((int) cur, SeekOrigin.Begin);
+        }
+
         public static long Pad(BinaryWriter w, ushort len)
         {
             while (len-- > 0)

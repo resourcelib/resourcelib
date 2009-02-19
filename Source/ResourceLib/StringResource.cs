@@ -45,6 +45,15 @@ namespace Vestris.ResourceLib
             {
                 return _value;
             }
+            set
+            {
+                _value = value;
+            }       
+        }
+
+        public StringResource(string key)
+        {
+            _key = key;
         }
 
         public StringResource(IntPtr lpRes)
@@ -67,25 +76,28 @@ namespace Vestris.ResourceLib
         public void Write(BinaryWriter w)
         {
             // write the block info
-            long wStringLengthPos = w.BaseStream.Position;
+            long headerPos = w.BaseStream.Position;
             // wLength
-            w.Write((UInt16)_header.wLength);
+            w.Write((UInt16) _header.wLength);
             // wValueLength
-            w.Write((UInt16)_header.wValueLength);
+            w.Write((UInt16) _header.wValueLength);
             // wType
-            w.Write((UInt16)_header.wType);
+            w.Write((UInt16) _header.wType);
             // szKey
             w.Write(Encoding.Unicode.GetBytes(_key));
             // null terminator
             w.Write((UInt16) 0);
             // pad fixed info
             ResourceUtil.PadToDWORD(w);
-            if (_header.wValueLength > 0 && _value != null)
+            long valuePos = w.BaseStream.Position;
+            if (_value != null)
             {
                 // Value
                 w.Write(Encoding.Unicode.GetBytes(_value));
             }
+            ResourceUtil.WriteAt(w, (w.BaseStream.Position - valuePos) / 2, headerPos + 2);
             ResourceUtil.PadToDWORD(w);
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
     }
 }

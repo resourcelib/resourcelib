@@ -50,7 +50,8 @@ namespace Vestris.ResourceLibUnitTests
         {
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
             Assert.IsTrue(File.Exists(filename));
-            VersionResource versionResource = new VersionResource(filename);
+            VersionResource versionResource = new VersionResource();
+            versionResource.LoadFrom(filename);
             Console.WriteLine("File version: {0}", versionResource.FileVersion);
             Console.WriteLine("Product version: {0}", versionResource.ProductVersion);
             Dictionary<string, ResourceTable>.Enumerator resourceEnumerator = versionResource.Resources.GetEnumerator();
@@ -121,19 +122,43 @@ namespace Vestris.ResourceLibUnitTests
             string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
             Assert.IsTrue(File.Exists(filename));
 
-            VersionResource versionResource = new VersionResource(filename);
+            VersionResource versionResource = new VersionResource();
+            versionResource.LoadFrom(filename);
             Console.WriteLine("File version: {0}", versionResource.FileVersion);
             Console.WriteLine("Product version: {0}", versionResource.ProductVersion);
             versionResource.FileVersion = "1.2.3.4";
+            versionResource.ProductVersion = "5.6.7.8";
+
+            //StringFileInfo stringFileInfo = (StringFileInfo) versionResource.Resources["StringFileInfo"];
+            //stringFileInfo["Comments"] = "test";
 
             string targetFilename = Path.Combine(Path.GetTempPath(), "test.dll");
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
-            versionResource.Save(targetFilename);
+            versionResource.SaveTo(targetFilename);
 
-            VersionResource newVersionResource = new VersionResource(targetFilename);
+            VersionResource newVersionResource = new VersionResource();
+            newVersionResource.LoadFrom(targetFilename);
             Console.WriteLine("File version: {0}", newVersionResource.FileVersion);
             Console.WriteLine("Product version: {0}", newVersionResource.ProductVersion);
+
+            Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
+            Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
+        }
+
+        [Test]
+        public void TestLoadAndSaveOriginalVersionResource()
+        {
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
+            Assert.IsTrue(File.Exists(filename));
+
+            string targetFilename = Path.Combine(Path.GetTempPath(), "test.dll");
+            Console.WriteLine(targetFilename);
+            File.Copy(filename, targetFilename, true);
+
+            byte[] data = VersionResource.LoadBytesFrom(filename);
+            VersionResource.SaveTo(targetFilename, data);
         }
 
         [Test]
@@ -143,17 +168,15 @@ namespace Vestris.ResourceLibUnitTests
             string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
             Assert.IsTrue(File.Exists(filename));
 
-            VersionResource versionResource = new VersionResource(filename);
+            VersionResource versionResource = new VersionResource();
+            versionResource.LoadFrom(filename);
             Console.WriteLine("File version: {0}", versionResource.FileVersion);
 
-            byte[] currentBytes = versionResource.ReadBytes; // ResourceUtil.GetBytes<Kernel32.VS_VERSIONINFO>(versionResource.VersionInfo);
-            byte[] newBytes = versionResource.GetBytes();
+            byte[] currentBytes = VersionResource.LoadBytesFrom(filename);
+            byte[] newBytes = versionResource.WriteAndGetBytes();
 
             Console.WriteLine("Current: {0}:{1}", currentBytes, currentBytes.Length);
             Console.WriteLine("New: {0}:{1}", newBytes, newBytes.Length);
-
-            // compare the first VS_VERSIONINFO bytes
-            // \todo skipping two bytes, size isn't the same until all fields are written
 
             StringBuilder currentString = new StringBuilder();
             StringBuilder newString = new StringBuilder();
@@ -174,8 +197,6 @@ namespace Vestris.ResourceLibUnitTests
 
                 Assert.AreEqual(currentBytes[i], newBytes[i], string.Format("Error at offset {0}", i));
             }
-
-            // \todo: comapre byte-to-byte
         }
 
     }
