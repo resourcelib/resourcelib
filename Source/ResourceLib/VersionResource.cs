@@ -15,15 +15,6 @@ namespace Vestris.ResourceLib
         ResourceTable _header = new ResourceTable();
         Kernel32.VS_FIXEDFILEINFO _fixedfileinfo;
         private Dictionary<string, ResourceTable> _resources = null;
-        private byte[] _readBytes = null;
-
-        public byte[] ReadBytes
-        {
-            get
-            {
-                return _readBytes;
-            }
-        }
 
         public ResourceTable Header
         {
@@ -55,57 +46,29 @@ namespace Vestris.ResourceLib
             Load(lpRes);
         }
 
-        public VersionResource(string filename)
+        public VersionResource()
         {
-            IntPtr hModule = IntPtr.Zero;
 
-            try
-            {
-                // load DLL
-                hModule = Kernel32.LoadLibraryEx(filename, IntPtr.Zero,
-                    Kernel32.DONT_RESOLVE_DLL_REFERENCES | Kernel32.LOAD_LIBRARY_AS_DATAFILE);
+        }
 
-                if (IntPtr.Zero == hModule)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
+        public void LoadFrom(string filename)
+        {
+            base.LoadFrom(filename, Marshal.StringToHGlobalUni("#1"), new IntPtr(16));
+        }
 
-                IntPtr hRes = Kernel32.FindResource(hModule, Marshal.StringToHGlobalUni("#1"), new IntPtr(Kernel32.RT_RCDATA));
-                if (IntPtr.Zero == hRes)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                IntPtr hGlobal = Kernel32.LoadResource(hModule, hRes);
-                if (IntPtr.Zero == hGlobal)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                IntPtr lpRes = Kernel32.LockResource(hGlobal);
-
-                if (lpRes == IntPtr.Zero)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                _size = Kernel32.SizeofResource(hModule, hRes);
-                if (_size <= 0)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                Load(lpRes);
-            }
-            finally
-            {
-                if (hModule != IntPtr.Zero)
-                    Kernel32.FreeLibrary(hModule);
-            }
+        public static byte[] LoadBytesFrom(string filename)
+        {
+            return Resource.LoadBytesFrom(filename, Marshal.StringToHGlobalUni("#1"), new IntPtr(16));
         }
 
         /// <summary>
         /// Load a version resource, heavily inspired from http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx
         /// </summary>
         /// <param name="lpRes"></param>
-        public void Load(IntPtr lpRes)
+        public override IntPtr Load(IntPtr lpRes)
         {
             _resources = new Dictionary<string, ResourceTable>();
             IntPtr pFixedFileInfo = _header.Load(lpRes);
-
-            // save bytes for Bytes property
-            _readBytes = new byte[_header.Header.wLength];
-            Marshal.Copy(lpRes, _readBytes, 0, _header.Header.wLength);
 
             _fixedfileinfo = (Kernel32.VS_FIXEDFILEINFO)Marshal.PtrToStructure(
                 pFixedFileInfo, typeof(Kernel32.VS_FIXEDFILEINFO));
@@ -128,6 +91,8 @@ namespace Vestris.ResourceLib
                 _resources.Add(rc.Key, rc);
                 pChild = ResourceUtil.Align(pChild.ToInt32() + rc.Header.wLength);
             }
+
+            return new IntPtr(lpRes.ToInt32() + _header.Header.wLength);
         }
 
         /// <summary>
@@ -203,7 +168,7 @@ namespace Vestris.ResourceLib
             if (h == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            byte[] data = GetBytes();
+            byte[] data = WriteAndGetBytes();
 
             if (!Kernel32.UpdateResource(h, "16", "#1",
                 (ushort) ResourceUtil.MAKELANGID(Kernel32.LANG_NEUTRAL, Kernel32.SUBLANG_NEUTRAL),

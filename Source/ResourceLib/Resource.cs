@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 using System.IO;
 
 namespace Vestris.ResourceLib
@@ -63,12 +64,99 @@ namespace Vestris.ResourceLib
             _size = size;
         }
 
+        public static byte[] LoadBytesFrom(string filename, IntPtr name, IntPtr type)
+        {
+            IntPtr hModule = IntPtr.Zero;
+
+            try
+            {
+                hModule = Kernel32.LoadLibraryEx(filename, IntPtr.Zero,
+                    Kernel32.DONT_RESOLVE_DLL_REFERENCES | Kernel32.LOAD_LIBRARY_AS_DATAFILE);
+
+                if (IntPtr.Zero == hModule)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                IntPtr hRes = Kernel32.FindResource(hModule, name, type);
+                if (IntPtr.Zero == hRes)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                IntPtr hGlobal = Kernel32.LoadResource(hModule, hRes);
+                if (IntPtr.Zero == hGlobal)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                IntPtr lpRes = Kernel32.LockResource(hGlobal);
+
+                if (lpRes == IntPtr.Zero)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                int size = Kernel32.SizeofResource(hModule, hRes);
+                if (size <= 0)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                byte[] bytes = new byte[size];
+                Marshal.Copy(lpRes, bytes, 0, size);
+
+                return bytes;
+            }
+            finally
+            {
+                if (hModule != IntPtr.Zero)
+                    Kernel32.FreeLibrary(hModule);
+            }
+        }
+
+        public void LoadFrom(string filename, IntPtr name, IntPtr type)
+        {
+            _type = ResourceUtil.GetResourceName(type);
+            _name = ResourceUtil.GetResourceName(name);
+
+            IntPtr hModule = IntPtr.Zero;
+
+            try
+            {                
+                hModule = Kernel32.LoadLibraryEx(filename, IntPtr.Zero,
+                    Kernel32.DONT_RESOLVE_DLL_REFERENCES | Kernel32.LOAD_LIBRARY_AS_DATAFILE);
+
+                if (IntPtr.Zero == hModule)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                IntPtr hRes = Kernel32.FindResource(hModule, name, type);
+                if (IntPtr.Zero == hRes)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                IntPtr hGlobal = Kernel32.LoadResource(hModule, hRes);
+                if (IntPtr.Zero == hGlobal)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                IntPtr lpRes = Kernel32.LockResource(hGlobal);
+
+                if (lpRes == IntPtr.Zero)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                _size = Kernel32.SizeofResource(hModule, hRes);
+                if (_size <= 0)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                Load(lpRes);
+            }
+            finally
+            {
+                if (hModule != IntPtr.Zero)
+                    Kernel32.FreeLibrary(hModule);
+            }
+        }
+
+        public virtual IntPtr Load(IntPtr lpRes)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual void Write(BinaryWriter w)
         {
             throw new NotImplementedException();
         }
 
-        public byte[] GetBytes()
+        public byte[] WriteAndGetBytes()
         {
             MemoryStream ms = new MemoryStream();
             BinaryWriter w = new BinaryWriter(ms, Encoding.Default);
