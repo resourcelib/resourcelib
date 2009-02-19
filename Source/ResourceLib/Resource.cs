@@ -10,11 +10,11 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class Resource
     {
-        private string _type;
-        private string _name;
-        private ushort _language;
-        private IntPtr _hResource = IntPtr.Zero;
-        private int _size;
+        protected string _type;
+        protected string _name;
+        protected ushort _language;
+        protected IntPtr _hResource = IntPtr.Zero;
+        protected int _size = 0;
 
         public int Size
         {
@@ -46,6 +46,11 @@ namespace Vestris.ResourceLib
             {
                 return _name;
             }
+        }
+
+        public Resource()
+        {
+
         }
 
         public Resource(IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)

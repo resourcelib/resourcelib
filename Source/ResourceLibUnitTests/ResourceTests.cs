@@ -51,5 +51,27 @@ namespace Vestris.ResourceLibUnitTests
                 //Console.WriteLine("Version: {0}", vr.FileVersion);
             }
         }
+
+        [Test]
+        public void TestLoadVersionResource()
+        {
+            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Assert.IsTrue(File.Exists(filename));
+            VersionResource versionResource = new VersionResource(filename);
+            Console.WriteLine("  {0}", versionResource.FileVersion);
+            Dictionary<string, StringTableResource>.Enumerator stringTableResourceEnumerator = versionResource.StringTableResources.GetEnumerator();
+            while (stringTableResourceEnumerator.MoveNext())
+            {
+                StringTableResource stringTableResource = stringTableResourceEnumerator.Current.Value;
+                Console.WriteLine("  {0}", stringTableResource.BlockInfo.szKey);
+                Dictionary<string, string>.Enumerator stringEnumerator = stringTableResource.Strings.GetEnumerator();
+                while (stringEnumerator.MoveNext())
+                {
+                    Console.WriteLine("  {0} = {1}",
+                        stringEnumerator.Current.Key,
+                        stringEnumerator.Current.Value);
+                }
+            }
+        }
     }
 }

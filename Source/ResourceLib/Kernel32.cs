@@ -122,6 +122,9 @@ namespace Vestris.ResourceLib
 
         public delegate bool EnumResourceLanguagesDelegate(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, ushort wIDLanguage, IntPtr lParam);
 
+        [DllImport("kernel32.dll", EntryPoint = "FindResource", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern IntPtr FindResource(IntPtr hModule, IntPtr lpszName, IntPtr lpszType);
+
         [DllImport("kernel32.dll", EntryPoint = "FindResourceExW", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr FindResourceEx(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, long wLanguage);
 
