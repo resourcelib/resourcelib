@@ -24,7 +24,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Type of the group icon resource.
         /// </summary>
-        public GroupType Type
+        public GroupType GroupIconResourceType
         {
             get
             {
@@ -69,7 +69,7 @@ namespace Vestris.ResourceLib
                 Marshal.StringToHGlobalUni("#1"), 1033, 
                 Marshal.SizeOf(typeof(Kernel32.GRPICONDIR)))
         {
-            Type = GroupType.Icon;
+            GroupIconResourceType = GroupType.Icon;
         }
 
         /// <summary>

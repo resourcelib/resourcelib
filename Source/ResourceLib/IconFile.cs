@@ -98,10 +98,10 @@ namespace Vestris.ResourceLib
             switch (Type)
             {
                 case GroupType.Icon:
-                    groupIconResource.Type = GroupIconResource.GroupType.Icon;
+                    groupIconResource.GroupIconResourceType = GroupIconResource.GroupType.Icon;
                     break;
                 case GroupType.Cursor:
-                    groupIconResource.Type = GroupIconResource.GroupType.Cursor;
+                    groupIconResource.GroupIconResourceType = GroupIconResource.GroupType.Cursor;
                     break;
             }
 
