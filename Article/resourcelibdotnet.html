@@ -18,9 +18,9 @@ CODE { COLOR: #990000; FONT-FAMILY: "Courier New", Courier, mono; }
 
 <h2>Introduction</h2>
 
-<p>There are several good articles about reading and writing resources from/to a compiled binary. Most focus on retrieving module version information and modifying version information, mostly in C++. Some detail the same operations for cursor or dialog resources. There's, however, no single .NET library to retrieve and save any type of resources, or any library to edit version resources specifically.</p>
+<p>There are several good articles about reading and writing resources from/to a compiled binary. Most focus on retrieving module version information and modifying version information, mostly in C++. Some detail the same operations for cursors, icons or dialog resources. There's, however, no single .NET library to retrieve and save any type of resources, or any library to edit version resources specifically.</p>
 
-<p>This implementation is a framework that enumerates resources and implements both read and write of the file version (<code>VS_VERSIONINFO</code>) resources. It can be easily extended to other resource types.</p>
+<p>This implementation is a framework that enumerates resources and implements both read and write of the file version (<code>VS_VERSIONINFO</code>) resources. It has been extended to icons and can be further extended to other resource types easily.</p>
 
 <h2>Background</h2>
 
@@ -142,6 +142,24 @@ versionResource.SaveTo(filename);</pre>
  ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos); 
 }</pre>
 
+<h2>Extending to Icons</h2>
+
+<p>Extending the library to support icons involves implementing the data structures
+ for icon storage and hooking up ResourceInfo callbacks. When <span style="color: #990000;
+  font-family: Courier New">ResourceInfo </span>encouters a resource of type "14"
+ (<span style="color: #990000; font-family: Courier New">RT_GROUP_ICON</span>), it
+ creates an object of type <span style="color: #990000; font-family: Courier New">
+  GroupIconResource</span>, much like string and version resources.</p>
+ <ul>
+  <li>A <span style="color: #990000; font-family: Courier New">GroupIconResource </span>
+   represents a collection of icon resources.</li>
+  <li>An <span style="color: #990000; font-family: Courier New">IconResource </span>
+   represents a single icon with many images.</li>
+  <li>An <span style="color: #990000; font-family: Courier New">IconImage </span>is
+   not a resource per-se, but raw data embedded in the file at an offset defined by
+   the icon resource and represents a single icon bitmap, for example in a BMP format.</li>
+ </ul>
+
 <h2>Source Code</h2>
 
 <p>The latest version of this article and source code can always be found <a href="svn://svn.vestris.com/codeproject/ResourceLib/" target="_blank">here</a>.</p>
@@ -152,10 +170,9 @@ versionResource.SaveTo(filename);</pre>
 
 <ul>
 <li><a href="VerInfoLib.aspx">Modification of Version Information Resources in Compiled Binaries</a></li>
-
 <li><a href="http://www.codeproject.com/KB/cpp/GetLocalVersionInfos.aspx">Retrieving version information from your local application's resource</a></li>
-
 <li><a href="http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx">A Fast Way to Get at the File's Version</a></li>
+<li><a href="http://www.codeguru.com/csharp/.net/net_general/graphics/article.php/c12787/">IconLib: Icons Unfolded</a></li>
 </ul>
 
 <h2>History</h2>
@@ -163,8 +180,8 @@ versionResource.SaveTo(filename);</pre>
 <ul>
 <li>2008-06-30: Initial version</li>
  <li>2008-07-08: Bug: wrong value for RT_RCDATA</li>
+ <li>2008-09-27: Added r/o support for icons</li>
 </ul>
-
 
 </body>
 </html>

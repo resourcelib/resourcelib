@@ -16,7 +16,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoad()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
             Assert.IsTrue(File.Exists(filename));
             using (ResourceInfo vi = new ResourceInfo())
             {
@@ -38,6 +38,18 @@ namespace Vestris.ResourceLibUnitTests
                             {
                                 Console.WriteLine("Dump of {0}:", stringTableResourceEnumerator.Current.Key);
                                 DumpResource(stringTableResourceEnumerator.Current.Value);
+                            }
+                        }
+                        else if (resource is GroupIconResource)
+                        {
+                            GroupIconResource groupiconResource = (GroupIconResource)resource;
+                            Console.WriteLine(" Type: {0}", groupiconResource.Type);
+                            foreach (IconResource icon in groupiconResource.Icons)
+                            {
+                                Console.WriteLine(" Icon: {0} ({1} byte(s))", 
+                                    icon.ToString(), icon.ImageSize);
+                                Console.WriteLine("  {0} ({1}x{2})", 
+                                    icon.Image.Header.BitmapCompression, icon.Image.Header.biHeight, icon.Image.Header.biWidth);
                             }
                         }
                     }
@@ -231,6 +243,5 @@ namespace Vestris.ResourceLibUnitTests
                 Assert.AreEqual(currentBytes[i], newBytes[i], string.Format("Error at offset {0}", i));
             }
         }
-
     }
 }

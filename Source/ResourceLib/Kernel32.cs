@@ -38,9 +38,9 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// This structure contains version information about a file. 
         /// This information is language- and code page–independent.
-        /// http://msdn.microsoft.com/en-us/library/aa909176.aspx
+        /// http://msdn.microsoft.com/en-us/library/ms647001.aspx
         /// </summary>
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
         public struct VS_FIXEDFILEINFO
         {
             public UInt32 dwSignature;
@@ -58,32 +58,64 @@ namespace Vestris.ResourceLib
             public UInt32 dwFileDateLS;
         };
 
+        /// <summary>
+        /// A group icon resource header.
+        /// http://msdn.microsoft.com/en-us/library/ms997538.aspx
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        public struct GRPICONDIR
+        {
+            public UInt16 wReserved; // reserved
+            public UInt16 wType; // type, 1 = icon, 2 = cursor
+            public UInt16 wImageCount; // image count
+        };
+
+        /// <summary>
+        /// An icon directory entry
+        /// http://msdn.microsoft.com/en-us/library/ms997538.aspx
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        public struct GRPICONDIRENTRY
+        {
+            public Byte bWidth; // width
+            public Byte bHeight; // height
+            public Byte bColors; // 0 means 256 or more
+            public Byte bReserved; // reserved
+            public UInt16 wPlanes; // number of planes
+            public UInt16 wBitsPerPixel; // bits per pixel
+            public UInt32 dwImageSize; // size of image data
+            public UInt16 nID; // icon ID
+        };
+
         [DllImport("kernel32.dll")]
         public static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool FreeLibrary(IntPtr hModule);
 
-        public const uint RT_CURSOR = 1;
-        public const uint RT_BITMAP = 2;
-        public const uint RT_ICON = 3;
-        public const uint RT_MENU = 4;
-        public const uint RT_DIALOG = 5;
-        public const uint RT_uint = 6;
-        public const uint RT_FONTDIR = 7;
-        public const uint RT_FONT = 8;
-        public const uint RT_ACCELERATOR = 9;
-        public const uint RT_RCDATA = 10;
-        public const uint RT_MESSAGETABLE = 11;
-        public const uint RT_GROUP_CURSOR = 12;
-        public const uint RT_GROUP_ICON = 14;
-        public const uint RT_VERSION = 16;
-        public const uint RT_DLGINCLUDE = 17;
-        public const uint RT_PLUGPLAY = 19;
-        public const uint RT_VXD = 20;
-        public const uint RT_ANICURSOR = 21;
-        public const uint RT_ANIICON = 22;
-        public const uint RT_HTML = 23;
+        public enum ResourceTypes
+        {
+            RT_CURSOR = 1,
+            RT_BITMAP = 2,
+            RT_ICON = 3,
+            RT_MENU = 4,
+            RT_DIALOG = 5,
+            RT_STRING = 6,
+            RT_FONTDIR = 7,
+            RT_FONT = 8,
+            RT_ACCELERATOR = 9,
+            RT_RCDATA = 10,
+            RT_MESSAGETABLE = 11,
+            RT_GROUP_CURSOR = 12,
+            RT_GROUP_ICON = 14,
+            RT_VERSION = 16,
+            RT_DLGINCLUDE = 17,
+            RT_PLUGPLAY = 19,
+            RT_VXD = 20,
+            RT_ANICURSOR = 21,
+            RT_ANIICON = 22,
+            RT_HTML = 23,
+        };
 
         [DllImport("kernel32.dll", EntryPoint = "EnumResourceTypesW", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern bool EnumResourceTypes(IntPtr hModule, EnumResourceTypesDelegate lpEnumFunc, IntPtr lParam);

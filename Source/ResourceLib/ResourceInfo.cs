@@ -127,11 +127,14 @@ namespace Vestris.ResourceLib
             switch (ResourceUtil.GetResourceName(lpszType))
             {
                 case "16": // Kernel32.RT_VERSION:
-                    rc = new VersionResource(hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                    rc = new VersionResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                    break;
+                case "14": // Kernel32.RT_GROUP_ICON
+                    rc = new GroupIconResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
                     break;
                 // \todo: specialize other resource types
                 default:
-                    rc = new Resource(hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                    rc = new Resource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
                     break;
             }
 

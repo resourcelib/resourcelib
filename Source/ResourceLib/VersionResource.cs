@@ -38,15 +38,15 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// A version resource
         /// </summary>
-        public VersionResource(IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)
-            : base(hResource, type, name, wIDLanguage, size)
+        public VersionResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)
+            : base(hModule, hResource, type, name, wIDLanguage, size)
         {
             IntPtr lpRes = Kernel32.LockResource(hResource);
 
             if (lpRes == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            Read(lpRes);
+            Read(hModule, lpRes);
         }
 
         public VersionResource()
@@ -64,7 +64,7 @@ namespace Vestris.ResourceLib
             return Resource.LoadBytesFrom(filename, Marshal.StringToHGlobalUni("#1"), new IntPtr(16));
         }
 
-        public override IntPtr Read(IntPtr lpRes)
+        public override IntPtr Read(IntPtr hModule, IntPtr lpRes)
         {
             _resources = new Dictionary<string, ResourceTable>();
             IntPtr pFixedFileInfo = _header.Read(lpRes);
@@ -165,12 +165,12 @@ namespace Vestris.ResourceLib
 
         public static void SaveTo(string filename, byte[] data)
         {
-            Resource.SaveTo(filename, 1, Kernel32.RT_VERSION, data);
+            Resource.SaveTo(filename, 1, (uint) Kernel32.ResourceTypes.RT_VERSION, data);
         }
 
         public void SaveTo(string filename)
         {
-            base.SaveTo(filename, 1, Kernel32.RT_VERSION);
+            base.SaveTo(filename, 1, (uint) Kernel32.ResourceTypes.RT_VERSION);
         }
 
         public ResourceTable this[string key]

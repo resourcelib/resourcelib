@@ -15,6 +15,7 @@ namespace Vestris.ResourceLib
         protected string _type;
         protected string _name;
         protected ushort _language;
+        protected IntPtr _hModule = IntPtr.Zero;
         protected IntPtr _hResource = IntPtr.Zero;
         protected int _size = 0;
 
@@ -55,8 +56,9 @@ namespace Vestris.ResourceLib
 
         }
 
-        public Resource(IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)
+        public Resource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)
         {
+            _hModule = hModule;
             _type = ResourceUtil.GetResourceName(type);
             _name = ResourceUtil.GetResourceName(name);
             _language = wIDLanguage;
@@ -137,7 +139,7 @@ namespace Vestris.ResourceLib
                 if (_size <= 0)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
-                Read(lpRes);
+                Read(hModule, lpRes);
             }
             finally
             {
@@ -146,7 +148,7 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public virtual IntPtr Read(IntPtr lpRes)
+        public virtual IntPtr Read(IntPtr hModule, IntPtr lpRes)
         {
             throw new NotImplementedException();
         }
