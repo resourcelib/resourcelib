@@ -35,8 +35,7 @@ CODE { COLOR: #990000; FONT-FAMILY: "Courier New", Courier, mono; }
 
 <p>The following example demonstrates enumerating resources by type. From the sample <em>atl.dll</em> in the Windows <em>system</em> directory, you will typically get the following resources: MUI, REGISTRY, TYPELIB, and &quot;16&quot;, which is the <code>RT_VERSION</code> resource.</p>
 
-<pre lang="cs">
-<span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
+<pre lang="cs"><span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
 <span class="code-keyword">using</span> (ResourceInfo vi = <span class="code-keyword">new</span> ResourceInfo()) 
 {
  vi.Load(filename);
@@ -54,8 +53,7 @@ CODE { COLOR: #990000; FONT-FAMILY: "Courier New", Courier, mono; }
 
 <p>You can load file version information without enumerating resources.</p>
 
-<pre lang="cs">
-<span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
+<pre lang="cs"><span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
 VersionResource versionResource = <span class="code-keyword">new</span> VersionResource();
 versionResource.LoadFrom(filename);
 Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string">File version: {0}&quot;</span>, versionResource.FileVersion);
@@ -186,8 +184,7 @@ public struct GRPICONDIR
 
 <p>Each <code>StringResource</code> is the endpoint structure without any children.</p>
 
-<pre lang="cs">
-<span class="code-keyword">public</span> <span class="code-keyword">void</span> Read(<span class="code-SDKkeyword">IntPtr</span> lpRes) 
+<pre lang="cs"><span class="code-keyword">public</span> <span class="code-keyword">void</span> Read(<span class="code-SDKkeyword">IntPtr</span> lpRes) 
 { 
  _header = (Kernel32.RESOURCE_HEADER) Marshal.PtrToStructure( lpRes, <span class="code-keyword">typeof</span>(Kernel32.RESOURCE_HEADER)); 
  <span class="code-SDKkeyword">IntPtr</span> pKey = <span class="code-keyword">new</span> <span class="code-SDKkeyword">IntPtr</span>(lpRes.ToInt32() + Marshal.SizeOf(_header)); 
@@ -200,8 +197,7 @@ public struct GRPICONDIR
 
 <p>Writing is the reverse operation of reading, but the header must be updated to the correct length. It's easier to align the structure and to calculate the difference between the end of the structure and the beginning of it after it's written.</p>
 
-<pre lang="cs">
-<span class="code-keyword">public</span> <span class="code-keyword">override</span> <span class="code-keyword">void</span> Write(BinaryWriter w) 
+<pre lang="cs"><span class="code-keyword">public</span> <span class="code-keyword">override</span> <span class="code-keyword">void</span> Write(BinaryWriter w) 
 { 
  <span class="code-keyword">long</span> headerPos = w.BaseStream.Position; 
  <span class="code-keyword">base</span>.Write(w); 
@@ -264,10 +260,8 @@ vector of bytes and comparing the two. An example of such a test is
 
 <h2>Source Code</h2>
 
-<p>The latest version of this article and source code can always be found in <a href="http://subversion.tigris.org/">
-  Subversion</a> under <a href="svn://svn.vestris.com/codeproject/ResourceLib/">svn://svn.vestris.com/codeproject/ResourceLib</a>.
- You can also <a href="http://svn.vestris.com/listing.php?repname=Vestris+SVN&path=%2Fcodeproject%2FResourceLib%2FSource%2FResourceLib%2F#_codeproject_ResourceLib_Source_ResourceLib_">
-  browse the source code</a>.</p>
+<p>The latest version of this article and source code can always be found on CodePlex
+ under <a href="http://www.codeplex.com/resourcelib">http://www.codeplex.com/resourcelib</a><a href="svn://svn.vestris.com/codeproject/ResourceLib/"></a>.</p>
 
 <h2>Links</h2>
 
@@ -290,6 +284,7 @@ vector of bytes and comparing the two. An example of such a test is
  <li>2008-07-08: Bug: wrong value for RT_RCDATA</li>
  <li>2008-09-28: Added support for icons</li>
  <li>2008-10-03: Bug: wrong binary data writing version resource without copy</li>
+ <li>2009-02-19: Moved to CodePlex, released 1.1.</li>
 </ul>
  <p>
   &nbsp;</p>
