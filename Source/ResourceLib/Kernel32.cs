@@ -10,25 +10,6 @@ namespace Vestris.ResourceLib
         public const uint LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008;
         public const uint LOAD_IGNORE_CODE_AUTHZ_LEVEL = 0x00000010;
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct VS_VERSIONINFO
-        {
-            public UInt16 wLength;
-            public UInt16 wValueLength;
-            public UInt16 wType;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 15)]
-            public string szKey;
-            public UInt16 Padding1;
-
-            public static Int32 PaddingOffset
-            {
-                get
-                {
-                    return Marshal.OffsetOf(typeof(Kernel32.VS_VERSIONINFO), "Padding1").ToInt32();
-                }
-            }
-        };
-
         /// <summary>
         /// This structure depicts the organization of data in a file-version resource. 
         /// http://msdn.microsoft.com/en-us/library/aa909192.aspx
@@ -53,7 +34,6 @@ namespace Vestris.ResourceLib
         {
             public UInt16 wLanguageIDMS;
             public UInt16 wCodePageIBM;
-
         };
         
         /// <summary>
@@ -125,10 +105,23 @@ namespace Vestris.ResourceLib
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr LoadResource(IntPtr hModule, IntPtr hResData);
 
-        [DllImport("kernel32", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true)]
         public static extern int SizeofResource(IntPtr hInstance, IntPtr hResInfo);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool CloseHandle(IntPtr hHandle);
+
+        [DllImport("kernel32.dll", EntryPoint = "BeginUpdateResourceW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr BeginUpdateResource(string pFileName, bool bDeleteExistingResources);
+
+        [DllImport("kernel32.dll", EntryPoint = "UpdateResourceW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool UpdateResource(IntPtr hUpdate, string lpType, string lpName, UInt16 wLanguage, byte[] lpData, UInt32 cbData);
+
+        [DllImport("kernel32.dll", EntryPoint = "EndUpdateResourceW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool EndUpdateResource(IntPtr hUpdate, bool fDiscard);
+
+        // see http://www.koders.com/c/fid55D967C849A49CF8BB92B395A24B5DC7B21DB658.aspx for other languages
+        public const ushort LANG_NEUTRAL = 0x00;
+        public const ushort SUBLANG_NEUTRAL = 0x00;
     }
 }

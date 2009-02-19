@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Vestris.ResourceLib
 {
@@ -60,6 +61,20 @@ namespace Vestris.ResourceLib
             _language = wIDLanguage;
             _hResource = hResource;
             _size = size;
+        }
+
+        public virtual void Write(BinaryWriter w)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] GetBytes()
+        {
+            MemoryStream ms = new MemoryStream();
+            BinaryWriter w = new BinaryWriter(ms, Encoding.Default);
+            Write(w);
+            w.Close();
+            return ms.ToArray();
         }
     }
 }

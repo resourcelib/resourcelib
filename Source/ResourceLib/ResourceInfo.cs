@@ -139,6 +139,11 @@ namespace Vestris.ResourceLib
             return true;
         }
 
+        public void Save(string filename)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             Unload();

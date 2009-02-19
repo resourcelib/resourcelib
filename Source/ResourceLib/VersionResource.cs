@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Vestris.ResourceLib
 {
@@ -11,11 +12,29 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class VersionResource : Resource
     {
-        Kernel32.VS_VERSIONINFO _versioninfo;
+        Kernel32.STRING_OR_VAR_INFO_HEADER _header;
+        private string _key;
         Kernel32.VS_FIXEDFILEINFO _fixedfileinfo;
-        private Dictionary<string, Resource> _resources = null;
+        private Dictionary<string, ResourceTable> _resources = null;
+        private byte[] _readBytes = null;
 
-        public Dictionary<string, Resource> Resources
+        public byte[] ReadBytes
+        {
+            get
+            {
+                return _readBytes;
+            }
+        }
+
+        public Kernel32.STRING_OR_VAR_INFO_HEADER Header
+        {
+            get
+            {
+                return _header;
+            }
+        }
+
+        public Dictionary<string, ResourceTable> Resources
         {
             get
             {
@@ -82,32 +101,39 @@ namespace Vestris.ResourceLib
         /// <param name="lpRes"></param>
         public void Load(IntPtr lpRes)
         {
-            _resources = new Dictionary<string, Resource>();
-            _versioninfo = (Kernel32.VS_VERSIONINFO)Marshal.PtrToStructure(lpRes, typeof(Kernel32.VS_VERSIONINFO));
+            _resources = new Dictionary<string, ResourceTable>();
+            _header = (Kernel32.STRING_OR_VAR_INFO_HEADER) Marshal.PtrToStructure(lpRes, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
 
-            IntPtr pFI = ResourceUtil.Align(lpRes.ToInt32() + Kernel32.VS_VERSIONINFO.PaddingOffset + 1);
+            // save bytes for Bytes property
+            _readBytes = new byte[_header.wLength];
+            Marshal.Copy(lpRes, _readBytes, 0, _header.wLength);
 
-            _fixedfileinfo = (Kernel32.VS_FIXEDFILEINFO) Marshal.PtrToStructure(
-                pFI, typeof(Kernel32.VS_FIXEDFILEINFO));
+            IntPtr pBlockKey = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            _key = Marshal.PtrToStringUni(pBlockKey);
 
-            IntPtr pChild = ResourceUtil.Align(pFI.ToInt32() + _versioninfo.wValueLength);
+            IntPtr pChild = ResourceUtil.Align(pBlockKey.ToInt32() + (_key.Length + 1) * 2);
 
-            Kernel32.STRING_OR_VAR_INFO_HEADER pChildInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER) Marshal.PtrToStructure(
+            _fixedfileinfo = (Kernel32.VS_FIXEDFILEINFO)Marshal.PtrToStructure(
+                pChild, typeof(Kernel32.VS_FIXEDFILEINFO));
+
+            pChild = ResourceUtil.Align(pChild.ToInt32() + _header.wValueLength);
+
+            Kernel32.STRING_OR_VAR_INFO_HEADER pChildInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER)Marshal.PtrToStructure(
                 pChild, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
 
-            while (pChild.ToInt32() < (lpRes.ToInt32() + _versioninfo.wLength))
+            while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))
             {
-                Resource rc = null;
+                ResourceTable rc = null;
                 IntPtr pKey = new IntPtr(pChild.ToInt32() + Marshal.SizeOf(pChildInfo));
                 string key = Marshal.PtrToStringUni(pKey);
                 IntPtr pData = ResourceUtil.Align(pKey.ToInt32() + (key.Length + 1) * 2);
                 switch (key)
                 {
                     case "StringFileInfo":
-                        rc = new StringTableResource(pData, pChildInfo.wType, key, Language, pChildInfo.wLength);
+                        rc = new StringFileInfo(pChild);
                         break;
                     default:
-                        rc = new VariableTableResource(pData, pChildInfo.wType, key, Language, pChildInfo.wLength);
+                        rc = new VarFileInfo(pChild);
                         break;
                 }
 
@@ -133,6 +159,17 @@ namespace Vestris.ResourceLib
                     (_fixedfileinfo.dwFileVersionLS & 0xffff0000) >> 16,
                     _fixedfileinfo.dwFileVersionLS & 0x0000ffff);
             }
+            set
+            {
+                UInt32 major = 0, minor = 0, build = 0, release = 0;
+                string[] version_s = value.Split(".".ToCharArray(), 4);
+                if (version_s.Length >= 1) major = UInt32.Parse(version_s[0]);
+                if (version_s.Length >= 2) minor = UInt32.Parse(version_s[1]);
+                if (version_s.Length >= 3) build = UInt32.Parse(version_s[2]);
+                if (version_s.Length >= 4) release = UInt32.Parse(version_s[3]);
+                _fixedfileinfo.dwFileVersionMS = (major << 16) + minor;
+                _fixedfileinfo.dwFileVersionLS = (build << 16) + release;
+            }
         }
 
         /// <summary>
@@ -148,6 +185,64 @@ namespace Vestris.ResourceLib
                     (_fixedfileinfo.dwProductVersionLS & 0xffff0000) >> 16,
                     _fixedfileinfo.dwProductVersionLS & 0x0000ffff);
             }
+            set
+            {
+                UInt32 major = 0, minor = 0, build = 0, release = 0;
+                string[] version_s = value.Split(".".ToCharArray(), 4);
+                if (version_s.Length >= 1) major = UInt32.Parse(version_s[0]);
+                if (version_s.Length >= 2) minor = UInt32.Parse(version_s[1]);
+                if (version_s.Length >= 3) build = UInt32.Parse(version_s[2]);
+                if (version_s.Length >= 4) release = UInt32.Parse(version_s[3]);
+                _fixedfileinfo.dwProductVersionMS = (major << 16) + minor;
+                _fixedfileinfo.dwProductVersionLS = (build << 16) + release;
+            }
+        }
+
+        public override void Write(BinaryWriter w)
+        {
+            // wLength
+            w.Write((UInt16) _header.wLength);
+            // write wValueLength
+            w.Write((UInt16) _header.wValueLength); // Marshal.SizeOf(_fixedfileinfo));
+            // write wType
+            w.Write((UInt16) _header.wType);
+            // write key
+            w.Write(Encoding.Unicode.GetBytes(_key));
+            // write null-terminator
+            w.Write((UInt16) 0);
+            // pad fixed info
+            ResourceUtil.PadToDWORD(w);
+            // write fixed file info
+            long wValuePos = w.BaseStream.Position;
+            w.Write(ResourceUtil.GetBytes<Kernel32.VS_FIXEDFILEINFO>(_fixedfileinfo));
+            ResourceUtil.PadToDWORD(w);
+
+            Dictionary<string, ResourceTable>.Enumerator resourceEnum = _resources.GetEnumerator();
+            while (resourceEnum.MoveNext())
+            {
+                Console.WriteLine("Offset: {0}", w.BaseStream.Position);
+                resourceEnum.Current.Value.Write(w);
+            }
+        }
+
+        public void Save(string filename)
+        {
+            IntPtr h = Kernel32.BeginUpdateResource(filename, false);
+
+            if (h == IntPtr.Zero)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            byte[] data = GetBytes();
+
+            if (!Kernel32.UpdateResource(h, "16", "#1",
+                (ushort) ResourceUtil.MAKELANGID(Kernel32.LANG_NEUTRAL, Kernel32.SUBLANG_NEUTRAL),
+                data, (uint)data.Length))
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            if (!Kernel32.EndUpdateResource(h, false))
+                throw new Win32Exception(Marshal.GetLastWin32Error());
         }
     }
 }

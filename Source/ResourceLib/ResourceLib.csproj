@@ -37,9 +37,13 @@
     <Compile Include="ResourceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.cs" />
+    <Compile Include="ResourceTable.cs" />
     <Compile Include="ResourceUtil.cs" />
-    <Compile Include="StringTableResource.cs" />
-    <Compile Include="VariableTableResource.cs" />
+    <Compile Include="StringFileInfo.cs" />
+    <Compile Include="StringResource.cs" />
+    <Compile Include="StringTable.cs" />
+    <Compile Include="VarFileInfo.cs" />
+    <Compile Include="VarTable.cs" />
     <Compile Include="VersionResource.cs" />
   </ItemGroup>
   <ItemGroup>
