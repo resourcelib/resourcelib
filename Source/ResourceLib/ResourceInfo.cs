@@ -126,7 +126,7 @@ namespace Vestris.ResourceLib
             Resource rc = null;
             switch (ResourceUtil.GetResourceName(lpszType))
             {
-                case "16": // RT_RCDATA (version)
+                case "16": // Kernel32.RT_VERSION:
                     rc = new VersionResource(hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
                     break;
                 // \todo: specialize other resource types

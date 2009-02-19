@@ -165,20 +165,20 @@ namespace Vestris.ResourceLib
             return ms.ToArray();
         }
 
-        public void SaveTo(string filename, IntPtr name, IntPtr type)
+        public void SaveTo(string filename, uint name, uint type)
         {
             byte[] data = WriteAndGetBytes();
             SaveTo(filename, name, type, data);
         }
 
-        public static void SaveTo(string filename, IntPtr name, IntPtr type, byte[] data)
+        public static void SaveTo(string filename, uint name, uint type, byte[] data)
         {
             IntPtr h = Kernel32.BeginUpdateResource(filename, false);
 
             if (h == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            if (!Kernel32.UpdateResource(h, type, name,
+            if (!Kernel32.UpdateResource(h, new IntPtr(type), new IntPtr(name),
                 (ushort)ResourceUtil.MAKELANGID(Kernel32.LANG_NEUTRAL, Kernel32.SUBLANG_NEUTRAL),
                 data, (uint)data.Length))
             {

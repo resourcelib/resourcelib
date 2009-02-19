@@ -48,6 +48,7 @@
  </ItemGroup>
  <ItemGroup>
   <BinaryFiles Include="Source/**/$(Configuration)/Vestris.*.dll" />
+  <BinaryFiles Include="Source/**/$(Configuration)/nunit.framework.dll" />
  </ItemGroup>
  <ItemGroup>
   <PackageFiles Include="$(ReleaseDir)/**/*" />
