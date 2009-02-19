@@ -181,7 +181,7 @@ namespace Vestris.ResourceLib
 
         public void SaveIconTo(string filename)
         {
-            SaveTo(filename, _header.nID, (uint) Kernel32.ResourceTypes.RT_ICON, 1033, _image.Data);
+            SaveTo(filename, new IntPtr(_header.nID), new IntPtr((uint) Kernel32.ResourceTypes.RT_ICON), Language, _image.Data);
         }
     }
 }

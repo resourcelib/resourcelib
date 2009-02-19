@@ -167,12 +167,14 @@ namespace Vestris.ResourceLib
 
         public static void SaveTo(string filename, byte[] data)
         {
-            Resource.SaveTo(filename, 1, (uint)Kernel32.ResourceTypes.RT_VERSION, (ushort)ResourceUtil.NEUTRALLANGID, data);
+            Resource.SaveTo(filename, new IntPtr(1), new IntPtr((uint)Kernel32.ResourceTypes.RT_VERSION), 
+                (ushort) ResourceUtil.NEUTRALLANGID, data);
         }
 
         public void SaveTo(string filename)
         {
-            base.SaveTo(filename, 1, (uint)Kernel32.ResourceTypes.RT_VERSION, (ushort)ResourceUtil.NEUTRALLANGID);
+            base.SaveTo(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), 
+                (ushort)ResourceUtil.NEUTRALLANGID);
         }
 
         public ResourceTable this[string key]

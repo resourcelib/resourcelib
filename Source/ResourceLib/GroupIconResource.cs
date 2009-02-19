@@ -66,7 +66,8 @@ namespace Vestris.ResourceLib
             : base(IntPtr.Zero, 
                 IntPtr.Zero, 
                 new IntPtr((uint)Kernel32.ResourceTypes.RT_GROUP_ICON), 
-                Marshal.StringToHGlobalUni("#1"), 1033, 
+                new IntPtr(1), 
+                1033, 
                 Marshal.SizeOf(typeof(Kernel32.GRPICONDIR)))
         {
             GroupIconResourceType = GroupType.Icon;
@@ -78,13 +79,14 @@ namespace Vestris.ResourceLib
         /// <param name="filename">an executable file (.exe or .dll)</param>
         public void LoadFrom(string filename)
         {
-            base.LoadFrom(filename, Marshal.StringToHGlobalUni("#1"), 
+            base.LoadFrom(filename, new IntPtr(1), 
                 new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON));
         }
 
         public void SaveTo(string filename)
         {
-            base.SaveTo(filename, 1, (uint) Kernel32.ResourceTypes.RT_GROUP_ICON, 1033);
+            base.SaveTo(filename, new IntPtr(int.Parse(Name)), 
+                new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON), Language);
 
             foreach (IconResource icon in _icons)
             {
