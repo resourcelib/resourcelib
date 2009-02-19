@@ -8,7 +8,10 @@ using System.IO;
 namespace Vestris.ResourceLib
 {
     /// <summary>
-    /// A version resource, RT_RCDATA
+    /// VS_VERSIONINFO
+    /// This structure depicts the organization of data in a file-version resource. It is the root structure 
+    /// that contains all other file-version information structures.
+    /// http://msdn.microsoft.com/en-us/library/aa914916.aspx
     /// </summary>
     public class VersionResource : Resource
     {
@@ -43,7 +46,7 @@ namespace Vestris.ResourceLib
             if (lpRes == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            Load(lpRes);
+            Read(lpRes);
         }
 
         public VersionResource()
@@ -61,14 +64,10 @@ namespace Vestris.ResourceLib
             return Resource.LoadBytesFrom(filename, Marshal.StringToHGlobalUni("#1"), new IntPtr(16));
         }
 
-        /// <summary>
-        /// Load a version resource, heavily inspired from http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx
-        /// </summary>
-        /// <param name="lpRes"></param>
-        public override IntPtr Load(IntPtr lpRes)
+        public override IntPtr Read(IntPtr lpRes)
         {
             _resources = new Dictionary<string, ResourceTable>();
-            IntPtr pFixedFileInfo = _header.Load(lpRes);
+            IntPtr pFixedFileInfo = _header.Read(lpRes);
 
             _fixedfileinfo = (Kernel32.VS_FIXEDFILEINFO)Marshal.PtrToStructure(
                 pFixedFileInfo, typeof(Kernel32.VS_FIXEDFILEINFO));
@@ -149,6 +148,7 @@ namespace Vestris.ResourceLib
 
         public override void Write(BinaryWriter w)
         {
+            long headerPos = w.BaseStream.Position;
             _header.Write(w);
             
             w.Write(ResourceUtil.GetBytes<Kernel32.VS_FIXEDFILEINFO>(_fixedfileinfo));
@@ -159,6 +159,8 @@ namespace Vestris.ResourceLib
             {
                 resourceEnum.Current.Value.Write(w);
             }
+
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
 
         public static void SaveTo(string filename, byte[] data)
@@ -169,6 +171,18 @@ namespace Vestris.ResourceLib
         public void SaveTo(string filename)
         {
             base.SaveTo(filename, new IntPtr(1), new IntPtr(Kernel32.RT_RCDATA));
+        }
+
+        public ResourceTable this[string key]
+        {
+            get
+            {
+                return Resources[key];
+            }
+            set
+            {
+                Resources[key] = value;
+            }
         }
     }
 }

@@ -1,16 +1,35 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLib", "ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLibUnitTests", "ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLibUnitTests", "Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Article", "Article", "{8C34CEDC-B5FB-42FD-A408-B0EA599AFBB8}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		Article\resourcelibdotnet.html = Article\resourcelibdotnet.html
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D703E923-FE2E-4B4D-B67F-55BC8E4D52CD}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		build.cmd = build.cmd
+		ResourceLib.proj = ResourceLib.proj
 	EndProjectSection
 EndProject
 Global

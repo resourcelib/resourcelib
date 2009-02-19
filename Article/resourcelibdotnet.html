@@ -1,0 +1,203 @@
+<!--------------------------------------------------------------------------->
+<!--                        IGNORE THIS SECTION                            -->
+<html>
+<head>
+ <title>File Resource Management Library (.NET)</title>
+ <style>
+BODY, P, TD { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10pt }
+H2,H3,H4,H5 { color: #ff9900; font-weight: bold; }
+H2 { font-size: 13pt; }
+H3 { font-size: 12pt; }
+H4 { font-size: 10pt; color: black; }
+PRE { BACKGROUND-COLOR: #FBEDBB; FONT-FAMILY: "Courier New", Courier, mono; WHITE-SPACE: pre; }
+CODE { COLOR: #990000; FONT-FAMILY: "Courier New", Courier, mono; }
+</style>
+ <link rel="stylesheet" type="text/css" href="http://www.codeproject.com/styles/global.css">
+</head>
+<body bgcolor="#FFFFFF" color="#000000">
+ <!--------------------------------------------------------------------------->
+ <pre>Title:       File Resoource Management Library (.NET)
+Author:      Daniel Doubrovkine
+Email:       dblock@dblock.org
+Member ID:   913212
+Language:    C#
+Platform:    Windows, .NET 2.0
+Technology:  
+Level:       Intermediate
+Description: A .NET implementation of file resource management with complete support for VS_VERSIONINFO version resources.
+Section      Suggest a section...
+SubSection   Suggest a subsection...
+</pre>
+ <ul class="download">
+  <li><a href="resourcelib/ResourceLib.zip">Download binaries &amp; source - ?? Kb</a></li>
+ </ul>
+ <h2>
+  Introduction
+ </h2>
+ <p>
+  There are several good articles about reading and writing resources from/to a compiled
+  binary. Most focus on retreiving module version information and modifying version
+  information, mostly in C++. Some detail the same operations for cursor or dialog
+  resources. There's however no single .NET library to retrieve and save any type
+  of resources or any library to edit version resources specifically.
+ </p>
+ <p>
+  This implementation is a framework that enumerates resources and implements both
+  read and write of the file version (VS_VERSIONINFO) resources. It can be
+  easily extended to other resource types.</p>
+ <h2>
+  Background
+ </h2>
+ <p>
+  Initially I started porting the version resource implementation from <a href="http://www.codeproject.com/KB/library/VerInfoLib.aspx">
+   Denis Zabavchik's C++ VerInfoLib</a>.</p>
+ <h2>
+  Using the Code
+ </h2>
+ <h3>
+  Enumerating Resources</h3>
+ <p>
+  The following example demonstrates enumerating resources by type. From the sample
+  atl.dll in the Windows sytem directory you will typically get the following resources:
+  MUI, REGISTRY, TYPELIB and "16", which is the RT_VERSION resource.</p>
+  <pre lang="cs">string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+using (ResourceInfo vi = new ResourceInfo()) 
+{
+ vi.Load(filename);
+ foreach (string type in vi.ResourceTypes)
+ {
+  Console.WriteLine(type);
+  foreach (Resource resource in vi.Resources[type])
+  {
+   Console.WriteLine(" {0} ({1}) - {2} byte(s)", resource.Name, resource.Language, resource.Size);
+  }
+ }
+} </pre>
+ <h3>
+  Reading Version Information</h3>
+ <p>
+  You can load file version information without enumerating resources.</p>
+ <pre lang="cs">string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+VersionResource versionResource = new VersionResource();
+versionResource.LoadFrom(filename);
+Console.WriteLine("File version: {0}", versionResource.FileVersion);
+StringFileInfo stringFileInfo = (StringFileInfo) versionResource["StringFileInfo"];
+foreach (KeyValuePair&lt;string, StringResource&gt; stringResource in stringFileInfo.Default.Strings)
+{
+ Console.WriteLine("{0} = {1}", stringResource.Value.Key, stringResource.Value.StringValue);
+}  
+ </pre>
+ <h3>
+  Writing Version Information</h3>
+ <p>
+  You can also write updated version information.
+  Note that string resources should end with an extra null terminator.</p>
+ <pre lang="cs">string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+VersionResource versionResource = new VersionResource();
+versionResource.LoadFrom(filename);
+Console.WriteLine("File version: {0}", versionResource.FileVersion);
+versionResource.FileVersion = "1.2.3.4";
+StringFileInfo stringFileInfo = (StringFileInfo) versionResource["StringFileInfo"];
+stringFileInfo["CompanyName"] = "My Company\0";
+stringFileInfo["Weather"] = "Sunshine, beach weather.\0"; 
+versionResource.SaveTo(filename);
+ </pre>
+ <h2>
+  Implementation
+ </h2>
+ <h3>
+  Base Structures</h3>
+ <p>
+  Every resource structure has a similar header, implemented in ResourceTable.cs.</p><pre lang="cs">[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)] 
+public struct RESOURCE_HEADER 
+{ 
+ public UInt16 wLength; 
+ public UInt16 wValueLength; 
+ public UInt16 wType; 
+};  </pre>
+ <p>
+  The header is usually followed by a Unicode string (a key) and an array of data
+  structures, each with a similar resource header. All structures are aligned to 32-bit
+  boundaries.
+ </p>
+ <h3>
+  Reading</h3>
+ <p>
+  Because of a uniform type of header, you'll find the same pattern in reading structured
+  data throughout the code. 
+ </p>
+ <p>
+  Here's an example of StringTable.</p>
+ <pre lang="cs">
+public override IntPtr Read(IntPtr lpRes) 
+{
+ IntPtr pChild = base.Read(lpRes);
+ while (pChild.ToInt32() &lt; (lpRes.ToInt32() + _header.wLength)) 
+ {
+  StringResource res = new StringResource(pChild); 
+  _strings.Add(res.Key, res); 
+  pChild = ResourceUtil.Align(pChild.ToInt32() + res.Header.wLength); 
+ } 
+ return new IntPtr(lpRes.ToInt32() + _header.wLength); 
+}  </pre>
+ <p>
+  Each StringResource is the endpoint structure without any children.</p>
+ <pre lang="cs">
+public void Read(IntPtr lpRes) 
+{ 
+ _header = (Kernel32.RESOURCE_HEADER) Marshal.PtrToStructure( lpRes, typeof(Kernel32.RESOURCE_HEADER)); 
+ IntPtr pKey = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header)); 
+ _key = Marshal.PtrToStringUni(pKey); 
+ IntPtr pValue = ResourceUtil.Align(pKey.ToInt32() + (_key.Length + 1) * 2); 
+ _value = _header.wValueLength > 0 ? Marshal.PtrToStringUni(pValue, _header.wValueLength) : null; 
+} </pre><h3>
+ Writing</h3>
+ <p>
+  Writing is the reverse operation from reading, but the header must be updated to
+  the correct length. It's easier to align the structure and to calculate the difference
+  between the end of the structure and the beginning of it after it's written.</p>
+ <pre lang="cs">
+public override void Write(BinaryWriter w) 
+{ 
+ long headerPos = w.BaseStream.Position; 
+ base.Write(w); 
+ Dictionary<string stringresource="">
+</string>.Enumerator stringsEnum = _strings.GetEnumerator(); 
+ while (stringsEnum.MoveNext()) 
+ { 
+  stringsEnum.Current.Value.Write(w); 
+ } 
+ ResourceUtil.PadToDWORD(w); 
+ ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos); 
+}</pre>
+ <h2>
+  License</h2>
+ <ul>
+  <li>CodeProject Open License: <a href="http://www.codeproject.com/info/cpol10.aspx">
+   http://www.codeproject.com/info/cpol10.aspx</a></li>
+ </ul>
+ <h2>
+  Source Code</h2>
+ <p>
+  The latest version of this article and source code can always be found in <a href="svn://svn.vestris.com/codeproject/ResourceLib/">
+   svn://svn.vestris.com/codeproject/ResourceLib</a>.</p>
+ <h2>
+  Links</h2>
+ <p>
+  This article combines, implements, ports or obsoletes the functionalities of the
+  following publications.</p>
+ <ul>
+  <li><a href="http://www.codeproject.com/KB/library/VerInfoLib.aspx">http://www.codeproject.com/KB/library/VerInfoLib.aspx</a></li>
+  <li><a href="http://www.codeproject.com/KB/cpp/GetLocalVersionInfos.aspx">http://www.codeproject.com/KB/cpp/GetLocalVersionInfos.aspx</a></li>
+  <li><a href="http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx">http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx</a></li>
+ </ul>
+ <h2>
+  History
+ </h2>
+ <ul>
+  <li>2008-06-30: initial version</li>
+ </ul>
+ <p>
+  &nbsp;</p>
+</body>
+</html>

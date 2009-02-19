@@ -6,6 +6,11 @@ using System.IO;
 
 namespace Vestris.ResourceLib
 {
+    /// <summary>
+    /// This structure depicts the organization of data in a file-version resource. It contains language 
+    /// and code page formatting information for the strings. A code page is an ordered character set.
+    /// http://msdn.microsoft.com/en-us/library/aa909192.aspx
+    /// </summary>
     public class StringTable : ResourceTable
     {
         Dictionary<string, StringResource> _strings;
@@ -20,13 +25,13 @@ namespace Vestris.ResourceLib
 
         public StringTable(IntPtr lpRes)
         {
-            Load(lpRes);
+            Read(lpRes);
         }
 
-        public override IntPtr Load(IntPtr lpRes)
+        public override IntPtr Read(IntPtr lpRes)
         {
             _strings = new Dictionary<string, StringResource>();
-            IntPtr pChild = base.Load(lpRes);
+            IntPtr pChild = base.Read(lpRes);
 
             while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))
             {
@@ -57,13 +62,16 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return _strings[key].StringValue;
+                return _strings[key].Value;
             }
             set
             {
                 StringResource sr = null;
                 if (!_strings.TryGetValue(key, out sr))
+                {
                     sr = new StringResource(key);
+                    _strings.Add(key, sr);
+                }
 
                 sr.Value = value;
             }

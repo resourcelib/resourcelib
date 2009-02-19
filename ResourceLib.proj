@@ -1,0 +1,34 @@
+<Project DefaultTargets="all" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+ <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+ <PropertyGroup Condition="'$(Configuration)'==''">
+  <Configuration>Debug</Configuration>
+ </PropertyGroup>
+ <Target Name="all">
+  <CallTarget Targets="version" />
+  <CallTarget Targets="build" />
+ </Target>
+ <Target Name="version">
+  <Version>
+   <Output TaskParameter="Major" PropertyName="Major" />
+   <Output TaskParameter="Minor" PropertyName="Minor" />
+   <Output TaskParameter="Build" PropertyName="Build" />
+   <Output TaskParameter="Revision" PropertyName="Revision" />
+  </Version>
+  <SvnVersion LocalPath=".">
+   <Output TaskParameter="Revision" PropertyName="Build" />
+  </SvnVersion>
+  <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
+  <MakeDir Directories="Source\Common" />
+  <AssemblyInfo CodeLanguage="CS" OutputFile="Source\Common\GlobalAssemblyInfo.cs"
+   AssemblyDescription="Binary Resource Management Library" AssemblyConfiguration=""
+   AssemblyCompany="Vestris Inc." AssemblyProduct="ResourceLib" AssemblyCopyright="Copyright (c) Daniel Doubrovkine, Vestris Inc. 2008"
+   AssemblyTrademark="" ComVisible="false" CLSCompliant="false" AssemblyDelaySign="false" AssemblyKeyName="" AssemblyCulture=""
+   AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)" />
+ </Target>
+ <Target Name="clean">
+  <MSBuild Projects="ResourceLib.sln" Targets="Clean" />
+ </Target>
+ <Target Name="build">
+  <MSBuild Projects="ResourceLib.sln" />
+ </Target>
+</Project>

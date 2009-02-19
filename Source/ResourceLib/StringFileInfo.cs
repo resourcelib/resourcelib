@@ -6,6 +6,11 @@ using System.IO;
 
 namespace Vestris.ResourceLib
 {
+    /// <summary>
+    /// This structure depicts the organization of data in a file-version resource. 
+    /// It contains version information that can be displayed for a particular language and code page.
+    /// http://msdn.microsoft.com/en-us/library/aa908808.aspx
+    /// </summary>
     public class StringFileInfo : ResourceTable
     {
         Dictionary<string, StringTable> _strings;
@@ -20,15 +25,14 @@ namespace Vestris.ResourceLib
 
         public StringFileInfo(IntPtr lpRes)
         {
-            Load(lpRes);
+            Read(lpRes);
         }
 
-        public override IntPtr Load(IntPtr lpRes)
+        public override IntPtr Read(IntPtr lpRes)
         {
             _strings = new Dictionary<string, StringTable>();
-            IntPtr pChild = base.Load(lpRes);
+            IntPtr pChild = base.Read(lpRes);
 
-            // read strings, each string is in a structure described in http://msdn.microsoft.com/en-us/library/aa909025.aspx
             while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))
             {
                 StringTable res = new StringTable(pChild);
@@ -53,19 +57,25 @@ namespace Vestris.ResourceLib
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
 
+        public StringTable Default
+        {
+            get
+            {
+                Dictionary<string, StringTable>.Enumerator iter = _strings.GetEnumerator();
+                if (iter.MoveNext()) return iter.Current.Value;
+                return null;
+            }
+        }
+
         public string this[string key]
         {
             get
             {
-                Dictionary<string, StringTable>.Enumerator enumerator = _strings.GetEnumerator();
-                enumerator.MoveNext();
-                return enumerator.Current.Value[key];
+                return Default[key];
             }
             set
             {
-                Dictionary<string, StringTable>.Enumerator enumerator = _strings.GetEnumerator();
-                enumerator.MoveNext();
-                enumerator.Current.Value[key] = value;
+                Default[key] = value;
             }
         }
     }

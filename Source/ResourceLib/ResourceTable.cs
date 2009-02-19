@@ -34,15 +34,15 @@ namespace Vestris.ResourceLib
 
         public ResourceTable(IntPtr lpRes)
         {
-            Load(lpRes);
+            Read(lpRes);
         }
 
         /// <summary>
-        /// Load the resource header, return a pointer to the end of it.
+        /// Read the resource header, return a pointer to the end of it.
         /// </summary>
         /// <param name="lpRes">top of header</param>
         /// <returns>end of header, after the key, aligned at 32bit</returns>
-        public virtual IntPtr Load(IntPtr lpRes)
+        public virtual IntPtr Read(IntPtr lpRes)
         {
             _header = (Kernel32.RESOURCE_HEADER) Marshal.PtrToStructure(
                 lpRes, typeof(Kernel32.RESOURCE_HEADER));

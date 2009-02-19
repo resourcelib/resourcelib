@@ -137,7 +137,7 @@ namespace Vestris.ResourceLib
                 if (_size <= 0)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
-                Load(lpRes);
+                Read(lpRes);
             }
             finally
             {
@@ -146,7 +146,7 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public virtual IntPtr Load(IntPtr lpRes)
+        public virtual IntPtr Read(IntPtr lpRes)
         {
             throw new NotImplementedException();
         }

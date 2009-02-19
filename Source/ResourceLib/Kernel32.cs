@@ -11,8 +11,7 @@ namespace Vestris.ResourceLib
         public const uint LOAD_IGNORE_CODE_AUTHZ_LEVEL = 0x00000010;
 
         /// <summary>
-        /// This structure depicts the organization of data in a file-version resource. 
-        /// http://msdn.microsoft.com/en-us/library/aa909192.aspx
+        /// A resource header.
         /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public struct RESOURCE_HEADER
@@ -23,7 +22,7 @@ namespace Vestris.ResourceLib
         };
 
         /// <summary>
-        /// Language and code page combinations supported by this file. 
+        /// Language and code page combinations.
         /// The low-order word of each DWORD must contain a Microsoft language identifier, 
         /// and the high-order word must contain the IBM code page number. 
         /// Either high-order or low-order word can be zero, indicating that the file is language 
@@ -37,7 +36,8 @@ namespace Vestris.ResourceLib
         };
         
         /// <summary>
-        /// This structure contains version information about a file. This information is language- and code page–independent.
+        /// This structure contains version information about a file. 
+        /// This information is language- and code page–independent.
         /// http://msdn.microsoft.com/en-us/library/aa909176.aspx
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]

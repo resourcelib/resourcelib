@@ -7,7 +7,9 @@ using System.IO;
 namespace Vestris.ResourceLib
 {
     /// <summary>
-    /// A variable information block
+    /// This structure depicts the organization of data in a file-version resource. It typically contains a 
+    /// list of language and code page identifier pairs that the version of the application or DLL supports.
+    /// http://msdn.microsoft.com/en-us/library/bb202818.aspx
     /// </summary>
     public class VarTable : ResourceTable
     {
@@ -23,13 +25,13 @@ namespace Vestris.ResourceLib
 
         public VarTable(IntPtr lpRes)
         {
-            Load(lpRes);
+            Read(lpRes);
         }
 
-        public override IntPtr Load(IntPtr lpRes)
+        public override IntPtr Read(IntPtr lpRes)
         {
             _languages = new Dictionary<UInt16, UInt16>();
-            IntPtr pVar = base.Load(lpRes);
+            IntPtr pVar = base.Read(lpRes);
 
             while (pVar.ToInt32() < (lpRes.ToInt32() + _header.wLength))
             {
@@ -60,6 +62,18 @@ namespace Vestris.ResourceLib
             ResourceUtil.WriteAt(w, w.BaseStream.Position - valuePos, headerPos + 2);
             ResourceUtil.PadToDWORD(w);
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
+        }
+
+        public UInt16 this[UInt16 key]
+        {
+            get
+            {
+                return _languages[key];
+            }
+            set
+            {
+                _languages[key] = value;
+            }
         }
     }
 }

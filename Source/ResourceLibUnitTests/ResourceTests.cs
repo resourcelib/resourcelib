@@ -61,6 +61,21 @@ namespace Vestris.ResourceLibUnitTests
             }
         }
 
+        [Test]
+        public void TestLoadVersionResourceStrings()
+        {
+            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Assert.IsTrue(File.Exists(filename));
+            VersionResource versionResource = new VersionResource();
+            versionResource.LoadFrom(filename);
+            Console.WriteLine("File version: {0}", versionResource.FileVersion);
+            StringFileInfo stringFileInfo = (StringFileInfo) versionResource["StringFileInfo"];
+            foreach (KeyValuePair<string, StringResource> stringResource in stringFileInfo.Default.Strings)
+            {
+                Console.WriteLine("{0} = {1}", stringResource.Value.Key, stringResource.Value.StringValue);
+            }
+        }
+
         private void DumpResource(ResourceTable rc)
         {
             if (rc is StringFileInfo)
@@ -129,8 +144,12 @@ namespace Vestris.ResourceLibUnitTests
             versionResource.FileVersion = "1.2.3.4";
             versionResource.ProductVersion = "5.6.7.8";
 
-            //StringFileInfo stringFileInfo = (StringFileInfo) versionResource.Resources["StringFileInfo"];
-            //stringFileInfo["Comments"] = "test";
+            StringFileInfo stringFileInfo = (StringFileInfo)versionResource["StringFileInfo"];
+            stringFileInfo["Comments"] = string.Format("{0}\0", Guid.NewGuid());
+            stringFileInfo["NewValue"] = string.Format("{0}\0", Guid.NewGuid());
+
+            VarFileInfo varFileInfo = (VarFileInfo)versionResource["VarFileInfo"];
+            varFileInfo[0x409] = 1300;
 
             string targetFilename = Path.Combine(Path.GetTempPath(), "test.dll");
             File.Copy(filename, targetFilename, true);
@@ -144,6 +163,20 @@ namespace Vestris.ResourceLibUnitTests
 
             Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
+            
+            StringFileInfo newStringFileInfo = (StringFileInfo) newVersionResource["StringFileInfo"];
+            foreach (KeyValuePair<string, StringResource> stringResource in newStringFileInfo.Default.Strings)
+            {
+                Console.WriteLine("{0} = {1}", stringResource.Value.Key, stringResource.Value.StringValue);
+                Assert.AreEqual(stringResource.Value.Value, stringFileInfo[stringResource.Key]);
+            }
+
+            VarFileInfo newVarFileInfo = (VarFileInfo)newVersionResource["VarFileInfo"];
+            foreach (KeyValuePair<UInt16, UInt16> varResource in newVarFileInfo.Default.Languages)
+            {
+                Console.WriteLine("{0} = {1}", varResource.Key, varResource.Value);
+                Assert.AreEqual(varResource.Value, varFileInfo[varResource.Key]);
+            }
         }
 
         [Test]

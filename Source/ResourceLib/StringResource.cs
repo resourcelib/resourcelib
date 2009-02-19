@@ -6,6 +6,12 @@ using System.Runtime.InteropServices;
 
 namespace Vestris.ResourceLib
 {
+    /// <summary>
+    /// This structure depicts the organization of data in a file-version resource. It contains a string 
+    /// that describes a specific aspect of a file, such as a file's version, its copyright notices, 
+    /// or its trademarks.
+    /// http://msdn.microsoft.com/en-us/library/aa909025.aspx
+    /// </summary>
     public class StringResource
     {
         Kernel32.RESOURCE_HEADER _header;
@@ -54,14 +60,17 @@ namespace Vestris.ResourceLib
         public StringResource(string key)
         {
             _key = key;
+            _header.wType = 1;
+            _header.wLength = 0;
+            _header.wValueLength = 0;
         }
 
         public StringResource(IntPtr lpRes)
         {
-            Load(lpRes);
+            Read(lpRes);
         }
 
-        public void Load(IntPtr lpRes)
+        public void Read(IntPtr lpRes)
         {
             _header = (Kernel32.RESOURCE_HEADER)Marshal.PtrToStructure(
                 lpRes, typeof(Kernel32.RESOURCE_HEADER));
