@@ -167,13 +167,13 @@ namespace Vestris.ResourceLib
             return ms.ToArray();
         }
 
-        public void SaveTo(string filename, uint name, uint type)
+        public void SaveTo(string filename, uint name, uint type, ushort langid)
         {
             byte[] data = WriteAndGetBytes();
-            SaveTo(filename, name, type, data);
+            SaveTo(filename, name, type, langid, data);
         }
 
-        public static void SaveTo(string filename, uint name, uint type, byte[] data)
+        public static void SaveTo(string filename, uint name, uint type, ushort lang, byte[] data)
         {
             IntPtr h = Kernel32.BeginUpdateResource(filename, false);
 
@@ -181,8 +181,7 @@ namespace Vestris.ResourceLib
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
             if (!Kernel32.UpdateResource(h, new IntPtr(type), new IntPtr(name),
-                (ushort)ResourceUtil.MAKELANGID(Kernel32.LANG_NEUTRAL, Kernel32.SUBLANG_NEUTRAL),
-                data, (uint)data.Length))
+                lang, data, (uint)data.Length))
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }

@@ -42,15 +42,7 @@ namespace Vestris.ResourceLibUnitTests
                         }
                         else if (resource is GroupIconResource)
                         {
-                            GroupIconResource groupiconResource = (GroupIconResource)resource;
-                            Console.WriteLine(" Type: {0}", groupiconResource.Type);
-                            foreach (IconResource icon in groupiconResource.Icons)
-                            {
-                                Console.WriteLine(" Icon: {0} ({1} byte(s))", 
-                                    icon.ToString(), icon.ImageSize);
-                                Console.WriteLine("  {0} ({1}x{2})", 
-                                    icon.Image.Header.BitmapCompression, icon.Image.Header.biHeight, icon.Image.Header.biWidth);
-                            }
+                            DumpResource(resource as GroupIconResource);
                         }
                     }
                 }
@@ -86,6 +78,23 @@ namespace Vestris.ResourceLibUnitTests
             {
                 Console.WriteLine("{0} = {1}", stringResource.Value.Key, stringResource.Value.StringValue);
             }
+        }
+
+        private void DumpResource(GroupIconResource rc)
+        {
+            Console.WriteLine(" GroupIconResource: {0}, {1}", rc.Name, rc.Type);
+            foreach (IconResource icon in rc.Icons)
+            {
+                DumpResource(icon);
+            }
+        }
+
+        private void DumpResource(IconResource rc)
+        {
+            Console.WriteLine(" Icon: {0} ({1} byte(s))",
+                rc.ToString(), rc.ImageSize);
+            Console.WriteLine("  {0} ({1}x{2})",
+                rc.Image.Header.BitmapCompression, rc.Image.Header.biHeight, rc.Image.Header.biWidth);
         }
 
         private void DumpResource(ResourceTable rc)
@@ -242,6 +251,70 @@ namespace Vestris.ResourceLibUnitTests
 
                 Assert.AreEqual(currentBytes[i], newBytes[i], string.Format("Error at offset {0}", i));
             }
+        }
+
+        [Test]
+        public void TestLoadAndSaveIconResource()
+        {
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string icon1filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Icons\\Icon1.ico");
+            Assert.IsTrue(File.Exists(icon1filename));
+            IconFile iconFile = new IconFile(icon1filename);
+
+            Console.WriteLine("{0}: {1}", Path.GetFileName(icon1filename), iconFile.Type);
+            foreach (IconFileIcon icon in iconFile.Icons)
+            {
+                Console.WriteLine(" {0}", icon.ToString());
+            }
+
+            Console.WriteLine("Converted GroupIconResource:");
+            GroupIconResource groupIconResource = iconFile.ConvertToGroupIconResource();
+            DumpResource(groupIconResource);
+            Assert.AreEqual(iconFile.Icons.Count, groupIconResource.Icons.Count);
+
+            string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
+            Assert.IsTrue(File.Exists(filename));
+            string targetFilename = Path.Combine(Path.GetTempPath(), "test.dll");
+            File.Copy(filename, targetFilename, true);
+            Console.WriteLine(targetFilename);
+            groupIconResource.SaveTo(targetFilename);
+
+            Console.WriteLine("Written GroupIconResource:");
+            GroupIconResource newGroupIconResource = new GroupIconResource();
+            newGroupIconResource.LoadFrom(targetFilename);
+            DumpResource(newGroupIconResource);            
+        }
+
+        [Test]
+        public void TestReplaceIconResource()
+        {
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string icon1filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Icons\\Icon1.ico");
+            Assert.IsTrue(File.Exists(icon1filename));
+            IconFile iconFile = new IconFile(icon1filename);
+
+            Console.WriteLine("{0}: {1}", Path.GetFileName(icon1filename), iconFile.Type);
+            foreach (IconFileIcon icon in iconFile.Icons)
+            {
+                Console.WriteLine(" {0}", icon.ToString());
+            }
+
+            Console.WriteLine("Converted GroupIconResource:");
+            GroupIconResource groupIconResource = iconFile.ConvertToGroupIconResource();
+            DumpResource(groupIconResource);
+            Assert.AreEqual(iconFile.Icons.Count, groupIconResource.Icons.Count);
+
+            string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
+            Assert.IsTrue(File.Exists(filename));
+            string targetFilename = Path.Combine(Path.GetTempPath(), "write.exe");
+            File.Copy(filename, targetFilename, true);
+            Console.WriteLine(targetFilename);
+            groupIconResource.SaveTo(targetFilename);
+
+            Console.WriteLine("Written GroupIconResource:");
+            GroupIconResource newGroupIconResource = new GroupIconResource();
+            newGroupIconResource.LoadFrom(targetFilename);
+            DumpResource(newGroupIconResource);
         }
     }
 }

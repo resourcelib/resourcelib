@@ -16,11 +16,27 @@ namespace Vestris.ResourceLib
         private Kernel32.GRPICONDIRENTRY _header;
         private IconImage _image = new IconImage();
 
+        public Kernel32.GRPICONDIRENTRY Header
+        {
+            get
+            {
+                return _header;
+            }
+            set
+            {
+                _header = value;
+            }
+        }
+
         public IconImage Image
         {
             get
             {
                 return _image;
+            }
+            set
+            {
+                _image = value;
             }
         }
 
@@ -50,6 +66,10 @@ namespace Vestris.ResourceLib
             {
                 return _header.bWidth;
             }
+            set
+            {
+                _header.bWidth = value;
+            }
         }
 
         public Byte Height
@@ -57,6 +77,10 @@ namespace Vestris.ResourceLib
             get
             {
                 return _header.bHeight;
+            }
+            set
+            {
+                _header.bHeight = value;
             }
         }
 
@@ -85,7 +109,7 @@ namespace Vestris.ResourceLib
             if (dibBits == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            _image.Read(dibBits, Kernel32.SizeofResource(hModule, hIconRes));
+            _image.Read(dibBits, (uint) Kernel32.SizeofResource(hModule, hIconRes));
 
             return new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
         }
@@ -144,7 +168,20 @@ namespace Vestris.ResourceLib
 
         public override void Write(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            w.Write(_header.bWidth);
+            w.Write(_header.bHeight);
+            w.Write(_header.bColors);
+            w.Write(_header.bReserved);
+            w.Write(_header.wPlanes);
+            w.Write(_header.wBitsPerPixel);
+            w.Write(_header.dwImageSize);
+            w.Write(_header.nID);
+            ResourceUtil.PadToWORD(w);
+        }
+
+        public void SaveIconTo(string filename)
+        {
+            SaveTo(filename, _header.nID, (uint) Kernel32.ResourceTypes.RT_ICON, 1033, _image.Data);
         }
     }
 }

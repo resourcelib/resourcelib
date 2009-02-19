@@ -42,6 +42,20 @@ namespace Vestris.ResourceLib
             return Align(p.ToInt32());
         }
 
+        public static long PadToWORD(BinaryWriter w)
+        {
+            long pos = w.BaseStream.Position;
+
+            if (pos % 2 != 0)
+            {
+                long count = 2 - pos % 2;
+                Pad(w, (ushort)count);
+                pos += count;
+            }
+
+            return pos;
+        }
+
         public static long PadToDWORD(BinaryWriter w)
         {
             long pos = w.BaseStream.Position;
@@ -72,6 +86,14 @@ namespace Vestris.ResourceLib
             while (len-- > 0)
                 w.Write((byte) 0);
             return w.BaseStream.Position;
+        }
+
+        public static int NEUTRALLANGID
+        {
+            get
+            {
+                return MAKELANGID(Kernel32.LANG_NEUTRAL, Kernel32.SUBLANG_NEUTRAL);
+            }
         }
 
         public static int MAKELANGID(int primary, int sub)

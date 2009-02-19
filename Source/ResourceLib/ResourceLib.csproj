@@ -39,6 +39,8 @@
     </Compile>
     <Compile Include="Gdi32.cs" />
     <Compile Include="GroupIconResource.cs" />
+    <Compile Include="IconFile.cs" />
+    <Compile Include="IconFileIcon.cs" />
     <Compile Include="IconImage.cs" />
     <Compile Include="IconResource.cs" />
     <Compile Include="Kernel32.cs" />

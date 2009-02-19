@@ -20,7 +20,10 @@ CODE { COLOR: #990000; FONT-FAMILY: "Courier New", Courier, mono; }
 
 <p>There are several good articles about reading and writing resources from/to a compiled binary. Most focus on retrieving module version information and modifying version information, mostly in C++. Some detail the same operations for cursors, icons or dialog resources. There's, however, no single .NET library to retrieve and save any type of resources, or any library to edit version resources specifically.</p>
 
-<p>This implementation is a framework that enumerates resources and implements both read and write of the file version (<code>VS_VERSIONINFO</code>) resources. It has been extended to icons and can be further extended to other resource types easily.</p>
+<p>This implementation is a framework that enumerates resources and implements both read and write of the file version (<code>VS_VERSIONINFO</code>),
+ string resources (company, copyright and product information) and icon (<span style="color: #990000;
+  font-family: Courier New">RT_GROUP_ICON<span style="color: #000000; font-family: Verdana">,</span>
+  RT_ICON</span>) resources. It has been extended to icons and can be further extended to other resource types easily.</p>
 
 <h2>Background</h2>
 
@@ -92,7 +95,42 @@ versionResource.SaveTo(filename);</pre>
  <span class="code-keyword">public</span> <span class="code-SDKkeyword">UInt16</span> wType; 
 };</pre>
 
-<p>The header is usually followed by a Unicode string (a key) and an array of data structures, each with a similar resource header. All structures are aligned to 32-bit boundaries.</p>
+<p>The header is usually followed by a Unicode string (a key) and an array of data structures, each with a similar resource header. </p>
+
+<h3>
+Alignment
+</h3>
+<p>
+ All version resource structures are <a href="http://msdn.microsoft.com/en-us/library/aa290049.aspx">
+  aligned</a> to 32-bit boundaries (DWORD), while
+ icon resources are aligned to a 16-bit boundary (WORD). The resource library uses both
+ math to align pointers (<span
+  style="color: #990000; font-family: Courier New">ResourceUtil.Align<span style="color: #000000"><span
+   style="font-family: Verdana, Arial, Helvetica, sans-serif">) </span><span style="font-family: Verdana">
+    to align to DWORD</span></span></span>, and struct alignment (<span style="color: #990000;
+     font-family: Courier New">Pack = 2</span>) to align icon structures to WORD.</p>
+<p>
+</p>
+ <pre lang="cs">public static IntPtr Align(Int32 p)
+{
+    return new IntPtr((p + 3) & ~3);
+}
+
+public static IntPtr Align(IntPtr p)
+{
+    return Align(p.ToInt32());
+}
+ </pre>
+<p>
+</p>
+ <pre lang="cs">[StructLayout(LayoutKind.Sequential, Pack = 2)]
+public struct GRPICONDIR
+{
+    public UInt16 wReserved; // reserved
+    public UInt16 wType; // type, 1 = icon, 2 = cursor
+    public UInt16 wImageCount; // image count
+};
+ </pre>
 
 <h3>Reading</h3>
 
@@ -144,12 +182,14 @@ versionResource.SaveTo(filename);</pre>
 
 <h2>Extending to Icons</h2>
 
-<p>Extending the library to support icons involves implementing the data structures
+<p>Extending the library to support icons means implementing the data structures
  for icon storage and hooking up ResourceInfo callbacks. When <span style="color: #990000;
   font-family: Courier New">ResourceInfo </span>encouters a resource of type "14"
  (<span style="color: #990000; font-family: Courier New">RT_GROUP_ICON</span>), it
  creates an object of type <span style="color: #990000; font-family: Courier New">
-  GroupIconResource</span>, much like string and version resources.</p>
+  GroupIconResource</span>, much like string and version resources. The latter creates
+ an <span style="color: #990000; font-family: Courier New">IconResource</span>, which
+ loads an <span style="color: #990000; font-family: Courier New">IconImage</span>.</p>
  <ul>
   <li>A <span style="color: #990000; font-family: Courier New">GroupIconResource </span>
    represents a collection of icon resources.</li>
@@ -159,20 +199,42 @@ versionResource.SaveTo(filename);</pre>
    not a resource per-se, but raw data embedded in the file at an offset defined by
    the icon resource and represents a single icon bitmap, for example in a BMP format.</li>
  </ul>
+ <p>
+  In order to embed an existing icon from a .ico file into an executable (.exe or
+  .dll) we load the .ico file and convert it to a <span style="color: #990000; font-family: Courier New">
+   GroupIconResource</span>. The structure in an .ico file is similar to the structure
+  of the icon in an executable. The only difference is that the executable headers
+  store the icon ID, while a .ico header contains the offset of icon data. See <span
+   style="color: #990000; font-family: Courier New">IconFile </span>and <span style="color: #990000;
+    font-family: Courier New">IconFileIcon</span> classes for implementation details.
+  The <span style="color: #990000; font-family: Courier New">GroupIconResource </span>
+  is written to the target file, then each icon resource is written separately. Note
+  that the current implementation would replace icons with the same ID in the executable,
+  but doesn't delete old icons if you're storing less icon images than the previous
+  number - it probably should since these icons become orphaned.</p>
+ <p>
+  The ease of extending the library to icons validated our initial design model.
+ </p>
 
 <h2>Source Code</h2>
 
-<p>The latest version of this article and source code can always be found <a href="svn://svn.vestris.com/codeproject/ResourceLib/" target="_blank">here</a>.</p>
+<p>The latest version of this article and source code can always be found in <a href="http://subversion.tigris.org/">
+  Subversion</a> under <a href="svn://svn.vestris.com/codeproject/ResourceLib/">svn://svn.vestris.com/codeproject/ResourceLib</a>.
+ You can also <a href="http://svn.vestris.com/listing.php?repname=Vestris+SVN&path=%2Fcodeproject%2FResourceLib%2FSource%2FResourceLib%2F#_codeproject_ResourceLib_Source_ResourceLib_">
+  browse the source code</a>.</p>
 
 <h2>Links</h2>
 
-<p>This article combines, implements, ports, or obsoletes the functionalities of the following publications:</p>
+<p>This article combines, implements, ports, or obsoletes some of the functionalities of the following publications:</p>
 
 <ul>
-<li><a href="VerInfoLib.aspx">Modification of Version Information Resources in Compiled Binaries</a></li>
-<li><a href="http://www.codeproject.com/KB/cpp/GetLocalVersionInfos.aspx">Retrieving version information from your local application's resource</a></li>
-<li><a href="http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx">A Fast Way to Get at the File's Version</a></li>
-<li><a href="http://www.codeguru.com/csharp/.net/net_general/graphics/article.php/c12787/">IconLib: Icons Unfolded</a></li>
+<li><a href="http://www.codeproject.com/KB/library/VerInfoLib.aspx">CodeProject: Modification of Version Information Resources in Compiled Binaries</a></li>
+<li><a href="http://www.codeproject.com/KB/cpp/GetLocalVersionInfos.aspx">CodeProject: Retrieving version information from your local application's resource</a></li>
+<li><a href="http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx">CodeProject: A Fast Way to Get at the File's Version</a></li>
+<li><a href="http://www.codeguru.com/csharp/.net/net_general/graphics/article.php/c12787/">CodeGuru: IconLib: Icons Unfolded</a></li>
+<li><a href="http://www.codeguru.com/cpp/w-p/win32/tutorials/print.php/c12873__1">CodeGuru: Hacking Icon Resources</a></li>
+<li><a href="http://www.codeproject.com/KB/GDI/using_vista_icons.aspx">CodeProject: Windows Vista Icons</a></li>
+<li><a href="http://msdn.microsoft.com/en-us/library/ms997538.aspx">MSDN: Icons in Win32</a></li>
 </ul>
 
 <h2>History</h2>
@@ -180,8 +242,10 @@ versionResource.SaveTo(filename);</pre>
 <ul>
 <li>2008-06-30: Initial version</li>
  <li>2008-07-08: Bug: wrong value for RT_RCDATA</li>
- <li>2008-09-27: Added r/o support for icons</li>
+ <li>2008-09-28: Added support for icons</li>
 </ul>
+ <p>
+ </p>
 
 </body>
 </html>

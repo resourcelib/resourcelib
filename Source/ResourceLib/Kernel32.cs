@@ -87,6 +87,33 @@ namespace Vestris.ResourceLib
             public UInt16 nID; // icon ID
         };
 
+        /// <summary>
+        /// Icon group directory entry in an .ico file
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        public struct FILEGRPICONDIRENTRY
+        {
+            public Byte bWidth;
+            public Byte bHeight;
+            public Byte bColors;
+            public Byte bReserved;
+            public UInt16 wPlanes;
+            public UInt16 wBitsPerPixel;
+            public UInt32 dwImageSize;
+            public UInt32 dwFileOffset;
+        };
+
+        /// <summary>
+        /// Icon group structure in an .ico file
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        public struct FILEGRPICONDIR
+        {
+            public UInt16 wReserved;
+            public UInt16 wType;
+            public UInt16 wCount;
+        };
+
         [DllImport("kernel32.dll")]
         public static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
 

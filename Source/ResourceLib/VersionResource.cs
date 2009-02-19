@@ -56,12 +56,14 @@ namespace Vestris.ResourceLib
 
         public void LoadFrom(string filename)
         {
-            base.LoadFrom(filename, Marshal.StringToHGlobalUni("#1"), new IntPtr(16));
+            base.LoadFrom(filename, Marshal.StringToHGlobalUni("#1"),
+                new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION));
         }
 
         public static byte[] LoadBytesFrom(string filename)
         {
-            return Resource.LoadBytesFrom(filename, Marshal.StringToHGlobalUni("#1"), new IntPtr(16));
+            return Resource.LoadBytesFrom(filename, Marshal.StringToHGlobalUni("#1"),
+                new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION));
         }
 
         public override IntPtr Read(IntPtr hModule, IntPtr lpRes)
@@ -165,12 +167,12 @@ namespace Vestris.ResourceLib
 
         public static void SaveTo(string filename, byte[] data)
         {
-            Resource.SaveTo(filename, 1, (uint) Kernel32.ResourceTypes.RT_VERSION, data);
+            Resource.SaveTo(filename, 1, (uint)Kernel32.ResourceTypes.RT_VERSION, (ushort)ResourceUtil.NEUTRALLANGID, data);
         }
 
         public void SaveTo(string filename)
         {
-            base.SaveTo(filename, 1, (uint) Kernel32.ResourceTypes.RT_VERSION);
+            base.SaveTo(filename, 1, (uint)Kernel32.ResourceTypes.RT_VERSION, (ushort)ResourceUtil.NEUTRALLANGID);
         }
 
         public ResourceTable this[string key]

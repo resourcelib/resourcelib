@@ -18,7 +18,7 @@ namespace Vestris.ResourceLib
             Cursor = 2
         };
 
-        Kernel32.GRPICONDIR _header;
+        Kernel32.GRPICONDIR _header = new Kernel32.GRPICONDIR();
         List<IconResource> _icons = new List<IconResource>();
 
         /// <summary>
@@ -63,8 +63,33 @@ namespace Vestris.ResourceLib
         }
 
         public GroupIconResource()
+            : base(IntPtr.Zero, 
+                IntPtr.Zero, 
+                new IntPtr((uint)Kernel32.ResourceTypes.RT_GROUP_ICON), 
+                Marshal.StringToHGlobalUni("#1"), 1033, 
+                Marshal.SizeOf(typeof(Kernel32.GRPICONDIR)))
         {
+            Type = GroupType.Icon;
+        }
 
+        /// <summary>
+        /// Load from an executable file
+        /// </summary>
+        /// <param name="filename">an executable file (.exe or .dll)</param>
+        public void LoadFrom(string filename)
+        {
+            base.LoadFrom(filename, Marshal.StringToHGlobalUni("#1"), 
+                new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON));
+        }
+
+        public void SaveTo(string filename)
+        {
+            base.SaveTo(filename, 1, (uint) Kernel32.ResourceTypes.RT_GROUP_ICON, 1033);
+
+            foreach (IconResource icon in _icons)
+            {
+                icon.SaveIconTo(filename);
+            }
         }
 
         public override IntPtr Read(IntPtr hModule, IntPtr lpRes)
@@ -88,7 +113,14 @@ namespace Vestris.ResourceLib
 
         public override void Write(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            w.Write((UInt16) _header.wReserved);
+            w.Write((UInt16) _header.wType);
+            w.Write((UInt16) _icons.Count);
+            ResourceUtil.PadToWORD(w);
+            foreach(IconResource icon in _icons)
+            {
+                icon.Write(w);
+            }
         }
     }
 }
