@@ -7,8 +7,17 @@ namespace Vestris.ResourceLib
 {
     public class StringTableResource : Resource
     {
-        Kernel32.STRING_TABLE_INFO_HEADER _blockInfo;
+        Kernel32.STRING_OR_VAR_INFO_HEADER _blockInfo;
+        string _blockKey;
         Dictionary<string, string> _strings;
+
+        public string BlockKey
+        {
+            get
+            {
+                return _blockKey;
+            }
+        }
 
         public Dictionary<string, string> Strings
         {
@@ -18,7 +27,7 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public Kernel32.STRING_TABLE_INFO_HEADER BlockInfo
+        public Kernel32.STRING_OR_VAR_INFO_HEADER BlockInfo
         {
             get
             {
@@ -34,18 +43,20 @@ namespace Vestris.ResourceLib
 
         public void Load(IntPtr lpRes)
         {
-            IntPtr pBlockInfoHeader = ResourceUtil.Align(lpRes.ToInt32() + Kernel32.VS_VERSIONINFO.PaddingOffset);
-            _blockInfo = (Kernel32.STRING_TABLE_INFO_HEADER) Marshal.PtrToStructure(
-                pBlockInfoHeader, typeof(Kernel32.STRING_TABLE_INFO_HEADER));
-
             _strings = new Dictionary<string, string>();
 
-            IntPtr pChild = ResourceUtil.Align(pBlockInfoHeader.ToInt32() + Kernel32.STRING_TABLE_INFO_HEADER.PaddingOffset);
-            Kernel32.STRING_INFO_HEADER pChildInfo = (Kernel32.STRING_INFO_HEADER)Marshal.PtrToStructure(
-                pChild, typeof(Kernel32.STRING_INFO_HEADER));
+            _blockInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER) Marshal.PtrToStructure(
+                lpRes, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
+
+            IntPtr pBlockKey = ResourceUtil.Align(lpRes.ToInt32() + Marshal.SizeOf(_blockInfo));
+            _blockKey = Marshal.PtrToStringUni(pBlockKey);
+
+            IntPtr pChild = ResourceUtil.Align(pBlockKey.ToInt32() + (_blockKey.Length + 1) * 2);
+            Kernel32.STRING_OR_VAR_INFO_HEADER pChildInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER) Marshal.PtrToStructure(
+                pChild, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
 
             // read strings, each string is in a structure described in http://msdn.microsoft.com/en-us/library/aa909025.aspx
-            while (pChild.ToInt32() < (pBlockInfoHeader.ToInt32() + _blockInfo.wLength))
+            while (pChild.ToInt32() < (lpRes.ToInt32() + _blockInfo.wLength))
             {
                 IntPtr pChildKey = new IntPtr(pChild.ToInt32() + Marshal.SizeOf(pChildInfo));
                 string key = Marshal.PtrToStringUni(pChildKey);
@@ -57,8 +68,8 @@ namespace Vestris.ResourceLib
 
                 pChild = ResourceUtil.Align(pChild.ToInt32() + pChildInfo.wLength);
 
-                pChildInfo = (Kernel32.STRING_INFO_HEADER)Marshal.PtrToStructure(
-                    pChild, typeof(Kernel32.STRING_INFO_HEADER));
+                pChildInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER)Marshal.PtrToStructure(
+                    pChild, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
             }
             
         }

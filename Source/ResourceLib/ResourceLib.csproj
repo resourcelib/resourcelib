@@ -39,6 +39,7 @@
     <Compile Include="Resource.cs" />
     <Compile Include="ResourceUtil.cs" />
     <Compile Include="StringTableResource.cs" />
+    <Compile Include="VariableTableResource.cs" />
     <Compile Include="VersionResource.cs" />
   </ItemGroup>
   <ItemGroup>

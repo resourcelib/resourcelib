@@ -13,13 +13,13 @@ namespace Vestris.ResourceLib
     {
         Kernel32.VS_VERSIONINFO _versioninfo;
         Kernel32.VS_FIXEDFILEINFO _fixedfileinfo;
-        private Dictionary<string, StringTableResource> _stringtableresources = null;
+        private Dictionary<string, Resource> _resources = null;
 
-        public Dictionary<string, StringTableResource> StringTableResources
+        public Dictionary<string, Resource> Resources
         {
             get
             {
-                return _stringtableresources;
+                return _resources;
             }
         }
 
@@ -82,8 +82,7 @@ namespace Vestris.ResourceLib
         /// <param name="lpRes"></param>
         public void Load(IntPtr lpRes)
         {
-            _stringtableresources = new Dictionary<string, StringTableResource>();
-
+            _resources = new Dictionary<string, Resource>();
             _versioninfo = (Kernel32.VS_VERSIONINFO)Marshal.PtrToStructure(lpRes, typeof(Kernel32.VS_VERSIONINFO));
 
             IntPtr pFI = ResourceUtil.Align(lpRes.ToInt32() + Kernel32.VS_VERSIONINFO.PaddingOffset + 1);
@@ -92,27 +91,32 @@ namespace Vestris.ResourceLib
                 pFI, typeof(Kernel32.VS_FIXEDFILEINFO));
 
             IntPtr pChild = ResourceUtil.Align(pFI.ToInt32() + _versioninfo.wValueLength);
-            Kernel32.VS_VERSIONINFO pChildInfo = (Kernel32.VS_VERSIONINFO) Marshal.PtrToStructure(
-                pChild, typeof(Kernel32.VS_VERSIONINFO));
+
+            Kernel32.STRING_OR_VAR_INFO_HEADER pChildInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER) Marshal.PtrToStructure(
+                pChild, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
 
             while (pChild.ToInt32() < (lpRes.ToInt32() + _versioninfo.wLength))
             {
-                switch (pChildInfo.szKey)
+                Resource rc = null;
+                IntPtr pKey = new IntPtr(pChild.ToInt32() + Marshal.SizeOf(pChildInfo));
+                string key = Marshal.PtrToStringUni(pKey);
+                IntPtr pData = ResourceUtil.Align(pKey.ToInt32() + (key.Length + 1) * 2);
+                switch (key)
                 {
                     case "StringFileInfo":
-                        StringTableResource s = new StringTableResource(
-                            pChild, pChildInfo.wType, pChildInfo.szKey, Language, pChildInfo.wLength);
-                        _stringtableresources.Add(pChildInfo.szKey, s);
+                        rc = new StringTableResource(pData, pChildInfo.wType, key, Language, pChildInfo.wLength);
                         break;
-                    case "VarFileInfo":
-                        // \todo: implement this
+                    default:
+                        rc = new VariableTableResource(pData, pChildInfo.wType, key, Language, pChildInfo.wLength);
                         break;
                 }
 
+                _resources.Add(key, rc);
+
                 pChild = ResourceUtil.Align(pChild.ToInt32() + pChildInfo.wLength);
-                
-                pChildInfo = (Kernel32.VS_VERSIONINFO)Marshal.PtrToStructure(
-                    pChild, typeof(Kernel32.VS_VERSIONINFO));
+
+                pChildInfo = (Kernel32.STRING_OR_VAR_INFO_HEADER)Marshal.PtrToStructure(
+                    pChild, typeof(Kernel32.STRING_OR_VAR_INFO_HEADER));
             }
         }
 

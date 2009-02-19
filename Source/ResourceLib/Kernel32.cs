@@ -34,37 +34,28 @@ namespace Vestris.ResourceLib
         /// http://msdn.microsoft.com/en-us/library/aa909192.aspx
         /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct STRING_TABLE_INFO_HEADER
+        public struct STRING_OR_VAR_INFO_HEADER
         {
             public UInt16 wLength;
             public UInt16 wValueLength;
             public UInt16 wType;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
-            public string szKey;
-            public UInt16 Padding1;
-
-            public static Int32 PaddingOffset
-            {
-                get
-                {
-                    return Marshal.OffsetOf(typeof(Kernel32.STRING_TABLE_INFO_HEADER), "Padding1").ToInt32();
-                }
-            }
         };
-        
+
         /// <summary>
-        /// This structure depicts the organization of data in a file-version resource. It contains a string that 
-        /// describes a specific aspect of a file, such as a file's version, its copyright notices, or its trademarks.
-        /// http://msdn.microsoft.com/en-us/library/aa909025.aspx
+        /// Language and code page combinations supported by this file. 
+        /// The low-order word of each DWORD must contain a Microsoft language identifier, 
+        /// and the high-order word must contain the IBM code page number. 
+        /// Either high-order or low-order word can be zero, indicating that the file is language 
+        /// or code page independent.
         /// </summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct STRING_INFO_HEADER
+        public struct VAR_HEADER
         {
-            public UInt16 wLength;
-            public UInt16 wValueLength;
-            public UInt16 wType;
-        };
+            public UInt16 wLanguageIDMS;
+            public UInt16 wCodePageIBM;
 
+        };
+        
         /// <summary>
         /// This structure contains version information about a file. This information is language- and code page–independent.
         /// http://msdn.microsoft.com/en-us/library/aa909176.aspx
