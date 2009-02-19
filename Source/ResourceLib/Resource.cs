@@ -164,5 +164,29 @@ namespace Vestris.ResourceLib
             w.Close();
             return ms.ToArray();
         }
+
+        public void SaveTo(string filename, IntPtr name, IntPtr type)
+        {
+            byte[] data = WriteAndGetBytes();
+            SaveTo(filename, name, type, data);
+        }
+
+        public static void SaveTo(string filename, IntPtr name, IntPtr type, byte[] data)
+        {
+            IntPtr h = Kernel32.BeginUpdateResource(filename, false);
+
+            if (h == IntPtr.Zero)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            if (!Kernel32.UpdateResource(h, type, name,
+                (ushort)ResourceUtil.MAKELANGID(Kernel32.LANG_NEUTRAL, Kernel32.SUBLANG_NEUTRAL),
+                data, (uint)data.Length))
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            if (!Kernel32.EndUpdateResource(h, false))
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
     }
 }

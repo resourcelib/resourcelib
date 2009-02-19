@@ -115,7 +115,7 @@ namespace Vestris.ResourceLib
         public static extern IntPtr BeginUpdateResource(string pFileName, bool bDeleteExistingResources);
 
         [DllImport("kernel32.dll", EntryPoint = "UpdateResourceW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-        public static extern bool UpdateResource(IntPtr hUpdate, string lpType, string lpName, UInt16 wLanguage, byte[] lpData, UInt32 cbData);
+        public static extern bool UpdateResource(IntPtr hUpdate, IntPtr lpType, IntPtr lpName, UInt16 wLanguage, byte[] lpData, UInt32 cbData);
 
         [DllImport("kernel32.dll", EntryPoint = "EndUpdateResourceW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         public static extern bool EndUpdateResource(IntPtr hUpdate, bool fDiscard);
