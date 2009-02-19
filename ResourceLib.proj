@@ -2,10 +2,12 @@
  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
  <PropertyGroup Condition="'$(Configuration)'==''">
   <Configuration>Debug</Configuration>
+  <ReleaseDir>Vestris.ResourceLib</ReleaseDir>
  </PropertyGroup>
  <Target Name="all">
   <CallTarget Targets="version" />
   <CallTarget Targets="build" />
+  <CallTarget Targets="zip" />
  </Target>
  <Target Name="version">
   <Version>
@@ -30,5 +32,25 @@
  </Target>
  <Target Name="build">
   <MSBuild Projects="ResourceLib.sln" />
+ </Target>
+ <ItemGroup>
+  <SourceCodeFiles Include="Source/**/*.cs" />
+  <SourceCodeFiles Include="Source/**/*.csproj" />
+  <SourceCodeFiles Include="Source/**/License.txt" />
+ </ItemGroup>
+ <ItemGroup>
+  <ArticleFiles Include="Article/**/*.html" />
+ </ItemGroup>
+ <ItemGroup>
+  <BinaryFiles Include="Source/**/$(Configuration)/Vestris.*.dll" />
+ </ItemGroup>
+ <ItemGroup>
+  <PackageFiles Include="$(ReleaseDir)/**/*" />
+ </ItemGroup>
+ <Target Name="zip" DependsOnTargets="version">
+  <Copy SourceFiles="@(SourceCodeFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Source\%(RecursiveDir)" />
+  <Copy SourceFiles="@(ArticleFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Article\%(RecursiveDir)" />
+  <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Bin" />
+  <Zip ZipFileName="Vestris.ResourceLib.zip" Files="@(PackageFiles)" />
  </Target>
 </Project>
