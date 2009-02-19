@@ -19,6 +19,22 @@ namespace Vestris.ResourceLib
             public UInt16 wLength;
             public UInt16 wValueLength;
             public UInt16 wType;
+
+            public RESOURCE_HEADER(UInt16 valueLength)
+            {
+                wLength = 0;
+                wValueLength = valueLength;
+                wType = 0;
+            }
+        };
+
+        /// <summary>
+        /// Resource header type.
+        /// </summary>
+        public enum RESOURCE_HEADER_TYPE
+        {
+            BinaryData = 0,
+            StringData = 1
         };
 
         /// <summary>
@@ -56,6 +72,18 @@ namespace Vestris.ResourceLib
             public UInt32 dwFileSubtype;
             public UInt32 dwFileDateMS;
             public UInt32 dwFileDateLS;
+
+            public static VS_FIXEDFILEINFO GetWindowsDefault()
+            {
+                VS_FIXEDFILEINFO fixedFileInfo = new VS_FIXEDFILEINFO();
+                fixedFileInfo.dwSignature = 0xfeef04bd;
+                fixedFileInfo.dwStrucVersion = 0x10000;
+                fixedFileInfo.dwFileFlagsMask = 0x3f;
+                fixedFileInfo.dwFileOS = 4;
+                fixedFileInfo.dwFileSubtype = 0;
+                fixedFileInfo.dwFileType = 2;
+                return fixedFileInfo;
+            }
         };
 
         /// <summary>

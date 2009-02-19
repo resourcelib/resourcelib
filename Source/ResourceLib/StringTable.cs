@@ -31,7 +31,7 @@ namespace Vestris.ResourceLib
         public StringTable(string key)
             : base(key)
         {
-
+            _header.wType = (UInt16)Kernel32.RESOURCE_HEADER_TYPE.StringData;
         }
 
         public StringTable(IntPtr lpRes)

@@ -26,8 +26,7 @@ namespace Vestris.ResourceLib
         public VarFileInfo()
             : base("VarFileInfo")
         {
-            VarTable defaultVarTable = new VarTable();
-            _variables[ResourceUtil.USENGLISHLANGID.ToString()] = defaultVarTable;        
+            _header.wType = (UInt16)Kernel32.RESOURCE_HEADER_TYPE.StringData;
         }
 
         public VarFileInfo(IntPtr lpRes)

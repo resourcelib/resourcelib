@@ -66,8 +66,8 @@ namespace Vestris.ResourceLibUnitTests
             Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
 
-            StringFileInfo newStringFileInfo = (StringFileInfo)newVersionResource["StringFileInfo"];
-            foreach (KeyValuePair<string, StringResource> stringResource in newStringFileInfo.Default.Strings)
+            StringFileInfo testedStringFileInfo = (StringFileInfo)newVersionResource["StringFileInfo"];
+            foreach (KeyValuePair<string, StringResource> stringResource in testedStringFileInfo.Default.Strings)
             {
                 Console.WriteLine("{0} = {1}", stringResource.Value.Key, stringResource.Value.StringValue);
                 Assert.AreEqual(stringResource.Value.Value, stringFileInfo[stringResource.Key]);
@@ -108,6 +108,62 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [Test]
+        public void TestVersionConstructorBytes()
+        {
+            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Assert.IsTrue(File.Exists(filename));
+            VersionResource existingVersionResource = new VersionResource();
+            Console.WriteLine("Loading {0}", filename);
+            existingVersionResource.LoadFrom(filename, ResourceUtil.USENGLISHLANGID);
+            DumpResource.Dump(existingVersionResource);
+
+            VersionResource versionResource = new VersionResource();
+            versionResource.FileVersion = existingVersionResource.FileVersion;
+            versionResource.ProductVersion = existingVersionResource.ProductVersion;
+
+            StringFileInfo existingVersionResourceStringFileInfo = (StringFileInfo)existingVersionResource["StringFileInfo"];
+            VarFileInfo existingVersionResourceVarFileInfo = (VarFileInfo)existingVersionResource["VarFileInfo"];
+
+            // copy string resources, data only
+            StringFileInfo stringFileInfo = new StringFileInfo();
+            versionResource["StringFileInfo"] = stringFileInfo;
+            {
+                Dictionary<string, StringTable>.Enumerator enumerator = existingVersionResourceStringFileInfo.Strings.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    StringTable stringTable = new StringTable(enumerator.Current.Key);
+                    stringFileInfo.Strings.Add(enumerator.Current.Key, stringTable);
+                    Dictionary<string, StringResource>.Enumerator resourceEnumerator = enumerator.Current.Value.Strings.GetEnumerator();
+                    while (resourceEnumerator.MoveNext())
+                    {
+                        StringResource stringResource = new StringResource(resourceEnumerator.Current.Key);
+                        stringResource.Value = resourceEnumerator.Current.Value.Value;
+                        stringTable.Strings.Add(resourceEnumerator.Current.Key, stringResource);
+                    }
+                }
+            }
+
+            // copy var resources, data only
+            VarFileInfo varFileInfo = new VarFileInfo();
+            versionResource["VarFileInfo"] = varFileInfo;
+            {
+                Dictionary<string, VarTable>.Enumerator enumerator = existingVersionResourceVarFileInfo.Vars.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    VarTable varTable = new VarTable(enumerator.Current.Key);
+                    varFileInfo.Vars.Add(enumerator.Current.Key, varTable);
+                    Dictionary<ushort, ushort>.Enumerator translationEnumerator = enumerator.Current.Value.Languages.GetEnumerator();
+                    while (translationEnumerator.MoveNext())
+                    {
+                        varTable.Languages.Add(translationEnumerator.Current.Key, translationEnumerator.Current.Value);
+                    }
+                }
+            }
+
+            CompareBytes(existingVersionResource.WriteAndGetBytes(), versionResource.WriteAndGetBytes());
+        }
+
+        [Test]
         public void TestDeleteAndSaveVersionResource()
         {
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
@@ -124,16 +180,47 @@ namespace Vestris.ResourceLibUnitTests
             versionResource.FileVersion = existingVersionResource.FileVersion;
             versionResource.ProductVersion = existingVersionResource.ProductVersion;
 
-            StringFileInfo stringFileInfo = new StringFileInfo();
-            stringFileInfo["Comments"] = string.Format("{0}\0", Guid.NewGuid());
-            stringFileInfo["NewValue"] = string.Format("{0}\0", Guid.NewGuid());
-            versionResource["StringFileInfo"] = stringFileInfo;
+            StringFileInfo existingVersionResourceStringFileInfo = (StringFileInfo)existingVersionResource["StringFileInfo"];
+            VarFileInfo existingVersionResourceVarFileInfo = (VarFileInfo)existingVersionResource["VarFileInfo"];
 
+            // copy string resources, data only
+            StringFileInfo stringFileInfo = new StringFileInfo();
+            versionResource["StringFileInfo"] = stringFileInfo;
+            {
+                Dictionary<string, StringTable>.Enumerator enumerator = existingVersionResourceStringFileInfo.Strings.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    StringTable stringTable = new StringTable(enumerator.Current.Key);
+                    stringFileInfo.Strings.Add(enumerator.Current.Key, stringTable);
+                    Dictionary<string, StringResource>.Enumerator resourceEnumerator = enumerator.Current.Value.Strings.GetEnumerator();
+                    while (resourceEnumerator.MoveNext())
+                    {
+                        StringResource stringResource = new StringResource(resourceEnumerator.Current.Key);
+                        stringResource.Value = resourceEnumerator.Current.Value.Value;
+                        stringTable.Strings.Add(resourceEnumerator.Current.Key, stringResource);
+                    }
+                }
+            }
+
+            // copy var resources, data only
             VarFileInfo varFileInfo = new VarFileInfo();
-            varFileInfo[0x409] = 1200;
             versionResource["VarFileInfo"] = varFileInfo;
+            {
+                Dictionary<string, VarTable>.Enumerator enumerator = existingVersionResourceVarFileInfo.Vars.GetEnumerator();
+                while (enumerator.MoveNext())
+                {
+                    VarTable varTable = new VarTable(enumerator.Current.Key);
+                    varFileInfo.Vars.Add(enumerator.Current.Key, varTable);
+                    Dictionary<ushort, ushort>.Enumerator translationEnumerator = enumerator.Current.Value.Languages.GetEnumerator();
+                    while (translationEnumerator.MoveNext())
+                    {
+                        varTable.Languages.Add(translationEnumerator.Current.Key, translationEnumerator.Current.Value);
+                    }
+                }
+            }
 
             versionResource.SaveTo(targetFilename);
+            Console.WriteLine("Reloading {0}", targetFilename);
 
             VersionResource newVersionResource = new VersionResource();
             newVersionResource.LoadFrom(targetFilename);
@@ -142,8 +229,8 @@ namespace Vestris.ResourceLibUnitTests
             Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
 
-            StringFileInfo newStringFileInfo = (StringFileInfo)newVersionResource["StringFileInfo"];
-            foreach (KeyValuePair<string, StringResource> stringResource in newStringFileInfo.Default.Strings)
+            StringFileInfo testedStringFileInfo = (StringFileInfo)newVersionResource["StringFileInfo"];
+            foreach (KeyValuePair<string, StringResource> stringResource in testedStringFileInfo.Default.Strings)
             {
                 Assert.AreEqual(stringResource.Value.Value, stringFileInfo[stringResource.Key]);
             }
@@ -182,32 +269,49 @@ namespace Vestris.ResourceLibUnitTests
                 ResourceUtil.USENGLISHLANGID);
             Console.WriteLine("File version: {0}", versionResource.FileVersion);
 
-            byte[] currentBytes = VersionResource.LoadBytesFrom(filename, 
+            byte[] expectedBytes = VersionResource.LoadBytesFrom(filename, 
                 ResourceUtil.USENGLISHLANGID);
-            byte[] newBytes = versionResource.WriteAndGetBytes();
+            byte[] testedBytes = versionResource.WriteAndGetBytes();
 
-            Console.WriteLine("Current: {0}:{1}", currentBytes, currentBytes.Length);
-            Console.WriteLine("New: {0}:{1}", newBytes, newBytes.Length);
+            CompareBytes(expectedBytes, testedBytes);            
+        }
 
-            StringBuilder currentString = new StringBuilder();
-            StringBuilder newString = new StringBuilder();
+        private void CompareBytes(byte[] expectedBytes, byte[] testedBytes)
+        {
+            Console.WriteLine("Expected: {0}:{1}", expectedBytes, expectedBytes.Length);
+            Console.WriteLine("Tested: {0}:{1}", testedBytes, testedBytes.Length);
 
-            for (int i = 0; i < Math.Min(currentBytes.Length, newBytes.Length); i++)
+            StringBuilder expectedString = new StringBuilder();
+            StringBuilder testedString = new StringBuilder();
+
+            int errors = 0;
+            for (int i = 0; i < Math.Min(expectedBytes.Length, testedBytes.Length); i++)
             {
-                if (char.IsLetterOrDigit((char)newBytes[i]))
-                    newString.Append((char)newBytes[i]);
+                if (char.IsLetterOrDigit((char)testedBytes[i]))
+                    testedString.Append((char)testedBytes[i]);
+                else if (testedBytes[i] != 0)
+                    testedString.AppendFormat("[{0}]", (int)testedBytes[i]);
 
-                if (char.IsLetterOrDigit((char)currentBytes[i]))
-                    currentString.Append((char)currentBytes[i]);
+                if (char.IsLetterOrDigit((char)expectedBytes[i]))
+                    expectedString.Append((char)expectedBytes[i]);
+                else if (expectedBytes[i] != 0)
+                    expectedString.AppendFormat("[{0}]", (int)expectedBytes[i]);
 
-                if (currentBytes[i] != newBytes[i])
+                if (expectedBytes[i] != testedBytes[i])
                 {
-                    Console.WriteLine(currentString.ToString());
-                    Console.WriteLine(newString.ToString());
+                    Console.WriteLine(expectedString.ToString());
+                    Console.WriteLine(testedString.ToString());
                 }
 
-                Assert.AreEqual(currentBytes[i], newBytes[i], string.Format("Error at offset {0}", i));
+                if (expectedBytes[i] != testedBytes[i])
+                {
+                    Console.WriteLine(string.Format("Error at offset {0}, expected {1} got {2}",
+                        i, expectedBytes[i], testedBytes[i]));
+                    errors++;
+                }
             }
+
+            Assert.IsTrue(errors == 0, "Errors in binary comparisons.");
         }
     }
 }

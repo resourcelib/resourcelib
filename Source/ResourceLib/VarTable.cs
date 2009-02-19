@@ -13,7 +13,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class VarTable : ResourceTable
     {
-        private Dictionary<UInt16, UInt16> _languages = new Dictionary<ushort,ushort>();
+        private Dictionary<UInt16, UInt16> _languages = new Dictionary<UInt16, UInt16>();
 
         public Dictionary<UInt16, UInt16> Languages
         {
@@ -25,8 +25,13 @@ namespace Vestris.ResourceLib
 
         public VarTable()
         {
-            _key = "Translation";
-            _languages[0x409] = 1200;
+
+        }
+
+        public VarTable(string key)
+            : base(key)
+        {
+
         }
 
         public VarTable(IntPtr lpRes)

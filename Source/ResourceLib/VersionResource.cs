@@ -16,7 +16,7 @@ namespace Vestris.ResourceLib
     public class VersionResource : Resource
     {
         ResourceTable _header = new ResourceTable("VS_VERSION_INFO");
-        Kernel32.VS_FIXEDFILEINFO _fixedfileinfo = new Kernel32.VS_FIXEDFILEINFO();
+        Kernel32.VS_FIXEDFILEINFO _fixedfileinfo = Kernel32.VS_FIXEDFILEINFO.GetWindowsDefault();
         private Dictionary<string, ResourceTable> _resources = new Dictionary<string, ResourceTable>();
 
         public ResourceTable Header
@@ -52,9 +52,7 @@ namespace Vestris.ResourceLib
         public VersionResource()
             : base(IntPtr.Zero, IntPtr.Zero, new IntPtr((int) Kernel32.ResourceTypes.RT_VERSION), new IntPtr(1), ResourceUtil.USENGLISHLANGID, 0)
         {
-            Kernel32.RESOURCE_HEADER resourceHeader = new Kernel32.RESOURCE_HEADER();
-            resourceHeader.wValueLength = (ushort) Marshal.SizeOf(_fixedfileinfo);
-            _header.Header = resourceHeader;
+            _header.Header = new Kernel32.RESOURCE_HEADER((ushort) Marshal.SizeOf(_fixedfileinfo));
         }
 
         public void LoadFrom(string filename)

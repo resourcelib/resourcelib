@@ -26,8 +26,7 @@ namespace Vestris.ResourceLib
         public StringFileInfo()
             : base("StringFileInfo")
         {
-            StringTable defaultStringTable = new StringTable("040904b0");
-            _strings["040904B0"] = defaultStringTable;
+            _header.wType = (UInt16) Kernel32.RESOURCE_HEADER_TYPE.StringData;
         }
 
         public StringFileInfo(IntPtr lpRes)
