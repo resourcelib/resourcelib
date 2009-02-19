@@ -13,7 +13,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class VarFileInfo : ResourceTable
     {
-        Dictionary<string, VarTable> _variables;
+        Dictionary<string, VarTable> _variables = new Dictionary<string, VarTable>();
 
         public Dictionary<string, VarTable> Vars
         {
@@ -23,6 +23,13 @@ namespace Vestris.ResourceLib
             }
         }
 
+        public VarFileInfo()
+            : base("VarFileInfo")
+        {
+            VarTable defaultVarTable = new VarTable();
+            _variables[ResourceUtil.USENGLISHLANGID.ToString()] = defaultVarTable;        
+        }
+
         public VarFileInfo(IntPtr lpRes)
         {
             Read(lpRes);
@@ -30,7 +37,7 @@ namespace Vestris.ResourceLib
 
         public override IntPtr Read(IntPtr lpRes)
         {
-            _variables = new Dictionary<string, VarTable>();
+            _variables.Clear();
             IntPtr pChild = base.Read(lpRes);
 
             while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))

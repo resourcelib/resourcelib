@@ -88,7 +88,7 @@ namespace Vestris.ResourceLib
             return w.BaseStream.Position;
         }
 
-        public static int NEUTRALLANGID
+        public static ushort NEUTRALLANGID
         {
             get
             {
@@ -96,19 +96,27 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public static int MAKELANGID(int primary, int sub)
+        public static ushort USENGLISHLANGID
         {
-            return (((ushort)sub) << 10) | ((ushort)primary);
+            get
+            {
+                return ResourceUtil.MAKELANGID(Kernel32.LANG_ENGLISH, Kernel32.SUBLANG_ENGLISH_US);
+            }
         }
 
-        public static int PRIMARYLANGID(int lcid)
+        public static ushort MAKELANGID(int primary, int sub)
         {
-            return ((ushort)lcid) & 0x3ff;
+            return (ushort) ((((ushort)sub) << 10) | ((ushort)primary));
         }
 
-        public static int SUBLANGID(int lcid)
+        public static ushort PRIMARYLANGID(ushort lcid)
         {
-            return ((ushort)lcid) >> 10;
+            return (ushort) (((ushort)lcid) & 0x3ff);
+        }
+
+        public static ushort SUBLANGID(ushort lcid)
+        {
+            return (ushort) (((ushort)lcid) >> 10);
         }
 
         public static byte[] GetBytes<T>(T anything)

@@ -13,7 +13,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class StringFileInfo : ResourceTable
     {
-        Dictionary<string, StringTable> _strings;
+        Dictionary<string, StringTable> _strings = new Dictionary<string, StringTable>();
 
         public Dictionary<string, StringTable> Strings
         {
@@ -23,6 +23,13 @@ namespace Vestris.ResourceLib
             }
         }
 
+        public StringFileInfo()
+            : base("StringFileInfo")
+        {
+            StringTable defaultStringTable = new StringTable("040904b0");
+            _strings["040904B0"] = defaultStringTable;
+        }
+
         public StringFileInfo(IntPtr lpRes)
         {
             Read(lpRes);
@@ -30,7 +37,7 @@ namespace Vestris.ResourceLib
 
         public override IntPtr Read(IntPtr lpRes)
         {
-            _strings = new Dictionary<string, StringTable>();
+            _strings.Clear();
             IntPtr pChild = base.Read(lpRes);
 
             while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))

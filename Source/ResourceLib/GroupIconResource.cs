@@ -80,7 +80,8 @@ namespace Vestris.ResourceLib
         public void LoadFrom(string filename)
         {
             base.LoadFrom(filename, new IntPtr(1), 
-                new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON));
+                new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON),
+                Kernel32.LANG_NEUTRAL);
         }
 
         public void SaveTo(string filename)

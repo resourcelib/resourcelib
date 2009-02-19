@@ -25,11 +25,20 @@ namespace Vestris.ResourceLib
             {
                 return _header;
             }
+            set
+            {
+                _header = value;
+            }
         }
 
         public ResourceTable()
         {
 
+        }
+
+        public ResourceTable(string key)
+        {
+            _key = key;
         }
 
         public ResourceTable(IntPtr lpRes)

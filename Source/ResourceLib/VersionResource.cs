@@ -15,9 +15,9 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class VersionResource : Resource
     {
-        ResourceTable _header = new ResourceTable();
-        Kernel32.VS_FIXEDFILEINFO _fixedfileinfo;
-        private Dictionary<string, ResourceTable> _resources = null;
+        ResourceTable _header = new ResourceTable("VS_VERSION_INFO");
+        Kernel32.VS_FIXEDFILEINFO _fixedfileinfo = new Kernel32.VS_FIXEDFILEINFO();
+        private Dictionary<string, ResourceTable> _resources = new Dictionary<string, ResourceTable>();
 
         public ResourceTable Header
         {
@@ -50,25 +50,37 @@ namespace Vestris.ResourceLib
         }
 
         public VersionResource()
+            : base(IntPtr.Zero, IntPtr.Zero, new IntPtr((int) Kernel32.ResourceTypes.RT_VERSION), new IntPtr(1), ResourceUtil.USENGLISHLANGID, 0)
         {
-
+            Kernel32.RESOURCE_HEADER resourceHeader = new Kernel32.RESOURCE_HEADER();
+            resourceHeader.wValueLength = (ushort) Marshal.SizeOf(_fixedfileinfo);
+            _header.Header = resourceHeader;
         }
 
         public void LoadFrom(string filename)
         {
-            base.LoadFrom(filename, Marshal.StringToHGlobalUni("#1"),
-                new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION));
+            LoadFrom(filename, ResourceUtil.NEUTRALLANGID);
+        }
+
+        public void LoadFrom(string filename, ushort lang)
+        {
+            base.LoadFrom(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), lang);
         }
 
         public static byte[] LoadBytesFrom(string filename)
         {
-            return Resource.LoadBytesFrom(filename, Marshal.StringToHGlobalUni("#1"),
-                new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION));
+            return LoadBytesFrom(filename, ResourceUtil.NEUTRALLANGID);
+        }
+
+        public static byte[] LoadBytesFrom(string filename, ushort lang)
+        {
+            return Resource.LoadBytesFrom(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), lang);
         }
 
         public override IntPtr Read(IntPtr hModule, IntPtr lpRes)
         {
-            _resources = new Dictionary<string, ResourceTable>();
+            _resources.Clear();
+
             IntPtr pFixedFileInfo = _header.Read(lpRes);
 
             _fixedfileinfo = (Kernel32.VS_FIXEDFILEINFO)Marshal.PtrToStructure(
@@ -168,13 +180,13 @@ namespace Vestris.ResourceLib
         public static void SaveTo(string filename, byte[] data)
         {
             Resource.SaveTo(filename, new IntPtr(1), new IntPtr((uint)Kernel32.ResourceTypes.RT_VERSION), 
-                (ushort) ResourceUtil.NEUTRALLANGID, data);
+                ResourceUtil.USENGLISHLANGID, data);
         }
 
         public void SaveTo(string filename)
         {
-            base.SaveTo(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), 
-                (ushort)ResourceUtil.NEUTRALLANGID);
+            base.SaveTo(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION),
+                ResourceUtil.USENGLISHLANGID);
         }
 
         public ResourceTable this[string key]

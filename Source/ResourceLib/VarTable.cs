@@ -13,7 +13,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class VarTable : ResourceTable
     {
-        private Dictionary<UInt16, UInt16> _languages;
+        private Dictionary<UInt16, UInt16> _languages = new Dictionary<ushort,ushort>();
 
         public Dictionary<UInt16, UInt16> Languages
         {
@@ -23,6 +23,12 @@ namespace Vestris.ResourceLib
             }
         }
 
+        public VarTable()
+        {
+            _key = "Translation";
+            _languages[0x409] = 1200;
+        }
+
         public VarTable(IntPtr lpRes)
         {
             Read(lpRes);
@@ -30,7 +36,7 @@ namespace Vestris.ResourceLib
 
         public override IntPtr Read(IntPtr lpRes)
         {
-            _languages = new Dictionary<UInt16, UInt16>();
+            _languages.Clear();
             IntPtr pVar = base.Read(lpRes);
 
             while (pVar.ToInt32() < (lpRes.ToInt32() + _header.wLength))

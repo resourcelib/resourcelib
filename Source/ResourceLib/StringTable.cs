@@ -13,7 +13,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class StringTable : ResourceTable
     {
-        Dictionary<string, StringResource> _strings;
+        Dictionary<string, StringResource> _strings = new Dictionary<string,StringResource>();
 
         public Dictionary<string, StringResource> Strings
         {
@@ -23,6 +23,17 @@ namespace Vestris.ResourceLib
             }
         }
 
+        public StringTable()
+        {
+        
+        }
+
+        public StringTable(string key)
+            : base(key)
+        {
+
+        }
+
         public StringTable(IntPtr lpRes)
         {
             Read(lpRes);
@@ -30,7 +41,7 @@ namespace Vestris.ResourceLib
 
         public override IntPtr Read(IntPtr lpRes)
         {
-            _strings = new Dictionary<string, StringResource>();
+            _strings.Clear();
             IntPtr pChild = base.Read(lpRes);
 
             while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))

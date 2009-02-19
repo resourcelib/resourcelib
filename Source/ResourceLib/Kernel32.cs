@@ -163,7 +163,7 @@ namespace Vestris.ResourceLib
         public static extern IntPtr FindResource(IntPtr hModule, IntPtr lpszName, IntPtr lpszType);
 
         [DllImport("kernel32.dll", EntryPoint = "FindResourceExW", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr FindResourceEx(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, long wLanguage);
+        public static extern IntPtr FindResourceEx(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, ushort wLanguage);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr LockResource(IntPtr hResData);
@@ -186,8 +186,10 @@ namespace Vestris.ResourceLib
         [DllImport("kernel32.dll", EntryPoint = "EndUpdateResourceW", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         public static extern bool EndUpdateResource(IntPtr hUpdate, bool fDiscard);
 
-        // see http://www.koders.com/c/fid55D967C849A49CF8BB92B395A24B5DC7B21DB658.aspx for other languages
-        public const ushort LANG_NEUTRAL = 0x00;
-        public const ushort SUBLANG_NEUTRAL = 0x00;
+        public const ushort LANG_NEUTRAL = 0;
+        public const ushort LANG_ENGLISH = 9;
+
+        public const ushort SUBLANG_NEUTRAL = 0;
+        public const ushort SUBLANG_ENGLISH_US = 1;
     }
 }

@@ -12,8 +12,8 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class Resource
     {
-        protected string _type;
-        protected string _name;
+        protected IntPtr _type;
+        protected IntPtr _name;
         protected ushort _language;
         protected IntPtr _hModule = IntPtr.Zero;
         protected IntPtr _hResource = IntPtr.Zero;
@@ -43,7 +43,7 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return _type;
+                return ResourceUtil.GetResourceName(_type);
             }
         }
 
@@ -51,11 +51,7 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return _name;
-            }
-            set
-            {
-                _name = value;
+                return ResourceUtil.GetResourceName(_name);
             }
         }
 
@@ -67,14 +63,14 @@ namespace Vestris.ResourceLib
         public Resource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, ushort wIDLanguage, int size)
         {
             _hModule = hModule;
-            _type = ResourceUtil.GetResourceName(type);
-            _name = ResourceUtil.GetResourceName(name);
+            _type = type;
+            _name = name;
             _language = wIDLanguage;
             _hResource = hResource;
             _size = size;
         }
 
-        public static byte[] LoadBytesFrom(string filename, IntPtr name, IntPtr type)
+        public static byte[] LoadBytesFrom(string filename, IntPtr name, IntPtr type, ushort lang)
         {
             IntPtr hModule = IntPtr.Zero;
 
@@ -86,7 +82,7 @@ namespace Vestris.ResourceLib
                 if (IntPtr.Zero == hModule)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
-                IntPtr hRes = Kernel32.FindResource(hModule, name, type);
+                IntPtr hRes = Kernel32.FindResourceEx(hModule, type, name, lang);
                 if (IntPtr.Zero == hRes)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
@@ -102,7 +98,7 @@ namespace Vestris.ResourceLib
                 int size = Kernel32.SizeofResource(hModule, hRes);
                 if (size <= 0)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
-
+                
                 byte[] bytes = new byte[size];
                 Marshal.Copy(lpRes, bytes, 0, size);
 
@@ -115,11 +111,8 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public void LoadFrom(string filename, IntPtr name, IntPtr type)
+        public void LoadFrom(string filename, IntPtr name, IntPtr type, ushort lang)
         {
-            _type = ResourceUtil.GetResourceName(type);
-            _name = ResourceUtil.GetResourceName(name);
-
             IntPtr hModule = IntPtr.Zero;
 
             try
@@ -130,7 +123,7 @@ namespace Vestris.ResourceLib
                 if (IntPtr.Zero == hModule)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
-                IntPtr hRes = Kernel32.FindResource(hModule, name, type);
+                IntPtr hRes = Kernel32.FindResourceEx(hModule, type, name, lang);
                 if (IntPtr.Zero == hRes)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
@@ -146,6 +139,10 @@ namespace Vestris.ResourceLib
                 _size = Kernel32.SizeofResource(hModule, hRes);
                 if (_size <= 0)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                _type = type;
+                _name = name;
+                _language = lang;
 
                 Read(hModule, lpRes);
             }
@@ -181,6 +178,19 @@ namespace Vestris.ResourceLib
             SaveTo(filename, name, type, langid, data);
         }
 
+        public void DeleteFrom(string filename)
+        {
+            Delete(filename, _name, _type, _language);
+        }
+
+        /// <summary>
+        /// Delete a resource.
+        /// </summary>
+        public static void Delete(string filename, IntPtr name, IntPtr type, ushort lang)
+        {
+            SaveTo(filename, name, type, lang, null);
+        }
+
         public static void SaveTo(string filename, IntPtr name, IntPtr type, ushort lang, byte[] data)
         {
             IntPtr h = Kernel32.BeginUpdateResource(filename, false);
@@ -189,7 +199,7 @@ namespace Vestris.ResourceLib
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
             if (!Kernel32.UpdateResource(h, type, name,
-                lang, data, (uint)data.Length))
+                lang, data, (data == null ? 0 : (uint) data.Length)))
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }
