@@ -4,85 +4,133 @@
 <head>
  <title>File Resource Management Library (.NET)</title>
  <style>
-BODY, P, TD { font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 10pt }
-H2,H3,H4,H5 { color: #ff9900; font-weight: bold; }
-H2 { font-size: 13pt; }
-H3 { font-size: 12pt; }
-H4 { font-size: 10pt; color: black; }
-PRE { BACKGROUND-COLOR: #FBEDBB; FONT-FAMILY: "Courier New", Courier, mono; WHITE-SPACE: pre; }
-CODE { COLOR: #990000; FONT-FAMILY: "Courier New", Courier, mono; }
-</style>
+  BODY, P, TD
+  {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+   font-size: 10pt;
+  }
+  H2, H3, H4, H5
+  {
+   color: #ff9900;
+   font-weight: bold;
+  }
+  H2
+  {
+   font-size: 13pt;
+  }
+  H3
+  {
+   font-size: 12pt;
+  }
+  H4
+  {
+   font-size: 10pt;
+   color: black;
+  }
+  PRE
+  {
+   background-color: #FBEDBB;
+   font-family: "Courier New" , Courier, mono;
+   white-space: pre;
+  }
+  CODE
+  {
+   color: #990000;
+   font-family: "Courier New" , Courier, mono;
+  }
+ </style>
  <link rel="stylesheet" type="text/css" href="http://www.codeproject.com/styles/global.css">
 </head>
 <body bgcolor="#FFFFFF" color="#000000">
-
-<h2>Introduction</h2>
-
-<p>There are several good articles about reading and writing resources from/to a compiled binary. Most focus on retrieving module version information and modifying version information, mostly in C++. Some detail the same operations for cursors, icons or dialog resources. There's, however, no single .NET library to retrieve and save any type of resources, or any library to edit or generate version resources specifically.</p>
-
-<p>This implementation is a framework that enumerates resources and implements both read and write of the file version (<code>VS_VERSIONINFO</code>),
- string resources (company, copyright and product information) and icon (<span style="color: #990000;
-  font-family: Courier New">RT_GROUP_ICON<span style="color: #000000; font-family: Verdana">,</span>
-  RT_ICON</span>) resources. It has been extended to icons and can be further extended to other resource types easily.</p>
-
-<h2>Background</h2>
-
-<p>Initially, I started porting the version resource implementation from <a href="VerInfoLib.aspx">Denis Zabavchik's C++ VerInfoLib</a>. Then, it grew bigger ...</p>
-
-<h2>Using the Code</h2>
-
-<h3>Enumerating Resources</h3>
-
-<p>The following example demonstrates enumerating resources by type. From the sample <em>atl.dll</em> in the Windows <em>system</em> directory, you will typically get the following resources: MUI, REGISTRY, TYPELIB, and &quot;16&quot;, which is the <code>RT_VERSION</code> resource.</p>
-
-<pre lang="cs"><span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
+ <h2>
+  Introduction</h2>
+ <p>
+  There are several good articles about reading and writing resources from/to a compiled
+  binary. Most focus on retrieving module version information and modifying version
+  information, mostly in C++. Some detail the same operations for cursors, icons or
+  dialog resources. There's, however, no single managed .NET library to retrieve and save
+  any type of resources, or any library to edit or generate version resources specifically.</p>
+ <p>
+  This implementation is a framework that enumerates resources and implements both
+  read and write of the file version (<code>VS_VERSIONINFO</code>), string resources
+  (company, copyright and product information) and icon (<span style="color: #990000;
+   font-family: Courier New">RT_GROUP_ICON<span style="color: #000000; font-family: Verdana">,</span>
+   RT_ICON</span>) resources. It can be further extended
+  to other resource types, easily.</p>
+ <h2>
+  Background</h2>
+ <p>
+  Initially, I started porting the version resource implementation from <a href="VerInfoLib.aspx">
+   Denis Zabavchik's C++ VerInfoLib</a>. Then, it grew bigger ...</p>
+ <h2>
+  Using the Code</h2>
+ <h3>
+  Enumerating Resources</h3>
+ <p>
+  The following example demonstrates enumerating resources by type. From the sample
+  <em>atl.dll</em> in the Windows <em>system</em> directory, you will typically get
+  the following resources: MUI, REGISTRY, TYPELIB, and &quot;16&quot;, which is the
+  <code>RT_VERSION</code> resource.</p>
+ <pre lang="cs"><span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span
+  class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
 <span class="code-keyword">using</span> (ResourceInfo vi = <span class="code-keyword">new</span> ResourceInfo()) 
 {
  vi.Load(filename);
- <span class="code-keyword">foreach</span> (<span class="code-keyword">string</span> type <span class="code-keyword">in</span> vi.ResourceTypes)
+ <span class="code-keyword">foreach</span> (<span class="code-keyword">string</span> type <span
+  class="code-keyword">in</span> vi.ResourceTypes)
  {
   Console.WriteLine(type);
   <span class="code-keyword">foreach</span> (Resource resource <span class="code-keyword">in</span> vi.Resources[type])
   {
-   Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string"> {0} ({1}) - {2} byte(s)&quot;</span>, resource.Name, resource.Language, resource.Size);
+   Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string">
+    {0} ({1}) - {2} byte(s)&quot;</span>, resource.Name, resource.Language, resource.Size);
   }
  }
 }</pre>
-
-<h3>Reading Version Information</h3>
-
-<p>You can load file version information without enumerating resources.</p>
-
-<pre lang="cs"><span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
+ <h3>
+  Reading Version Information</h3>
+ <p>
+  You can load file version information without enumerating resources.</p>
+ <pre lang="cs"><span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span
+  class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
 VersionResource versionResource = <span class="code-keyword">new</span> VersionResource();
 versionResource.LoadFrom(filename);
-Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string">File version: {0}&quot;</span>, versionResource.FileVersion);
-StringFileInfo stringFileInfo = (StringFileInfo) versionResource[<span class="code-string">&quot;</span><span class="code-string">StringFileInfo&quot;</span>];
-<span class="code-keyword">foreach</span> (KeyValuePair&lt;string, StringResource&gt; stringResource <span class="code-keyword">in</span> stringFileInfo.Default.Strings)
+Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string">File
+ version: {0}&quot;</span>, versionResource.FileVersion);
+StringFileInfo stringFileInfo = (StringFileInfo) versionResource[<span class="code-string">&quot;</span><span
+ class="code-string">StringFileInfo&quot;</span>];
+<span class="code-keyword">foreach</span> (KeyValuePair&lt;string, StringResource&gt; stringResource <span
+ class="code-keyword">in</span> stringFileInfo.Default.Strings)
 {
- Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string">{0} = {1}&quot;</span>, stringResource.Value.Key, stringResource.Value.StringValue);
+ Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string">{0}
+  = {1}&quot;</span>, stringResource.Value.Key, stringResource.Value.StringValue);
 }</pre>
-
-<h3>Writing Version Information</h3>
-
-<p>You can also write updated version information. The easiest way is to load an existing
- binary resource, update it and save it back. Note that string resources should end with an extra null terminator.</p>
-
-<pre lang="cs"><span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
+ <h3>
+  Writing Version Information</h3>
+ <p>
+  You can also write updated version information. The easiest way is to load an existing
+  binary resource, update it and save it back. Note that string resources should end
+  with an extra null terminator.</p>
+ <pre lang="cs"><span class="code-keyword">string</span> filename = Path.Combine(Environment.SystemDirectory, <span
+  class="code-string">&quot;</span><span class="code-string">atl.dll&quot;</span>);
 VersionResource versionResource = <span class="code-keyword">new</span> VersionResource();
 versionResource.LoadFrom(filename);
-Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string">File version: {0}&quot;</span>, versionResource.FileVersion);
+Console.WriteLine(<span class="code-string">&quot;</span><span class="code-string">File
+ version: {0}&quot;</span>, versionResource.FileVersion);
 versionResource.FileVersion = <span class="code-string">&quot;</span><span class="code-string">1.2.3.4&quot;</span>;
-StringFileInfo stringFileInfo = (StringFileInfo) versionResource[<span class="code-string">&quot;</span><span class="code-string">StringFileInfo&quot;</span>];
-stringFileInfo[<span class="code-string">&quot;</span><span class="code-string">CompanyName&quot;</span>] = <span class="code-string">&quot;</span><span class="code-string">My Company\0&quot;</span>;
-stringFileInfo[<span class="code-string">&quot;</span><span class="code-string">Weather&quot;</span>] = <span class="code-string">&quot;</span><span class="code-string">Sunshine, beach weather.\0&quot;</span>; 
+StringFileInfo stringFileInfo = (StringFileInfo) versionResource[<span class="code-string">&quot;</span><span
+ class="code-string">StringFileInfo&quot;</span>];
+stringFileInfo[<span class="code-string">&quot;</span><span class="code-string">CompanyName&quot;</span>] = <span
+ class="code-string">&quot;</span><span class="code-string">My Company\0&quot;</span>;
+stringFileInfo[<span class="code-string">&quot;</span><span class="code-string">Weather&quot;</span>] = <span
+ class="code-string">&quot;</span><span class="code-string">Sunshine, beach weather.\0&quot;</span>; 
 versionResource.SaveTo(filename);</pre>
-
-<p>Generating a complete version resource header allows you to save version information into a file that doesn't have any.
-This is more involved because you must generate all the structures. ResourceLib makes it easy since you don't have to worry about
- structure sizes or data alignment.</p>
-
-<pre lang="cs">VersionResource versionResource = new VersionResource();
+ <p>
+  Generating a complete version resource header allows you to save version information
+  into a file that doesn't have any. This is more involved because you must generate
+  all the structures. ResourceLib makes it easy since you don't have to worry about
+  structure sizes or data alignment.</p>
+ <pre lang="cs">VersionResource versionResource = new VersionResource();
 versionResource.FileVersion = "1.2.3.4";
 versionResource.ProductVersion = "4.5.6.7";
 
@@ -104,45 +152,41 @@ varFileInfo.Vars.Add(varFileInfoTranslation.Key, varFileInfoTranslation);
 varFileInfoTranslation[ResourceUtil.USENGLISHLANGID] = 1300;
 
 versionResource.SaveTo(targetFilename);</pre>
-
-<p>A unit test, called <span style="color: #990000;
-  font-family: Courier New">VersionResourceTests.TestDeleteAndSaveVersi<span style="color: #000000;
-   font-family: 'Courier New', Courier, mono; background-color: #fbedbb">o</span>nResource</span> implements this behavior and can be found 
-  in the ResourceLibUnitTests project. It
- makes a copy of atl.dll from the Windows system directory into the temporary folder,
- deletes its version resource, generates a new one without copying any data and updates
- the copy.</p>
-
-<h2>Implementation</h2>
-
-<h3>Base Structures</h3>
-
-<p>Every resource structure has a similar header, implemented in <em>ResourceTable.cs</em>.</p>
-
-<pre lang="cs">[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)] 
+ <p>
+  A unit test, called <span style="color: #990000; font-family: Courier New">VersionResourceTests.TestDeleteAndSaveVersi<span
+   style="color: #000000; font-family: 'Courier New', Courier, mono; background-color: #fbedbb">o</span>nResource</span>
+  implements this behavior and can be found in the ResourceLibUnitTests project. It
+  makes a copy of atl.dll from the Windows system directory into the temporary folder,
+  deletes its version resource, generates a new one without copying any data and updates
+  the copy.</p>
+ <h2>
+  Implementation</h2>
+ <h3>
+  Base Structures</h3>
+ <p>
+  Every resource structure has a similar header, implemented in <em>ResourceTable.cs</em>.</p>
+ <pre lang="cs">[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)] 
 <span class="code-keyword">public</span> <span class="code-keyword">struct</span> RESOURCE_HEADER 
 { 
  <span class="code-keyword">public</span> <span class="code-SDKkeyword">UInt16</span> wLength; 
  <span class="code-keyword">public</span> <span class="code-SDKkeyword">UInt16</span> wValueLength; 
  <span class="code-keyword">public</span> <span class="code-SDKkeyword">UInt16</span> wType; 
 };</pre>
-
-<p>The header is usually followed by a Unicode string (a key) and an array of data structures, each with a similar resource header. </p>
-
-<h3>
-Alignment
-</h3>
-<p>
- All version resource structures are <a href="http://msdn.microsoft.com/en-us/library/aa290049.aspx">
-  aligned</a> to 32-bit boundaries (DWORD), while
- icon resources are aligned to a 16-bit boundary (WORD). The resource library uses both
- math to align pointers (<span
-  style="color: #990000; font-family: Courier New">ResourceUtil.Align<span style="color: #000000"><span
-   style="font-family: Verdana, Arial, Helvetica, sans-serif">) </span><span style="font-family: Verdana">
-    to align to DWORD</span></span></span>, and struct alignment (<span style="color: #990000;
-     font-family: Courier New">Pack = 2</span>) to align icon structures to WORD.</p>
-<p>
-</p>
+ <p>
+  The header is usually followed by a Unicode string (a key) and an array of data
+  structures, each with a similar resource header.
+ </p>
+ <h3>
+  Alignment
+ </h3>
+ <p>
+  All version resource structures are <a href="http://msdn.microsoft.com/en-us/library/aa290049.aspx">
+   aligned</a> to 32-bit boundaries (DWORD), while icon resources are aligned to a
+  16-bit boundary (WORD). The resource library uses both math to align pointers (<span
+   style="color: #990000; font-family: Courier New">ResourceUtil.Align<span style="color: #000000"><span
+    style="font-family: Verdana, Arial, Helvetica, sans-serif">) </span><span style="font-family: Verdana">
+     to align to DWORD</span></span></span>, and struct alignment (<span style="color: #990000;
+      font-family: Courier New">Pack = 2</span>) to align icon structures to WORD.</p>
  <pre lang="cs">public static IntPtr Align(Int32 p)
 {
     return new IntPtr((p + 3) & ~3);
@@ -153,8 +197,6 @@ public static IntPtr Align(IntPtr p)
     return Align(p.ToInt32());
 }
  </pre>
-<p>
-</p>
  <pre lang="cs">[StructLayout(LayoutKind.Sequential, Pack = 2)]
 public struct GRPICONDIR
 {
@@ -163,14 +205,15 @@ public struct GRPICONDIR
     public UInt16 wImageCount; // image count
 };
  </pre>
-
-<h3>Reading</h3>
-
-<p>Because of a uniform type of header, you'll find the same pattern in reading structured data throughout the code.</p>
-
-<p>Here's an example of <code>StringTable</code>:</p>
-
-<pre lang="cs"><span class="code-keyword">public</span> <span class="code-keyword">override</span> <span class="code-SDKkeyword">IntPtr</span> Read(<span class="code-SDKkeyword">IntPtr</span> lpRes) 
+ <h3>
+  Reading</h3>
+ <p>
+  Because of a uniform type of header, you'll find the same pattern in reading structured
+  data throughout the code.</p>
+ <p>
+  Here's an example of <code>StringTable</code>:</p>
+ <pre lang="cs"><span class="code-keyword">public</span> <span class="code-keyword">override</span> <span
+  class="code-SDKkeyword">IntPtr</span> Read(<span class="code-SDKkeyword">IntPtr</span> lpRes) 
 {
  <span class="code-SDKkeyword">IntPtr</span> pChild = <span class="code-keyword">base</span>.Read(lpRes);
  <span class="code-keyword">while</span> (pChild.ToInt32() &lt; (lpRes.ToInt32() + _header.wLength)) 
@@ -179,25 +222,31 @@ public struct GRPICONDIR
   _strings.Add(res.Key, res); 
   pChild = ResourceUtil.Align(pChild.ToInt32() + res.Header.wLength); 
  } 
- <span class="code-keyword">return</span> <span class="code-keyword">new</span> <span class="code-SDKkeyword">IntPtr</span>(lpRes.ToInt32() + _header.wLength); 
+ <span class="code-keyword">return</span> <span class="code-keyword">new</span> <span
+  class="code-SDKkeyword">IntPtr</span>(lpRes.ToInt32() + _header.wLength); 
 }</pre>
-
-<p>Each <code>StringResource</code> is the endpoint structure without any children.</p>
-
-<pre lang="cs"><span class="code-keyword">public</span> <span class="code-keyword">void</span> Read(<span class="code-SDKkeyword">IntPtr</span> lpRes) 
+ <p>
+  Each <code>StringResource</code> is the endpoint structure without any children.</p>
+ <pre lang="cs"><span class="code-keyword">public</span> <span class="code-keyword">void</span> Read(<span
+  class="code-SDKkeyword">IntPtr</span> lpRes) 
 { 
  _header = (Kernel32.RESOURCE_HEADER) Marshal.PtrToStructure( lpRes, <span class="code-keyword">typeof</span>(Kernel32.RESOURCE_HEADER)); 
- <span class="code-SDKkeyword">IntPtr</span> pKey = <span class="code-keyword">new</span> <span class="code-SDKkeyword">IntPtr</span>(lpRes.ToInt32() + Marshal.SizeOf(_header)); 
+ <span class="code-SDKkeyword">IntPtr</span> pKey = <span class="code-keyword">new</span> <span
+  class="code-SDKkeyword">IntPtr</span>(lpRes.ToInt32() + Marshal.SizeOf(_header)); 
  _key = Marshal.PtrToStringUni(pKey);
- <span class="code-SDKkeyword">IntPtr</span> pValue = ResourceUtil.Align(pKey.ToInt32() + (_key.Length + <span class="code-digit">1</span>) * <span class="code-digit">2</span>); 
- _value = _header.wValueLength &gt; <span class="code-digit">0</span> ? Marshal.PtrToStringUni(pValue, _header.wValueLength) : <span class="code-keyword">null</span>; 
+ <span class="code-SDKkeyword">IntPtr</span> pValue = ResourceUtil.Align(pKey.ToInt32() + (_key.Length + <span
+  class="code-digit">1</span>) * <span class="code-digit">2</span>); 
+ _value = _header.wValueLength &gt; <span class="code-digit">0</span> ? Marshal.PtrToStringUni(pValue, _header.wValueLength) : <span
+  class="code-keyword">null</span>; 
 }</pre>
-
-<h3>Writing</h3>
-
-<p>Writing is the reverse operation of reading, but the header must be updated to the correct length. It's easier to align the structure and to calculate the difference between the end of the structure and the beginning of it after it's written.</p>
-
-<pre lang="cs"><span class="code-keyword">public</span> <span class="code-keyword">override</span> <span class="code-keyword">void</span> Write(BinaryWriter w) 
+ <h3>
+  Writing</h3>
+ <p>
+  Writing is the reverse operation of reading, but the header must be updated to the
+  correct length. It's easier to align the structure and to calculate the difference
+  between the end of the structure and the beginning of it after it's written.</p>
+ <pre lang="cs"><span class="code-keyword">public</span> <span class="code-keyword">override</span> <span
+  class="code-keyword">void</span> Write(BinaryWriter w) 
 { 
  <span class="code-keyword">long</span> headerPos = w.BaseStream.Position; 
  <span class="code-keyword">base</span>.Write(w); 
@@ -209,29 +258,30 @@ public struct GRPICONDIR
  ResourceUtil.PadToDWORD(w); 
  ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos); 
 }</pre>
-
-<h3>Binary Compatibility</h3>
-
-<p>It is very important to ensure that the library is capable of generating correct binary resources with proper sizes and correctly
-aligned structures. Each top-level resource is capable of reading from raw data and writing back the raw data. All
- lengths and sizes are recalculated at write time.</p>
+ <h3>
+  Binary Compatibility</h3>
  <p>
-  A series of unit
-tests ensure that data read is identical to the data written. This is accomplished by loading resources from an existing file,
-performing a deep copy of the data without any structural fields (lengths, number of elements, etc.), writing the copy to a
-vector of bytes and comparing the two. An example of such a test is
+  It is very important to ensure that the library is capable of generating correct
+  binary resources with proper sizes and correctly aligned structures. Each top-level
+  resource is capable of reading from raw data and writing back the raw data. All
+  lengths and sizes are recalculated at write time.</p>
+ <p>
+  A series of unit tests ensure that data read is identical to the data written. This
+  is accomplished by loading resources from an existing file, performing a deep copy
+  of the data without any structural fields (lengths, number of elements, etc.), writing
+  the copy to a vector of bytes and comparing the two. An example of such a test is
   <span style="color: #990000; font-family: Courier New">VersionResourceTests.TestDeepCopyBytes</span>.</p>
-
-<h2>Extending to Icons</h2>
-
-<p>Extending the library to support icons means implementing the data structures
- for icon storage and hooking up ResourceInfo callbacks. When <span style="color: #990000;
-  font-family: Courier New">ResourceInfo </span>encouters a resource of type "14"
- (<span style="color: #990000; font-family: Courier New">RT_GROUP_ICON</span>), it
- creates an object of type <span style="color: #990000; font-family: Courier New">
-  GroupIconResource</span>, much like string and version resources. The latter creates
- an <span style="color: #990000; font-family: Courier New">IconResource</span>, which
- loads an <span style="color: #990000; font-family: Courier New">IconImage</span>.</p>
+ <h2>
+  Extending to Icons</h2>
+ <p>
+  Extending the library to support icons means implementing the data structures for
+  icon storage and hooking up ResourceInfo callbacks. When <span style="color: #990000;
+   font-family: Courier New">ResourceInfo </span>encouters a resource of type "14"
+  (<span style="color: #990000; font-family: Courier New">RT_GROUP_ICON</span>), it
+  creates an object of type <span style="color: #990000; font-family: Courier New">
+   GroupIconResource</span>, much like string and version resources. The latter creates
+  an <span style="color: #990000; font-family: Courier New">IconResource</span>, which
+  loads an <span style="color: #990000; font-family: Courier New">IconImage</span>.</p>
  <ul>
   <li>A <span style="color: #990000; font-family: Courier New">GroupIconResource </span>
    represents a collection of icon resources.</li>
@@ -257,37 +307,39 @@ vector of bytes and comparing the two. An example of such a test is
  <p>
   The ease of extending the library to icons validated our initial design model.
  </p>
-
-<h2>Source Code</h2>
-
-<p>The latest version of this article and source code can always be found on CodePlex
- under <a href="http://www.codeplex.com/resourcelib">http://www.codeplex.com/resourcelib</a><a href="svn://svn.vestris.com/codeproject/ResourceLib/"></a>.</p>
-
-<h2>Links</h2>
-
-<p>This article combines, implements, ports, or obsoletes some of the functionalities of the following publications:</p>
-
-<ul>
-<li><a href="http://www.codeproject.com/KB/library/VerInfoLib.aspx">CodeProject: Modification of Version Information Resources in Compiled Binaries</a></li>
-<li><a href="http://www.codeproject.com/KB/cpp/GetLocalVersionInfos.aspx">CodeProject: Retrieving version information from your local application's resource</a></li>
-<li><a href="http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx">CodeProject: A Fast Way to Get at the File's Version</a></li>
-<li><a href="http://www.codeguru.com/csharp/.net/net_general/graphics/article.php/c12787/">CodeGuru: IconLib: Icons Unfolded</a></li>
-<li><a href="http://www.codeguru.com/cpp/w-p/win32/tutorials/print.php/c12873__1">CodeGuru: Hacking Icon Resources</a></li>
-<li><a href="http://www.codeproject.com/KB/GDI/using_vista_icons.aspx">CodeProject: Windows Vista Icons</a></li>
-<li><a href="http://msdn.microsoft.com/en-us/library/ms997538.aspx">MSDN: Icons in Win32</a></li>
-</ul>
-
-<h2>History</h2>
-
-<ul>
-<li>2008-06-30: Initial version</li>
- <li>2008-07-08: Bug: wrong value for RT_RCDATA</li>
- <li>2008-09-28: Added support for icons</li>
- <li>2008-10-03: Bug: wrong binary data writing version resource without copy</li>
- <li>2009-02-19: Moved to CodePlex, released 1.1.</li>
-</ul>
+ <h2>
+  Source Code</h2>
  <p>
-  &nbsp;</p>
-
+  The latest version of this article and source code can always be found on 
+  CodePlex at <a href="http://www.codeplex.com/resourcelib">http://www.codeplex.com/resourcelib</a><a
+   href="svn://svn.vestris.com/codeproject/ResourceLib/"></a>.</p>
+ <h2>
+  Links</h2>
+ <p>
+  This article combines, implements, ports, or obsoletes some of the functionalities
+  of the following publications:</p>
+ <ul>
+  <li><a href="http://www.codeproject.com/KB/library/VerInfoLib.aspx">CodeProject:
+   Modification of Version Information Resources in Compiled Binaries</a></li>
+  <li><a href="http://www.codeproject.com/KB/cpp/GetLocalVersionInfos.aspx">CodeProject:
+   Retrieving version information from your local application's resource</a></li>
+  <li><a href="http://www.codeproject.com/KB/dotnet/FastFileVersion.aspx">CodeProject:
+   A Fast Way to Get at the File's Version</a></li>
+  <li><a href="http://www.codeguru.com/csharp/.net/net_general/graphics/article.php/c12787/">
+   CodeGuru: IconLib: Icons Unfolded</a></li>
+  <li><a href="http://www.codeguru.com/cpp/w-p/win32/tutorials/print.php/c12873__1">
+   CodeGuru: Hacking Icon Resources</a></li>
+  <li><a href="http://www.codeproject.com/KB/GDI/using_vista_icons.aspx">CodeProject:
+   Windows Vista Icons</a></li>
+  <li><a href="http://msdn.microsoft.com/en-us/library/ms997538.aspx">MSDN: Icons in
+   Win32</a></li>
+ </ul>
+ <h2>
+  History</h2>
+ <ul>
+  <li>2008-06-30: Initial version</li>
+  <li>2008-09-28: Added support for icons</li>
+  <li>2009-02-19: Moved to CodePlex, released 1.1.</li>
+ </ul>
 </body>
 </html>

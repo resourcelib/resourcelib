@@ -1,62 +1,81 @@
 <Project DefaultTargets="all" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+ <Import Project="Version.proj"/>
  <PropertyGroup Condition="'$(Configuration)'==''">
-  <Configuration>Debug</Configuration>
+  <Configuration>Debug;Release</Configuration>
  </PropertyGroup>
  <PropertyGroup>
   <ReleaseDir>Vestris.ResourceLib</ReleaseDir>
  </PropertyGroup>
- <Target Name="all">
+ <Target Name="configurations">
+  <CreateItem Include="$(Configuration)">
+   <Output TaskParameter="Include" ItemName="Configuration" />
+  </CreateItem>
+ </Target>
+ <PropertyGroup>
+  <ProductName>ResourceLib</ProductName>
+  <CompanyName>Vestris Inc.</CompanyName>
+  <Copyright>Copyright (c) Vestris Inc.</Copyright>
+  <Trademark>All Rights Reserved</Trademark>
+  <MajorVersion>1</MajorVersion>
+  <MinorVersion>1</MinorVersion>
+ </PropertyGroup>
+ <Target Name="all" DependsOnTargets="configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
+  <CallTarget Targets="clean" />
   <CallTarget Targets="version" />
   <CallTarget Targets="build" />
+  <CallTarget Targets="test" />
+  <CallTarget Targets="doc" />
   <CallTarget Targets="zip" />
  </Target>
- <Target Name="version">
-  <Version Major="1" Minor="1">
-   <Output TaskParameter="Major" PropertyName="Major" />
-   <Output TaskParameter="Minor" PropertyName="Minor" />
-   <Output TaskParameter="Build" PropertyName="Build" />
-   <Output TaskParameter="Revision" PropertyName="Revision" />
-  </Version>
-  <SvnVersion LocalPath=".">
-   <Output TaskParameter="Revision" PropertyName="Build" />
-  </SvnVersion>
-  <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
-  <MakeDir Directories="Source\Common" />
-  <AssemblyInfo CodeLanguage="CS" OutputFile="Source\Common\GlobalAssemblyInfo.cs"
-   AssemblyDescription="Binary Resource Management Library" AssemblyConfiguration=""
-   AssemblyCompany="Vestris Inc." AssemblyProduct="ResourceLib" AssemblyCopyright="Copyright (c) Daniel Doubrovkine, Vestris Inc. 2008"
-   AssemblyTrademark="" ComVisible="false" CLSCompliant="false" AssemblyDelaySign="false" AssemblyKeyName="" AssemblyCulture=""
-   AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)" />
+ <Target Name="clean" DependsOnTargets="configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
+  <Message Importance="high" Text="Cleaning project, %(Configuration.Identity) ..." />
+  <MSBuild Projects="ResourceLib.sln" Targets="Clean" Properties="Configuration=%(Configuration.Identity)" />
+  <RemoveDir Directories="$(ReleaseDir)" />
+  <Delete Files="Source\Common\GlobalAssemblyInfo.cs" />
+  <Delete Files="Vestris.ResourceLib.$(Major).$(Minor).zip" />
  </Target>
- <Target Name="clean">
-  <MSBuild Projects="ResourceLib.sln" Targets="Clean" />
+ <Target Name="build" DependsOnTargets="version;configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
+  <Message Importance="high" Text="Compiling and linking project, %(Configuration.Identity) ..." />
+  <MSBuild Projects="ResourceLib.sln" Targets="Build" Properties="Configuration=%(Configuration.Identity)" />
  </Target>
- <Target Name="build">
-  <MSBuild Projects="ResourceLib.sln" />
+ <Target Name="test" DependsOnTargets="configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
+  <Message Importance="high" Text="Running tests, %(Configuration.Identity) ..." />
+  <CreateItem Include="Source\**\bin\%(Configuration.Identity)\Vestris.*UnitTests.dll">
+   <Output TaskParameter="Include" ItemName="UnitTestAssemblies"/>
+  </CreateItem>
+  <Message Text="@(UnitTestAssemblies)" />
+  <NUnit Assemblies="@(UnitTestAssemblies)" ToolPath="$(ProgramFiles)\NUnit 2.4.7\bin" />
  </Target>
  <ItemGroup>
   <SourceCodeFiles Include="*.sln" />
   <SourceCodeFiles Include="*.proj" />
   <SourceCodeFiles Include="*.cmd" />
-  <SourceCodeFiles Include="Source/**/*.cs" />
-  <SourceCodeFiles Include="Source/**/*.csproj" />
-  <SourceCodeFiles Include="Source/**/License.txt" />
+  <SourceCodeFiles Include="Source\**\*.cs" />
+  <SourceCodeFiles Include="Source\**\*.csproj" />
+  <SourceCodeFiles Include="Source\**\License.txt" />
  </ItemGroup>
  <ItemGroup>
-  <ArticleFiles Include="Article/**/*.html" />
+  <ArticleFiles Include="Article\**\*.html" />
  </ItemGroup>
- <ItemGroup>
-  <BinaryFiles Include="Source/**/$(Configuration)/Vestris.*.dll" />
-  <BinaryFiles Include="Source/**/$(Configuration)/nunit.framework.dll" />
- </ItemGroup>
- <ItemGroup>
-  <PackageFiles Include="$(ReleaseDir)/**/*" />
- </ItemGroup>
- <Target Name="zip" DependsOnTargets="version">
+ <Target Name="doc" DependsOnTargets="version;configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
+  <Error Condition="'$(DXROOT)'==''" Text="Missing Sandcastle, DXROOT environment variable not set, install from http://www.codeplex.com/Sandcastle" />
+  <Error Condition="'$(SHFBROOT)'==''" Text="Missing Sandcastle Builder, SHFBROOT environment variable not set, install from http://www.codeplex.com/SHFB" />
+  <Delete Files="Documentation\%(Configuration.Identity)\ResourceLib.chm" Condition="'%(Configuration.Identity)'=='Release'" />
+  <MSBuild Projects="Documentation\ResourceLib.shfbproj" Properties="Configuration=%(Configuration.Identity)" Condition="'%(Configuration.Identity)'=='Release'" />
+  <Error Condition="Exists('Documentation\%(Configuration.Identity)\LastBuild.log')" Text="Documentation build failed, check Documentation\%(Configuration.Identity)\LastBuild.log" />
+ </Target>
+ <Target Name="zip" DependsOnTargets="version;configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
   <Copy SourceFiles="@(SourceCodeFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Source\%(RecursiveDir)" />
   <Copy SourceFiles="@(ArticleFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Article\%(RecursiveDir)" />
-  <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Bin" />
-  <Zip ZipFileName="Vestris.ResourceLib.zip" Files="@(PackageFiles)" />
+  <Copy SourceFiles="Documentation\%(Configuration.Identity)\ResourceLib.chm" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)" Condition="'%(Configuration.Identity)'=='Release'" />
+  <CreateItem Include="Source\**\%(Configuration.Identity)/Vestris.*.dll" Exclude="Source\**\%(Configuration.Identity)/Vestris.*UnitTests.dll">
+   <Output TaskParameter="Include" ItemName="BinaryFiles" />
+  </CreateItem>
+  <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Bin\%(Configuration.Identity)" />
+  <CreateItem Include="$(ReleaseDir)\**\*" Condition="'%(Configuration.Identity)'=='Release'">
+   <Output TaskParameter="Include" ItemName="PackageFiles" />
+  </CreateItem>
+  <Zip ZipFileName="Vestris.ResourceLib.$(Major).$(Minor).zip" Condition="'%(Configuration.Identity)'=='Release'" Files="@(PackageFiles)" />
  </Target>
 </Project>

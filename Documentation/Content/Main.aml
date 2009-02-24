@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="C73DDB0A-3EC4-4fa4-A341-6A054FDA07DC" revisionNumber="1">
+ <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <introduction>
+   <para>
+    This is a framework that enumerates resources and implements both read and write of the file version (<literal>VS_VERSIONINFO</literal>), 
+    string resources (company, copyright and product information) and icon (<literal>RT_GROUP_ICON</literal>, <literal>RT_ICON</literal>) 
+    resources. It can be further extended to other resource types, easily.
+   </para>
+   <para>
+    This library is maintained on CodePlex at
+    <externalLink>
+     <linkHref>http://www.codeplex.com/resourcelib/</linkHref>
+     <linkText>http://www.codeplex.com/resourcelib/</linkText>
+    </externalLink>.
+   </para>
+  </introduction>
+ </developerConceptualDocument>
+</topic>

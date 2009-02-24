@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="473bb06e-99af-4e35-bc79-832501bdd403" revisionNumber="1">
+ <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <introduction>
+   <para>
+    This section demonstrates how to use this library for manipulating version resources.
+   </para>
+   <para>
+    A version resource is stored in a <externalLink>
+     <linkHref>http://msdn.microsoft.com/en-us/library/aa914916.aspx</linkHref>
+     <linkText>VS_VERSIONINFO</linkText>
+    </externalLink> root structure, which contains all other file-version information.
+    <list class="bullet">
+     <listItem>
+      <externalLink>
+       <linkHref>http://msdn.microsoft.com/en-us/library/ms647001.aspx</linkHref>
+       <linkText>VS_FIXEDFILEINFO</linkText>
+      </externalLink>, language- and code page-independent file version information.
+     </listItem>
+     <listItem>
+      <externalLink>
+       <linkHref>http://msdn.microsoft.com/en-us/library/aa908808.aspx</linkHref>
+       <linkText>StringFileInfo</linkText>
+      </externalLink>, language and code page formatting information for the strings.
+     </listItem>
+     <listItem>
+      <externalLink>
+       <linkHref>http://msdn.microsoft.com/en-us/library/aa909193.aspx</linkHref>
+       <linkText>VarFileInfo</linkText>
+      </externalLink>, version information not dependent on a particular language and code page combination.
+     </listItem>
+    </list>
+   </para>
+  </introduction>
+  <section address="version_readingversioninfo">
+   <title>Reading Version Information</title>
+   <content>
+    <para>
+     The following example loads file version information directly, without enumerating all resources.
+     <code language="cs">
+      <![CDATA[
+string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+VersionResource versionResource = new VersionResource();
+versionResource.LoadFrom(filename);
+Console.WriteLine("File version: {0}", versionResource.FileVersion);
+StringFileInfo stringFileInfo = (StringFileInfo) versionResource["StringFileInfo"];
+foreach (KeyValuePair<string, StringResource> stringResource in stringFileInfo.Default.Strings)
+{
+ Console.WriteLine("{0} = {1}", stringResource.Value.Key, stringResource.Value.StringValue);
+}
+]]>
+     </code>
+    </para>
+   </content>
+  </section>
+  <section address="version_writingversioninfo">
+   <title>Writing Version Information</title>
+   <content>
+    <para>
+     The easiest way to update version information is to load an existing binary resource, update it and save it back.
+     Note that string resources should end with an extra null terminator, a requirement of the Windows operating system.
+     <code language="cs">
+      <![CDATA[
+string filename = "test.dll";
+VersionResource versionResource = new VersionResource();
+versionResource.LoadFrom(filename);
+Console.WriteLine("File version: {0}", versionResource.FileVersion);
+versionResource.FileVersion = "1.2.3.4";
+StringFileInfo stringFileInfo = (StringFileInfo) versionResource["StringFileInfo"];
+stringFileInfo["CompanyName"] = "My Company\0";
+stringFileInfo["Weather"] = "Sunshine, beach weather.\0"; 
+versionResource.SaveTo(filename);
+     ]]>
+     </code>
+     Generating a complete version resource header allows you to save version information into a file that doesn't have any.
+     This is more involved because you must generate all the structures. ResourceLib makes it easy since you don't have
+     to worry about structure sizes or data alignment.
+     <code language="cs">
+      <![CDATA[
+VersionResource versionResource = new VersionResource();
+versionResource.FileVersion = "1.2.3.4";
+versionResource.ProductVersion = "4.5.6.7";
+
+StringFileInfo stringFileInfo = new StringFileInfo();
+versionResource[stringFileInfo.Key] = stringFileInfo;
+StringTable stringFileInfoStrings = new StringTable("040904b0");
+stringFileInfo.Strings.Add(stringFileInfoStrings.Key, stringFileInfoStrings);
+stringFileInfoStrings["ProductName"] = "ResourceLib\0";
+stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib\0";
+stringFileInfoStrings["CompanyName"] = "Vestris Inc.\0";
+stringFileInfoStrings["LegalCopyright"] = "All Rights Reserved\0";
+stringFileInfoStrings["Comments"] = "This file has a version resource updated by ResourceLib\0";
+stringFileInfoStrings["ProductVersion"] = string.Format("{0}\0", versionResource.ProductVersion);
+
+VarFileInfo varFileInfo = new VarFileInfo();
+versionResource[varFileInfo.Key] = varFileInfo;
+VarTable varFileInfoTranslation = new VarTable("Translation");
+varFileInfo.Vars.Add(varFileInfoTranslation.Key, varFileInfoTranslation);
+varFileInfoTranslation[ResourceUtil.USENGLISHLANGID] = 1300;
+
+versionResource.SaveTo(filename);
+      ]]>
+     </code>
+    </para>
+   </content>
+  </section>
+ </developerConceptualDocument>
+</topic>

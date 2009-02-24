@@ -16,30 +16,21 @@ if EXIST "%VisualStudioCmd%" (
 
 set SvnDir=%ProgramFiles%\svn
 if NOT EXIST "%SvnDir%" set SvnDir=%ProgramFiles%\Subversion
+if NOT EXIST "%SvnDir%" set SvnDir=%ProgramFiles%\SlikSvn
 if NOT EXIST "%SvnDir%" (
- echo Missing SubVersion, expected in %SvnDir%
+ echo Missing SubVersion, expected in %ProgramFiles%\svn or %ProgramFiles%\Subversion or %ProgramFiles%\SlikSvn
  exit /b -1
 )
 
-set NUnitDir=%ProgramFiles%\NUnit 2.4.7\bin
-if NOT EXIST "%NUnitDir%" (
- echo Missing NUnit, expected in %NUnitDir%
- exit /b -1
-)
-
-set DoxygenDir=%ProgramFiles%\doxygen\bin
-if NOT EXIST "%DoxygenDir%" (
- echo Missing Doxygen, expected in %DoxygenDir%
- exit /b -1
-)
-
-set FrameworkVersion=v2.0.50727
+set FrameworkVersion=v3.5
 set FrameworkDir=%SystemRoot%\Microsoft.NET\Framework
 
-PATH=%FrameworkDir%\%FrameworkVersion%;%NUnitDir%;%SvnDir%;%DoxygenDir%;%PATH%
+PATH=%FrameworkDir%\%FrameworkVersion%;%SvnDir%;%PATH%
 msbuild.exe ResourceLib.proj /t:%*
+if NOT %ERRORLEVEL%==0 exit /b %ERRORLEVEL%
 popd
 endlocal
+exit /b 0
 goto :EOF
 
 :Usage

@@ -13,6 +13,16 @@ namespace Vestris.ResourceLibUnitTests
     public class IconResourceTests
     {
         [Test]
+        public void TestLoadIconResources()
+        {
+            string filename = Path.Combine(Environment.SystemDirectory, "regedt32.exe");
+            Assert.IsTrue(File.Exists(filename));
+            GroupIconResource groupIconResource = new GroupIconResource();
+            groupIconResource.LoadFrom(filename);
+            DumpResource.Dump(groupIconResource);
+        }
+
+        [Test]
         public void TestLoadAndSaveIconResource()
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);

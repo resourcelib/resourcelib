@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Topics defaultTopic="C73DDB0A-3EC4-4fa4-A341-6A054FDA07DC">
+  <Topic id="C73DDB0A-3EC4-4fa4-A341-6A054FDA07DC" visible="True" title="ResourceLib.NET">
+    <Topic id="a6f46303-b703-4ff3-9572-55d8131eb883" visible="True" title="Getting Started" />
+    <Topic id="473bb06e-99af-4e35-bc79-832501bdd403" visible="True" title="Version Resources" />
+    <Topic id="8162f211-25a7-4c74-870b-8beba385902a" visible="True" title="Icon Resources" />
+    <Topic id="bfd78578-6e10-47e5-8b41-44426e0a1ac1" visible="True" title="License" />
+  </Topic>
+</Topics>

@@ -1,35 +1,35 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLibUnitTests", "Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Article", "Article", "{8C34CEDC-B5FB-42FD-A408-B0EA599AFBB8}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		Article\resourcelibdotnet.html = Article\resourcelibdotnet.html
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D703E923-FE2E-4B4D-B67F-55BC8E4D52CD}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		build.cmd = build.cmd
 		ResourceLib.proj = ResourceLib.proj
+		Version.proj = Version.proj
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLibUnitTests", "Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{AD64D826-875E-44FB-8DC4-95E2D37CC0BE}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\ResourceLib.content = Documentation\ResourceLib.content
+		Documentation\ResourceLib.shfbproj = Documentation\ResourceLib.shfbproj
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C46FF-FC48-496B-9C03-E48B91A8EBAB}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Content\GettingStarted.aml = Documentation\Content\GettingStarted.aml
+		Documentation\Content\IconResources.aml = Documentation\Content\IconResources.aml
+		Documentation\Content\License.aml = Documentation\Content\License.aml
+		Documentation\Content\Main.aml = Documentation\Content\Main.aml
+		Documentation\Content\VersionResources.aml = Documentation\Content\VersionResources.aml
 	EndProjectSection
 EndProject
 Global
@@ -49,5 +49,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{642C46FF-FC48-496B-9C03-E48B91A8EBAB} = {AD64D826-875E-44FB-8DC4-95E2D37CC0BE}
 	EndGlobalSection
 EndGlobal
