@@ -45,7 +45,7 @@
    <Output TaskParameter="Include" ItemName="UnitTestAssemblies"/>
   </CreateItem>
   <Message Text="@(UnitTestAssemblies)" />
-  <NUnit Assemblies="@(UnitTestAssemblies)" ToolPath="$(ProgramFiles)\NUnit 2.4.8\bin" />
+  <NUnit Assemblies="@(UnitTestAssemblies)" ToolPath="$(NUnitDir)\bin" />
  </Target>
  <ItemGroup>
   <SourceCodeFiles Include="*.sln" />

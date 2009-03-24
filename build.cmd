@@ -8,6 +8,15 @@ if "%~1"=="" (
 pushd "%~dp0"
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
+for /D %%n in ( "%ProgramFiles%\NUnit*" ) do (
+ set NUnitDir=%%~n
+)
+
+if NOT EXIST "%NUnitDir%" (
+ echo Missing NUnit, expected in %NUnitDir%
+ exit /b -1
+)
+
 set VisualStudioCmd=%ProgramFiles%\Microsoft Visual Studio 8.0\VC\vcvarsall.bat
 
 if EXIST "%VisualStudioCmd%" ( 
