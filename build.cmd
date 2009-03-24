@@ -14,18 +14,10 @@ if EXIST "%VisualStudioCmd%" (
  call "%VisualStudioCmd%"
 )
 
-set SvnDir=%ProgramFiles%\svn
-if NOT EXIST "%SvnDir%" set SvnDir=%ProgramFiles%\Subversion
-if NOT EXIST "%SvnDir%" set SvnDir=%ProgramFiles%\SlikSvn
-if NOT EXIST "%SvnDir%" (
- echo Missing SubVersion, expected in %ProgramFiles%\svn or %ProgramFiles%\Subversion or %ProgramFiles%\SlikSvn
- exit /b -1
-)
-
 set FrameworkVersion=v3.5
 set FrameworkDir=%SystemRoot%\Microsoft.NET\Framework
 
-PATH=%FrameworkDir%\%FrameworkVersion%;%SvnDir%;%PATH%
+PATH=%FrameworkDir%\%FrameworkVersion%;%PATH%
 msbuild.exe ResourceLib.proj /t:%*
 if NOT %ERRORLEVEL%==0 exit /b %ERRORLEVEL%
 popd
