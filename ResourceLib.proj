@@ -69,6 +69,7 @@
   <Copy SourceFiles="@(SourceCodeFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Source\%(RecursiveDir)" />
   <Copy SourceFiles="@(ArticleFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Article\%(RecursiveDir)" />
   <Copy SourceFiles="Documentation\%(Configuration.Identity)\ResourceLib.chm" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)" Condition="'%(Configuration.Identity)'=='Release'" />
+  <Copy SourceFiles="Documentation\WhatsNew.html" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)" Condition="'%(Configuration.Identity)'=='Release'" />
   <CreateItem Include="Source\**\%(Configuration.Identity)/Vestris.*.dll" Exclude="Source\**\%(Configuration.Identity)/Vestris.*UnitTests.dll">
    <Output TaskParameter="Include" ItemName="BinaryFiles" />
   </CreateItem>
