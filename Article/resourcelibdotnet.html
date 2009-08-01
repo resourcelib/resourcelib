@@ -136,7 +136,9 @@ versionResource.ProductVersion = "4.5.6.7";
 
 StringFileInfo stringFileInfo = new StringFileInfo();
 versionResource[stringFileInfo.Key] = stringFileInfo;
-StringTable stringFileInfoStrings = new StringTable("040904b0");
+StringTable stringFileInfoStrings = new StringTable();
+stringFileInfoStrings.LanguageID = 1033;
+stringFileInfoStrings.CodePage = 1200;
 stringFileInfo.Strings.Add(stringFileInfoStrings.Key, stringFileInfoStrings);
 stringFileInfoStrings["ProductName"] = "ResourceLib\0";
 stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib\0";

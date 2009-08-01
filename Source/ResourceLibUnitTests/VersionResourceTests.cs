@@ -259,7 +259,11 @@ namespace Vestris.ResourceLibUnitTests
 
             StringFileInfo stringFileInfo = new StringFileInfo();
             versionResource[stringFileInfo.Key] = stringFileInfo;
-            StringTable stringFileInfoStrings = new StringTable("040904b0");
+            StringTable stringFileInfoStrings = new StringTable(); // "040904b0"
+            stringFileInfoStrings.LanguageID = 1033;
+            stringFileInfoStrings.CodePage = 1200;
+            Assert.AreEqual(1033, stringFileInfoStrings.LanguageID);
+            Assert.AreEqual(1200, stringFileInfoStrings.CodePage);
             stringFileInfo.Strings.Add(stringFileInfoStrings.Key, stringFileInfoStrings);
             stringFileInfoStrings["ProductName"] = "ResourceLib\0";
             stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib\0";
@@ -355,6 +359,27 @@ namespace Vestris.ResourceLibUnitTests
             }
 
             Assert.IsTrue(errors == 0, "Errors in binary comparisons.");
+        }
+
+        [Test]
+        public void TestLoadNeutralDeleteEnglishResource()
+        {
+            // the 6to4svc.dll has an English version info strings resource that is loaded via netural            
+            VersionResource vr = new VersionResource();
+            string testDll = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\6to4svc.dll");
+            File.Copy(dll, testDll);
+            try
+            {
+                vr.LoadFrom(testDll);
+                Assert.AreEqual(1033, vr.Language);
+                vr.DeleteFrom(testDll);
+            }
+            finally
+            {
+                File.Delete(testDll);
+            }
         }
     }
 }

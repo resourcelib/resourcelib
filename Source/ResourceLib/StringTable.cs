@@ -68,6 +68,44 @@ namespace Vestris.ResourceLib
             ResourceUtil.PadToDWORD(w);
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
+        
+        /// <summary>
+        /// The four most significant digits of the key represent the language identifier.
+        /// Each Microsoft Standard Language identifier contains two parts: the low-order 10 bits 
+        /// specify the major language, and the high-order 6 bits specify the sublanguage.
+        /// </summary>
+        public UInt16 LanguageID
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_key)) 
+                    return 0;
+
+                return Convert.ToUInt16(_key.Substring(0, 4), 16);
+            }
+            set
+            {
+                _key = string.Format("{0:x4}{1:x4}", value, CodePage);
+            }
+        }
+
+        /// <summary>
+        /// The four least significant digits of the key represent the code page for which the data is formatted.
+        /// </summary>
+        public UInt16 CodePage
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_key))
+                    return 0;
+
+                return Convert.ToUInt16(_key.Substring(4, 4), 16);
+            }
+            set
+            {
+                _key = string.Format("{0:x4}{1:x4}", LanguageID, value);
+            }
+        }
 
         public string this[string key]
         {

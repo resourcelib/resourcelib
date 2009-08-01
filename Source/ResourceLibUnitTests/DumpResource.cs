@@ -69,7 +69,8 @@ namespace Vestris.ResourceLibUnitTests
 
         public static void Dump(StringTable stringTableResource)
         {
-            Console.WriteLine("StringTableResource: {0}", stringTableResource.Key);
+            Console.WriteLine("StringTableResource: {0} [{1}:{2}]", 
+                stringTableResource.Key, stringTableResource.LanguageID, stringTableResource.CodePage);
             Dictionary<string, StringResource>.Enumerator stringEnumerator = stringTableResource.Strings.GetEnumerator();
             while (stringEnumerator.MoveNext())
             {

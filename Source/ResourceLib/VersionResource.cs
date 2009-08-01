@@ -92,7 +92,9 @@ namespace Vestris.ResourceLib
                 switch (rc.Key)
                 {
                     case "StringFileInfo":
-                        rc = new StringFileInfo(pChild);
+                        StringFileInfo sr = new StringFileInfo(pChild);
+                        _language = sr.Default.LanguageID;
+                        rc = sr;
                         break;
                     default:
                         rc = new VarFileInfo(pChild);
