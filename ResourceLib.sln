@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	ProjectSection(SolutionItems) = preProject
 		Documentation\ResourceLib.content = Documentation\ResourceLib.content
 		Documentation\ResourceLib.shfbproj = Documentation\ResourceLib.shfbproj
+		Documentation\WhatsNew.html = Documentation\WhatsNew.html
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C46FF-FC48-496B-9C03-E48B91A8EBAB}"
