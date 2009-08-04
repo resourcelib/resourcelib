@@ -9,12 +9,15 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// This structure depicts the organization of data in a file-version resource. It contains language 
     /// and code page formatting information for the strings. A code page is an ordered character set.
-    /// http://msdn.microsoft.com/en-us/library/aa909192.aspx
+    /// See http://msdn.microsoft.com/en-us/library/aa909192.aspx for more information.
     /// </summary>
     public class StringTable : ResourceTable
     {
         Dictionary<string, StringResource> _strings = new Dictionary<string,StringResource>();
 
+        /// <summary>
+        /// Resource strings.
+        /// </summary>
         public Dictionary<string, StringResource> Strings
         {
             get
@@ -23,23 +26,39 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// A new string table.
+        /// </summary>
         public StringTable()
         {
         
         }
 
+        /// <summary>
+        /// A new string table.
+        /// </summary>
+        /// <param name="key">String table key.</param>
         public StringTable(string key)
             : base(key)
         {
             _header.wType = (UInt16)Kernel32.RESOURCE_HEADER_TYPE.StringData;
         }
 
-        public StringTable(IntPtr lpRes)
+        /// <summary>
+        /// An existing string table.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of the table.</param>
+        internal StringTable(IntPtr lpRes)
         {
             Read(lpRes);
         }
 
-        public override IntPtr Read(IntPtr lpRes)
+        /// <summary>
+        /// Read a string table.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of the string table.</param>
+        /// <returns>Pointer to the end of the string table.</returns>
+        internal override IntPtr Read(IntPtr lpRes)
         {
             _strings.Clear();
             IntPtr pChild = base.Read(lpRes);
@@ -54,7 +73,11 @@ namespace Vestris.ResourceLib
             return new IntPtr(lpRes.ToInt32() + _header.wLength);
         }
 
-        public override void Write(BinaryWriter w)
+        /// <summary>
+        /// Write the string table to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal override void Write(BinaryWriter w)
         {
             long headerPos = w.BaseStream.Position;
             base.Write(w);
@@ -107,6 +130,11 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Returns an entry within the string table.
+        /// </summary>
+        /// <param name="key">Key.</param>
+        /// <returns>An entry within the string table.</returns>
         public string this[string key]
         {
             get

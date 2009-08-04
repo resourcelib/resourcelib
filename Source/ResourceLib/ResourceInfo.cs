@@ -16,7 +16,7 @@ namespace Vestris.ResourceLib
         private List<string> _resourceTypes = null;
 
         /// <summary>
-        /// A dictionary of resources, the key is the resource type, eg. "REGISTRY" or "16" (version)
+        /// A dictionary of resources, the key is the resource type, eg. "REGISTRY" or "16" (version).
         /// </summary>
         public Dictionary<string, List<Resource>> Resources
         {
@@ -27,7 +27,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// A shortcut for available resource types
+        /// A shortcut for available resource types.
         /// </summary>
         public List<string> ResourceTypes
         {
@@ -37,13 +37,16 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// A new resource info.
+        /// </summary>
         public ResourceInfo()
         {
 
         }
 
         /// <summary>
-        /// Unload the previously loaded module
+        /// Unload the previously loaded module.
         /// </summary>
         public void Unload()
         {
@@ -55,8 +58,9 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Load an executable or a DLL and read its resources
+        /// Load an executable or a DLL and read its resources.
         /// </summary>
+        /// <param name="filename">Source filename.</param>
         public void Load(string filename)
         {
             Unload();
@@ -80,8 +84,12 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Enumerate resource types
+        /// Enumerate resource types.
         /// </summary>
+        /// <param name="hModule">Module handle.</param>
+        /// <param name="lpszType">Resource type.</param>
+        /// <param name="lParam">Additional parameter.</param>
+        /// <returns>TRUE if successful.</returns>
         private bool EnumResourceTypesImpl(IntPtr hModule, IntPtr lpszType, IntPtr lParam)
         {
             string typename = ResourceUtil.GetResourceName(lpszType);
@@ -97,6 +105,11 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Enumerate resource names within a resource by type
         /// </summary>
+        /// <param name="hModule">Module handle.</param>
+        /// <param name="lpszType">Resource type.</param>
+        /// <param name="lpszName">Resource name.</param>
+        /// <param name="lParam">Additional parameter.</param>
+        /// <returns>TRUE if successful.</returns>
         private bool EnumResourceNamesImpl(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, IntPtr lParam)
         {
             if (!Kernel32.EnumResourceLanguages(hModule, lpszType, lpszName, new Kernel32.EnumResourceLanguagesDelegate(EnumResourceLanguages), IntPtr.Zero))
@@ -108,6 +121,12 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Enumerate resource languages within a resource by name
         /// </summary>
+        /// <param name="hModule">Module handle.</param>
+        /// <param name="lpszType">Resource type.</param>
+        /// <param name="lpszName">Resource name.</param>
+        /// <param name="wIDLanguage">Language ID.</param>
+        /// <param name="lParam">Additional parameter.</param>
+        /// <returns>TRUE if successful.</returns>
         private bool EnumResourceLanguages(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, UInt16 wIDLanguage, IntPtr lParam)
         {
             string type = ResourceUtil.GetResourceName(lpszType);
@@ -134,7 +153,7 @@ namespace Vestris.ResourceLib
                     break;
                 // \todo: specialize other resource types
                 default:
-                    rc = new Resource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                    rc = new UnknownResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
                     break;
             }
 
@@ -142,11 +161,18 @@ namespace Vestris.ResourceLib
             return true;
         }
 
+        /// <summary>
+        /// Save resource to a file.
+        /// </summary>
+        /// <param name="filename">Target filename.</param>
         public void Save(string filename)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Dispose resource info object.
+        /// </summary>
         public void Dispose()
         {
             Unload();

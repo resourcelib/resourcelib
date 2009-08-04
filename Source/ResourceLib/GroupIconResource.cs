@@ -8,13 +8,22 @@ using System.IO;
 namespace Vestris.ResourceLib
 {
     /// <summary>
-    /// This structure depicts the organization of data in a group icon resource.
+    /// This structure depicts the organization of data in a hardware-independent icon resource.
     /// </summary>
     public class GroupIconResource : Resource
     {
+        /// <summary>
+        /// Resource type.
+        /// </summary>
         public enum GroupType
         {
+            /// <summary>
+            /// Icon.
+            /// </summary>
             Icon = 1,
+            /// <summary>
+            /// Cursor.
+            /// </summary>
             Cursor = 2
         };
 
@@ -22,7 +31,7 @@ namespace Vestris.ResourceLib
         List<IconResource> _icons = new List<IconResource>();
 
         /// <summary>
-        /// Type of the group icon resource.
+        /// Type of the hardware-independent icon resource.
         /// </summary>
         public GroupType GroupIconResourceType
         {
@@ -36,6 +45,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Icons contained in this hardware-independent icon resource.
+        /// </summary>
         public List<IconResource> Icons
         {
             get
@@ -49,9 +61,9 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// An icon resource
+        /// A hardware-independent icon resource.
         /// </summary>
-        public GroupIconResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
+        internal GroupIconResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
             : base(hModule, hResource, type, name, wIDLanguage, size)
         {
             IntPtr lpRes = Kernel32.LockResource(hResource);
@@ -62,6 +74,9 @@ namespace Vestris.ResourceLib
             Read(hModule, lpRes);
         }
 
+        /// <summary>
+        /// A new hardware-independent icon resource.
+        /// </summary>
         public GroupIconResource()
             : base(IntPtr.Zero, 
                 IntPtr.Zero, 
@@ -74,9 +89,9 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Load from an executable file
+        /// Load a hardware-independent icon resource from an executable file.
         /// </summary>
-        /// <param name="filename">an executable file (.exe or .dll)</param>
+        /// <param name="filename">name of an executable file (.exe or .dll)</param>
         public void LoadFrom(string filename)
         {
             base.LoadFrom(filename, new IntPtr(1), 
@@ -84,6 +99,10 @@ namespace Vestris.ResourceLib
                 Kernel32.LANG_NEUTRAL);
         }
 
+        /// <summary>
+        /// Save a hardware-independent icon resource to an executable file.
+        /// </summary>
+        /// <param name="filename">Name of an executable file (.exe or .dll).</param>
         public void SaveTo(string filename)
         {
             base.SaveTo(filename, new IntPtr(int.Parse(Name)), 
@@ -95,7 +114,13 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public override IntPtr Read(IntPtr hModule, IntPtr lpRes)
+        /// <summary>
+        /// Read a hardware-independent icon resource from a loaded module.
+        /// </summary>
+        /// <param name="hModule">Loaded executable module.</param>
+        /// <param name="lpRes">Pointer to the beginning of a hardware-independent icon resource.</param>
+        /// <returns>Pointer to the end of the hardware-independent icon resource.</returns>
+        internal override IntPtr Read(IntPtr hModule, IntPtr lpRes)
         {
             _icons.Clear();
 
@@ -114,7 +139,11 @@ namespace Vestris.ResourceLib
             return pEntry;
         }
 
-        public override void Write(BinaryWriter w)
+        /// <summary>
+        /// Write a hardware-independent icon resource to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal override void Write(BinaryWriter w)
         {
             w.Write((UInt16) _header.wReserved);
             w.Write((UInt16) _header.wType);

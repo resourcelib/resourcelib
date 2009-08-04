@@ -15,6 +15,9 @@ namespace Vestris.ResourceLib
     {
         Dictionary<string, StringTable> _strings = new Dictionary<string, StringTable>();
 
+        /// <summary>
+        /// Resource strings.
+        /// </summary>
         public Dictionary<string, StringTable> Strings
         {
             get
@@ -23,18 +26,30 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// A new string file-version resource.
+        /// </summary>
         public StringFileInfo()
             : base("StringFileInfo")
         {
             _header.wType = (UInt16) Kernel32.RESOURCE_HEADER_TYPE.StringData;
         }
 
-        public StringFileInfo(IntPtr lpRes)
+        /// <summary>
+        /// An existing string file-version resource.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of a string file-version resource.</param>
+        internal StringFileInfo(IntPtr lpRes)
         {
             Read(lpRes);
         }
 
-        public override IntPtr Read(IntPtr lpRes)
+        /// <summary>
+        /// Read an existing string file-version resource.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of a string file-version resource.</param>
+        /// <returns>Pointer to the end of the string file-version resource.</returns>
+        internal override IntPtr Read(IntPtr lpRes)
         {
             _strings.Clear();
             IntPtr pChild = base.Read(lpRes);
@@ -49,7 +64,11 @@ namespace Vestris.ResourceLib
             return new IntPtr(lpRes.ToInt32() + _header.wLength);
         }
 
-        public override void Write(BinaryWriter w)
+        /// <summary>
+        /// Write the string file-version resource to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal override void Write(BinaryWriter w)
         {
             long headerPos = w.BaseStream.Position;
             base.Write(w);
@@ -63,6 +82,9 @@ namespace Vestris.ResourceLib
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
 
+        /// <summary>
+        /// Default (first) string table.
+        /// </summary>
         public StringTable Default
         {
             get
@@ -73,6 +95,11 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Indexed string table.
+        /// </summary>
+        /// <param name="key">Key.</param>
+        /// <returns>A string table at a given index.</returns>
         public string this[string key]
         {
             get

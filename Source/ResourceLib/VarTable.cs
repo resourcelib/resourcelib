@@ -15,6 +15,9 @@ namespace Vestris.ResourceLib
     {
         private Dictionary<UInt16, UInt16> _languages = new Dictionary<UInt16, UInt16>();
 
+        /// <summary>
+        /// A dictionary of language and code page identifier pairs.
+        /// </summary>
         public Dictionary<UInt16, UInt16> Languages
         {
             get
@@ -23,23 +26,39 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// A new table of language and code page identifier pairs.
+        /// </summary>
         public VarTable()
         {
 
         }
 
+        /// <summary>
+        /// A new table of language and code page identifier pairs.
+        /// </summary>
+        /// <param name="key">Table key.</param>
         public VarTable(string key)
             : base(key)
         {
 
         }
 
-        public VarTable(IntPtr lpRes)
+        /// <summary>
+        /// An existing table of language and code page identifier pairs.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of the data.</param>
+        internal VarTable(IntPtr lpRes)
         {
             Read(lpRes);
         }
 
-        public override IntPtr Read(IntPtr lpRes)
+        /// <summary>
+        /// Read a table of language and code page identifier pairs.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of the data.</param>
+        /// <returns></returns>
+        internal override IntPtr Read(IntPtr lpRes)
         {
             _languages.Clear();
             IntPtr pVar = base.Read(lpRes);
@@ -55,7 +74,11 @@ namespace Vestris.ResourceLib
             return new IntPtr(lpRes.ToInt32() + _header.wLength);
         }
 
-        public override void Write(BinaryWriter w)
+        /// <summary>
+        /// Write the table of language and code page identifier pairs to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal override void Write(BinaryWriter w)
         {
             long headerPos = w.BaseStream.Position;
             base.Write(w);
@@ -75,6 +98,11 @@ namespace Vestris.ResourceLib
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
 
+        /// <summary>
+        /// Returns a code page identifier for a given language.
+        /// </summary>
+        /// <param name="key">Language ID.</param>
+        /// <returns>Code page identifier.</returns>
         public UInt16 this[UInt16 key]
         {
             get

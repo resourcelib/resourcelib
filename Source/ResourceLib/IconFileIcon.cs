@@ -16,6 +16,9 @@ namespace Vestris.ResourceLib
         private Kernel32.FILEGRPICONDIRENTRY _header;
         private IconImage _image = new IconImage();
 
+        /// <summary>
+        /// Icon header.
+        /// </summary>
         public Kernel32.FILEGRPICONDIRENTRY Header
         {
             get
@@ -24,6 +27,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Icon bitmap.
+        /// </summary>
         public IconImage Image
         {
             get
@@ -36,11 +42,17 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// New icon data.
+        /// </summary>
         public IconFileIcon()
         {
 
         }
 
+        /// <summary>
+        /// Icon width.
+        /// </summary>
         public Byte Width
         {
             get
@@ -49,6 +61,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Icon height.
+        /// </summary>
         public Byte Height
         {
             get
@@ -57,6 +72,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Image size in bytes.
+        /// </summary>
         public UInt32 ImageSize
         {
             get
@@ -65,7 +83,13 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public IntPtr Read(IntPtr lpData, IntPtr lpAllData)
+        /// <summary>
+        /// Read a single icon (.ico).
+        /// </summary>
+        /// <param name="lpData">Pointer to the beginning of this icon's data.</param>
+        /// <param name="lpAllData">Pointer to the beginning of all icon data.</param>
+        /// <returns>Pointer to the end of this icon's data.</returns>
+        internal IntPtr Read(IntPtr lpData, IntPtr lpAllData)
         {
             _header = (Kernel32.FILEGRPICONDIRENTRY)Marshal.PtrToStructure(
                 lpData, typeof(Kernel32.FILEGRPICONDIRENTRY));
@@ -76,14 +100,20 @@ namespace Vestris.ResourceLib
             return new IntPtr(lpData.ToInt32() + Marshal.SizeOf(_header));
         }
 
+        /// <summary>
+        /// Icon size as a string.
+        /// </summary>
+        /// <returns>Icon size in the width x height format.</returns>
         public override string ToString()
         {
             return string.Format("{0}x{1}", Width, Height);
         }
 
         /// <summary>
-        /// Convert into an icon resource that can be written into a .dll or .exe.
+        /// Convert into an icon resource that can be written into an executable.
         /// </summary>
+        /// <param name="id">Icon ID.</param>
+        /// <returns>An icon resource.</returns>
         public IconResource ConvertToIconResource(UInt16 id)
         {
             IconResource iconResource = new IconResource();

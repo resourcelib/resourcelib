@@ -16,6 +16,9 @@ namespace Vestris.ResourceLib
         private Kernel32.GRPICONDIRENTRY _header;
         private IconImage _image = new IconImage();
 
+        /// <summary>
+        /// Hardware-independent icon directory header.
+        /// </summary>
         public Kernel32.GRPICONDIRENTRY Header
         {
             get
@@ -28,6 +31,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// An icon image.
+        /// </summary>
         public IconImage Image
         {
             get
@@ -41,9 +47,9 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// An icon resource
+        /// An existing icon resource.
         /// </summary>
-        public IconResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
+        internal IconResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
             : base(hModule, hResource, type, name, wIDLanguage, size)
         {
             IntPtr lpRes = Kernel32.LockResource(hResource);
@@ -54,12 +60,17 @@ namespace Vestris.ResourceLib
             Read(hModule, lpRes);
         }
 
+        /// <summary>
+        /// A new icon resource.
+        /// </summary>
         public IconResource()
         {
 
         }
 
-
+        /// <summary>
+        /// Icon width in pixels.
+        /// </summary>
         public Byte Width
         {
             get
@@ -72,6 +83,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Icon height in pixels.
+        /// </summary>
         public Byte Height
         {
             get
@@ -84,6 +98,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Image size in bytes.
+        /// </summary>
         public UInt32 ImageSize
         {
             get
@@ -92,7 +109,13 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public override IntPtr Read(IntPtr hModule, IntPtr lpRes)
+        /// <summary>
+        /// Read an icon resource from a previously loaded module.
+        /// </summary>
+        /// <param name="hModule">Module handle.</param>
+        /// <param name="lpRes">Pointer to a directory entry in the hardware-independent icon resource.</param>
+        /// <returns>Pointer to the end of the icon resource.</returns>
+        internal override IntPtr Read(IntPtr hModule, IntPtr lpRes)
         {
             _header = (Kernel32.GRPICONDIRENTRY)Marshal.PtrToStructure(
                 lpRes, typeof(Kernel32.GRPICONDIRENTRY));
@@ -116,6 +139,9 @@ namespace Vestris.ResourceLib
             return new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
         }
 
+        /// <summary>
+        /// Icon pixel format.
+        /// </summary>
         public PixelFormat PixelFormat
         {
             get
@@ -140,6 +166,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Icon pixel format English standard string.
+        /// </summary>
         public string PixelFormatString
         {
             get
@@ -162,13 +191,21 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// String representation of the icon.
+        /// </summary>
+        /// <returns>A string in a format of width x height followed by the pixel format.</returns>
         public override string ToString()
         {
             return string.Format("{0}x{1} {2}",
                 Width, Height, PixelFormatString);
         }
 
-        public override void Write(BinaryWriter w)
+        /// <summary>
+        /// Write icon resource data to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal override void Write(BinaryWriter w)
         {
             w.Write(_header.bWidth);
             w.Write(_header.bHeight);
@@ -181,9 +218,17 @@ namespace Vestris.ResourceLib
             ResourceUtil.PadToWORD(w);
         }
 
+        /// <summary>
+        /// Save icon to a file.
+        /// </summary>
+        /// <param name="filename">Target file (.ico).</param>
         public void SaveIconTo(string filename)
         {
-            SaveTo(filename, new IntPtr(_header.nID), new IntPtr((uint) Kernel32.ResourceTypes.RT_ICON), Language, _image.Data);
+            SaveTo(filename, 
+                new IntPtr(_header.nID), 
+                new IntPtr((uint) Kernel32.ResourceTypes.RT_ICON), 
+                Language, 
+                _image.Data);
         }
     }
 }

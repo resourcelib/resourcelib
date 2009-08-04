@@ -14,10 +14,13 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class StringResource
     {
-        Kernel32.RESOURCE_HEADER _header;
-        string _key;
-        string _value;
+        private Kernel32.RESOURCE_HEADER _header;
+        private string _key;
+        private string _value;
 
+        /// <summary>
+        /// String resource header.
+        /// </summary>
         public Kernel32.RESOURCE_HEADER Header
         {
             get
@@ -26,6 +29,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Key.
+        /// </summary>
         public string Key
         {
             get
@@ -34,6 +40,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// String value.
+        /// </summary>
         public string StringValue
         {
             get
@@ -45,6 +54,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Value.
+        /// </summary>
         public string Value
         {
             get
@@ -57,6 +69,10 @@ namespace Vestris.ResourceLib
             }       
         }
 
+        /// <summary>
+        /// A new string resource.
+        /// </summary>
+        /// <param name="key">Key.</param>
         public StringResource(string key)
         {
             _key = key;
@@ -65,12 +81,20 @@ namespace Vestris.ResourceLib
             _header.wValueLength = 0;
         }
 
-        public StringResource(IntPtr lpRes)
+        /// <summary>
+        /// An existing string resource.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of a string resource.</param>
+        internal StringResource(IntPtr lpRes)
         {
             Read(lpRes);
         }
 
-        public void Read(IntPtr lpRes)
+        /// <summary>
+        /// Read a string resource.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of a string resource.</param>
+        internal void Read(IntPtr lpRes)
         {
             _header = (Kernel32.RESOURCE_HEADER)Marshal.PtrToStructure(
                 lpRes, typeof(Kernel32.RESOURCE_HEADER));
@@ -82,7 +106,11 @@ namespace Vestris.ResourceLib
             _value = _header.wValueLength > 0 ? Marshal.PtrToStringUni(pValue, _header.wValueLength) : null;
         }
 
-        public void Write(BinaryWriter w)
+        /// <summary>
+        /// Write a string resource to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal void Write(BinaryWriter w)
         {
             // write the block info
             long headerPos = w.BaseStream.Position;

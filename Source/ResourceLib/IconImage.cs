@@ -18,8 +18,11 @@ namespace Vestris.ResourceLib
         //private Byte[] icXOR;
         //private Byte[] icAND;
 
-        byte[] _data = null;
+        private byte[] _data = null;
 
+        /// <summary>
+        /// Raw image data.
+        /// </summary>
         public byte[] Data
         {
             get
@@ -44,6 +47,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Bitmap info header.
+        /// </summary>
         public Gdi32.BITMAPINFOHEADER Header
         {
             get
@@ -52,6 +58,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Bitmap size in bytes.
+        /// </summary>
         public int Size
         {
             get
@@ -60,21 +69,29 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// A new icon image.
+        /// </summary>
         public IconImage()
         {
 
         }
 
         /// <summary>
-        /// Load a .ico file
+        /// Load an existing (.ico) file.
         /// </summary>
-        /// <param name="filename">.ico filename</param>
+        /// <param name="filename">Path to an .ico file.</param>
         public IconImage(string filename)
         {
             Data = File.ReadAllBytes(filename);
         }
 
-        public void Read(IntPtr lpData, uint size)
+        /// <summary>
+        /// Read icon data.
+        /// </summary>
+        /// <param name="lpData">Pointer to the beginning of icon data.</param>
+        /// <param name="size">Icon data size.</param>
+        internal void Read(IntPtr lpData, uint size)
         {
             _header = (Gdi32.BITMAPINFOHEADER)Marshal.PtrToStructure(
                 lpData, typeof(Gdi32.BITMAPINFOHEADER));

@@ -19,7 +19,7 @@
     <ProjectSummary>
     </ProjectSummary>
     <MissingTags>AutoDocumentCtors</MissingTags>
-    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers</VisibleItems>
     <HtmlHelp1xCompilerPath>
     </HtmlHelp1xCompilerPath>
     <HtmlHelp2xCompilerPath>

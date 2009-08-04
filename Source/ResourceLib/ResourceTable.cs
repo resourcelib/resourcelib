@@ -6,11 +6,24 @@ using System.IO;
 
 namespace Vestris.ResourceLib
 {
+    /// <summary>
+    /// A resource table.
+    /// </summary>
     public class ResourceTable
     {
+        /// <summary>
+        /// Resource table header.
+        /// </summary>
         protected Kernel32.RESOURCE_HEADER _header;
+
+        /// <summary>
+        /// Resource table key.
+        /// </summary>
         protected string _key;
 
+        /// <summary>
+        /// Resource table key.
+        /// </summary>
         public string Key
         {
             get
@@ -19,6 +32,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Resource header.
+        /// </summary>
         public Kernel32.RESOURCE_HEADER Header
         {
             get
@@ -31,17 +47,28 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// A new resource table.
+        /// </summary>
         public ResourceTable()
         {
 
         }
 
+        /// <summary>
+        /// An existing resource table.
+        /// </summary>
+        /// <param name="key">resource key</param>
         public ResourceTable(string key)
         {
             _key = key;
         }
 
-        public ResourceTable(IntPtr lpRes)
+        /// <summary>
+        /// An existing resource table.
+        /// </summary>
+        /// <param name="lpRes">Pointer to resource table data.</param>
+        internal ResourceTable(IntPtr lpRes)
         {
             Read(lpRes);
         }
@@ -49,9 +76,9 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Read the resource header, return a pointer to the end of it.
         /// </summary>
-        /// <param name="lpRes">top of header</param>
-        /// <returns>end of header, after the key, aligned at 32bit</returns>
-        public virtual IntPtr Read(IntPtr lpRes)
+        /// <param name="lpRes">Top of header.</param>
+        /// <returns>End of header, after the key, aligned at a 32 bit boundary.</returns>
+        internal virtual IntPtr Read(IntPtr lpRes)
         {
             _header = (Kernel32.RESOURCE_HEADER) Marshal.PtrToStructure(
                 lpRes, typeof(Kernel32.RESOURCE_HEADER));
@@ -62,7 +89,11 @@ namespace Vestris.ResourceLib
             return ResourceUtil.Align(pBlockKey.ToInt32() + (_key.Length + 1) * 2);
         }
 
-        public virtual void Write(BinaryWriter w)
+        /// <summary>
+        /// Write the resource table.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal virtual void Write(BinaryWriter w)
         {
             // wLength
             w.Write((UInt16)_header.wLength);

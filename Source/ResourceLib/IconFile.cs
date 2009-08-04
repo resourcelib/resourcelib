@@ -12,9 +12,18 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class IconFile
     {
+        /// <summary>
+        /// Resource type.
+        /// </summary>
         public enum GroupType
         {
+            /// <summary>
+            /// Icon.
+            /// </summary>
             Icon = 1,
+            /// <summary>
+            /// Cursor.
+            /// </summary>
             Cursor = 2
         };
 
@@ -36,6 +45,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Collection of icons in an .ico file.
+        /// </summary>
         public List<IconFileIcon> Icons
         {
             get
@@ -48,15 +60,19 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// An existing .ico file.
+        /// </summary>
+        /// <param name="filename">An existing icon (.ico) file.</param>
         public IconFile(string filename)
         {
             LoadFrom(filename);
         }
 
         /// <summary>
-        /// Load from a .ico file
+        /// Load from a .ico file.
         /// </summary>
-        /// <param name="filename">an icon file (.ico)</param>
+        /// <param name="filename">An existing icon (.ico) file.</param>
         public void LoadFrom(string filename)
         {
             byte[] _data = File.ReadAllBytes(filename);
@@ -73,7 +89,12 @@ namespace Vestris.ResourceLib
             }
         }
 
-        public IntPtr Read(IntPtr lpData)
+        /// <summary>
+        /// Read icons.
+        /// </summary>
+        /// <param name="lpData">Pointer to the beginning of a FILEGRPICONDIR structure.</param>
+        /// <returns>Pointer to the end of a FILEGRPICONDIR structure.</returns>
+        internal IntPtr Read(IntPtr lpData)
         {
             _icons.Clear();
 
@@ -92,6 +113,10 @@ namespace Vestris.ResourceLib
             return lpEntry;
         }
 
+        /// <summary>
+        /// Convert a collection of icons into a group icon resource that can be embedded into an executable file.
+        /// </summary>
+        /// <returns>A harware-independent icon resource.</returns>
         public GroupIconResource ConvertToGroupIconResource()
         {
             GroupIconResource groupIconResource = new GroupIconResource();
