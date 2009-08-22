@@ -105,8 +105,13 @@ namespace Vestris.ResourceLib
         internal Resource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
         {
             _hModule = hModule;
-            _type = type;
-            _name = name;
+            // copy string values, the memory pointed to by type and name will be released
+            _type = ResourceUtil.IsIntResource(type)
+                ? type
+                : Marshal.StringToHGlobalUni(ResourceUtil.GetResourceName(type));
+            _name = ResourceUtil.IsIntResource(name) 
+                ? name
+                : Marshal.StringToHGlobalUni(ResourceUtil.GetResourceName(name));
             _language = wIDLanguage;
             _hResource = hResource;
             _size = size;

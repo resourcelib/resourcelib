@@ -47,7 +47,7 @@ namespace Vestris.ResourceLib
             if (IsIntResource(value))
                 return value.ToString();
 
-            return Marshal.PtrToStringUni((IntPtr)value);
+            return Marshal.PtrToStringUni(value);
         }
 
         /// <summary>

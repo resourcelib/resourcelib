@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Vestris.ResourceLib
 {
@@ -10,6 +11,26 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class UnknownResource : Resource
     {
+        /// <summary>
+        /// Raw resource data.
+        /// </summary>
+        protected byte[] _data = null;
+
+        /// <summary>
+        /// Raw resource data.
+        /// </summary>
+        public byte[] Data
+        {
+            get
+            {
+                return _data;
+            }
+            set
+            {
+                _data = value;
+            }
+        }
+
         /// <summary>
         /// A structured resource embedded in an executable module.
         /// </summary>
@@ -22,6 +43,7 @@ namespace Vestris.ResourceLib
         public UnknownResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
             : base(hModule, hResource, type, name, wIDLanguage, size)
         {
+            Read(hModule, hResource);
         }
 
         /// <summary>
@@ -32,7 +54,13 @@ namespace Vestris.ResourceLib
         /// <returns>Pointer to the end of the resource.</returns>
         internal override IntPtr Read(IntPtr hModule, IntPtr lpRes)
         {
-            throw new NotImplementedException();
+            if (_size > 0)
+            {
+                _data = new byte[_size];
+                Marshal.Copy(lpRes, _data, 0, _data.Length);
+            }
+
+            return new IntPtr(lpRes.ToInt32() + _size);
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace Vestris.ResourceLibUnitTests
 
                         if (resource is VersionResource)
                         {
-                            VersionResource versionResource = (VersionResource) resource;
+                            VersionResource versionResource = (VersionResource)resource;
                             Console.WriteLine("  File version: {0}", versionResource.FileVersion);
                             Console.WriteLine("  Language: {0}", versionResource.Language);
                             Dictionary<string, ResourceTable>.Enumerator stringTableResourceEnumerator = versionResource.Resources.GetEnumerator();
@@ -45,8 +45,39 @@ namespace Vestris.ResourceLibUnitTests
                         {
                             DumpResource.Dump(resource as GroupIconResource);
                         }
+                        else
+                        {
+                            DumpResource.Dump(resource);
+                        }
                     }
                 }
+            }
+        }
+
+        [Test]
+        public void TestCustom()
+        {
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\custom.exe");
+            Assert.IsTrue(File.Exists(filename));
+            using (ResourceInfo vi = new ResourceInfo())
+            {
+                vi.Load(filename);
+                // version resources (well-known)
+                List<Resource> versionResources = vi.Resources["16"]; // RT_VERSION
+                Assert.IsNotNull(versionResources);
+                Assert.AreEqual(1, versionResources.Count);
+                Resource versionResource = versionResources[0];
+                Assert.AreEqual(versionResource.Name, "1");
+                Assert.AreEqual(versionResource.Type, "16");
+                // custom resources
+                List<Resource> customResources = vi.Resources["CUSTOM"];
+                Assert.IsNotNull(customResources);
+                Assert.AreEqual(1, customResources.Count);
+                Resource customResource = customResources[0];
+                // check whether the properties are string representations
+                Assert.AreEqual(customResource.Name, "RES_CONFIGURATION");
+                Assert.AreEqual(customResource.Type, "CUSTOM");
             }
         }
     }

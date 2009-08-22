@@ -7,8 +7,13 @@ namespace Vestris.ResourceLibUnitTests
 {
     public abstract class DumpResource
     {
+        public static void Dump(Resource rc)
+        {
+            Console.WriteLine("Resource: {0} of type {1}, {2} byte(s)", rc.Name, rc.Type, rc.Size);
+        }
+
         public static void Dump(VersionResource rc)
-        {            
+        {
             Console.WriteLine("File version: {0}", rc.FileVersion);
             Console.WriteLine("Product version: {0}", rc.ProductVersion);
             Dictionary<string, ResourceTable>.Enumerator resourceEnumerator = rc.Resources.GetEnumerator();

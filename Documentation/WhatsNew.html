@@ -25,8 +25,13 @@
     <h3>
         1.2 (TBD)</h3>
     <ul>
-        <li>Added <code>StringTable.CodePage</code> and <code>StringTable.LanguageID</code> properties.</li>
+        <li>Added <code>StringTable.CodePage</code> and <code>StringTable.LanguageID</code>
+            properties.</li>
         <li>Bug: error deleting an English version resource which was loaded as language-neutral.</li>
+        <li>Bug: custom resources with literal string names return an invalid value in <code>
+            Resource.Name</code> and <code>Resource.Type</code>.</li>
+        <li>Added <code>UnknownResource.Data</code> read-only data bytes for unsupported resource
+            types.</li>
     </ul>
     <h3>
         1.1 (2009-02-19)</h3>
