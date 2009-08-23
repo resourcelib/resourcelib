@@ -4,14 +4,14 @@
   <introduction>
    <para>
     This is a framework that enumerates resources and implements both read and write of the file version (<literal>VS_VERSIONINFO</literal>), 
-    string resources (company, copyright and product information) and icon (<literal>RT_GROUP_ICON</literal>, <literal>RT_ICON</literal>) 
-    resources. It can be further extended to other resource types, easily.
+    string resources (company, copyright and product information), icon (<literal>RT_GROUP_ICON</literal>, <literal>RT_ICON</literal>) 
+    resources and SxS manifest (<literal>RT_MANIFEST</literal>) resources. It can be further extended to other resource types, easily.
    </para>
    <para>
     This library is maintained on CodePlex at
     <externalLink>
-     <linkHref>http://www.codeplex.com/resourcelib/</linkHref>
-     <linkText>http://www.codeplex.com/resourcelib/</linkText>
+     <linkHref>http://resourcelib.codeplex.com/</linkHref>
+     <linkText>http://resourcelib.codeplex.com/</linkText>
     </externalLink>.
    </para>
   </introduction>

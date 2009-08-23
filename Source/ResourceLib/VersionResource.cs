@@ -65,7 +65,7 @@ namespace Vestris.ResourceLib
         /// A new language-netural version resource.
         /// </summary>
         public VersionResource()
-            : base(IntPtr.Zero, IntPtr.Zero, new IntPtr((int) Kernel32.ResourceTypes.RT_VERSION), new IntPtr(1), ResourceUtil.USENGLISHLANGID, 0)
+            : base(IntPtr.Zero, IntPtr.Zero, new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), new IntPtr(1), ResourceUtil.USENGLISHLANGID, 0)
         {
             _header.Header = new Kernel32.RESOURCE_HEADER((UInt16) Marshal.SizeOf(_fixedfileinfo));
         }

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="065f0818-f488-451b-ac63-1c5e24299041" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        This section demonstrates how to use this library for manipulating Side-by-Side Assembly XML manifest resources.
+        When ResourceInfo encouters a resource of type <literal>"24"</literal> (<literal>RT_MANIFEST</literal>), it creates an object
+        of type ManifestResource. The latter loads the embedded SxS manifest as an XML document.
+      </para>
+      <para>
+        See <externalLink>
+          <linkHref>http://msdn.microsoft.com/en-us/library/aa375365(VS.85).aspx</linkHref>
+          <linkText>Isolated Applications and Side-by-Side Assemblies Manifests</linkText>
+        </externalLink> for more information.        
+      </para>
+    </introduction>
+    <section address="readingmanifest">
+      <title>Reading SxS Manifests</title>
+      <content>
+        <para>
+          The following example loads the SxS manifest directly, without enumerating all resources.
+          <code language="cs">
+            <![CDATA[
+string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
+ManifestResource rc = new ManifestResource();
+rc.LoadFrom(filename);
+Console.WriteLine("Manifest type: {0}", rc.ManifestType);
+Console.WriteLine(rc.Manifest.OuterXml);
+      ]]>
+          </code>
+        </para>
+      </content>
+    </section>
+    <section address="writingmanifest">
+      <title>Writing Manifest Resources</title>
+      <content>
+        <para>
+          A manifest can be written directly to an existing binary file, adding a new manifest or replacing an existing one.          
+          <code language="cs">
+            <![CDATA[
+ManifestResource manifestResource = new ManifestResource(Kernel32.ManifestType.CreateProcess);
+// A default manifest resource is valid, but has no useful attributes, load the desired manifest here.
+// manifestResource.Manifest.LoadXml(...);
+manifestResource.SaveTo(targetFilename);
+            ]]>
+          </code>
+        </para>
+        <alert type="note">
+          <para>
+            Rewriting an identical manifest does not necessarily preserve the size of the RT_MANIFEST resource because
+            new lines in attribute values are normalized. See the 
+            <externalLink>
+              <linkHref>http://www.w3.org/TR/REC-xml/#AVNormalize</linkHref>
+              <linkText>W3C spec section 3.3.3</linkText>
+            </externalLink> for details.
+          </para>
+        </alert>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>

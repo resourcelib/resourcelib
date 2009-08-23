@@ -80,7 +80,7 @@ namespace Vestris.ResourceLib
         public GroupIconResource()
             : base(IntPtr.Zero, 
                 IntPtr.Zero, 
-                new IntPtr((uint)Kernel32.ResourceTypes.RT_GROUP_ICON), 
+                new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON),
                 new IntPtr(1), 
                 1033, 
                 Marshal.SizeOf(typeof(Kernel32.GRPICONDIR)))
@@ -91,7 +91,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Load a hardware-independent icon resource from an executable file.
         /// </summary>
-        /// <param name="filename">name of an executable file (.exe or .dll)</param>
+        /// <param name="filename">Name of an executable file (.exe or .dll).</param>
         public void LoadFrom(string filename)
         {
             base.LoadFrom(filename, new IntPtr(1), 

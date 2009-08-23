@@ -143,18 +143,27 @@ namespace Vestris.ResourceLib
             int size = Kernel32.SizeofResource(hModule, hResource);
 
             Resource rc = null;
-            switch (ResourceUtil.GetResourceName(lpszType))
+            if (ResourceUtil.IsIntResource(lpszType))
             {
-                case "16": // Kernel32.RT_VERSION:
-                    rc = new VersionResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
-                    break;
-                case "14": // Kernel32.RT_GROUP_ICON
-                    rc = new GroupIconResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
-                    break;
-                // \todo: specialize other resource types
-                default:
-                    rc = new UnknownResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
-                    break;
+                switch (lpszType.ToInt32())
+                {
+                    case (int) Kernel32.ResourceTypes.RT_VERSION:
+                        rc = new VersionResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                        break;
+                    case (int) Kernel32.ResourceTypes.RT_GROUP_ICON:
+                        rc = new GroupIconResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                        break;
+                    case (int) Kernel32.ResourceTypes.RT_MANIFEST:
+                        rc = new ManifestResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                        break;
+                    default:
+                        rc = new UnknownResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                        break;
+                }
+            }
+            else
+            {
+                rc = new UnknownResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
             }
 
             resources.Add(rc);

@@ -43,7 +43,7 @@ namespace Vestris.ResourceLibUnitTests
 
             string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
             Assert.IsTrue(File.Exists(filename));
-            string targetFilename = Path.Combine(Path.GetTempPath(), "test.dll");
+            string targetFilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".exe");
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             groupIconResource.SaveTo(targetFilename);
@@ -52,6 +52,7 @@ namespace Vestris.ResourceLibUnitTests
             GroupIconResource newGroupIconResource = new GroupIconResource();
             newGroupIconResource.LoadFrom(targetFilename);
             DumpResource.Dump(newGroupIconResource);
+            File.Delete(targetFilename);
         }
 
         [Test]

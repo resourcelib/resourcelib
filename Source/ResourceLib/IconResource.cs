@@ -121,7 +121,7 @@ namespace Vestris.ResourceLib
                 lpRes, typeof(Kernel32.GRPICONDIRENTRY));
 
             IntPtr hIconInfo = Kernel32.FindResource(
-                hModule, (IntPtr) _header.nID, (IntPtr)Kernel32.ResourceTypes.RT_ICON);
+                hModule, new IntPtr(_header.nID), (IntPtr) Kernel32.ResourceTypes.RT_ICON);
 
             if (hIconInfo == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());

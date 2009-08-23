@@ -24,7 +24,6 @@
      <code language="cs">
       <![CDATA[
 string filename = Path.Combine(Environment.SystemDirectory, "regedt32.exe");
-Assert.IsTrue(File.Exists(filename));
 GroupIconResource rc = new GroupIconResource();
 rc.LoadFrom(filename);
 Console.WriteLine("GroupIconResource: {0}, {1}", rc.Name, rc.Type);

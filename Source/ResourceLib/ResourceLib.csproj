@@ -66,6 +66,7 @@
     <Compile Include="IconImage.cs" />
     <Compile Include="IconResource.cs" />
     <Compile Include="Kernel32.cs" />
+    <Compile Include="ManifestResource.cs" />
     <Compile Include="ResourceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.cs" />

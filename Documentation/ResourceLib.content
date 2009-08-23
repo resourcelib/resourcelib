@@ -4,6 +4,7 @@
     <Topic id="a6f46303-b703-4ff3-9572-55d8131eb883" visible="True" title="Getting Started" />
     <Topic id="473bb06e-99af-4e35-bc79-832501bdd403" visible="True" title="Version Resources" />
     <Topic id="8162f211-25a7-4c74-870b-8beba385902a" visible="True" title="Icon Resources" />
+    <Topic id="065f0818-f488-451b-ac63-1c5e24299041" visible="True" title="Manifest Resources" />
     <Topic id="bfd78578-6e10-47e5-8b41-44426e0a1ac1" visible="True" title="License" />
   </Topic>
 </Topics>

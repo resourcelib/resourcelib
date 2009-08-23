@@ -7,15 +7,54 @@ namespace Vestris.ResourceLibUnitTests
 {
     public abstract class DumpResource
     {
+        public static void Dump(ResourceInfo ri)
+        {
+            Console.WriteLine("Resource types: ");
+            foreach (string type in ri.ResourceTypes)
+            {
+                Console.WriteLine(type);
+            }
+
+            Console.WriteLine("Resources: ");
+            Dictionary<String, List<Resource>>.Enumerator riEnumerator = ri.Resources.GetEnumerator();
+            while (riEnumerator.MoveNext())
+            {
+                Console.WriteLine("Type: {0}", riEnumerator.Current.Key);
+                foreach (Resource r in riEnumerator.Current.Value)
+                {
+                    Dump(r);
+                }
+            }
+        }
+
         public static void Dump(Resource rc)
         {
             Console.WriteLine("Resource: {0} of type {1}, {2} byte(s)", rc.Name, rc.Type, rc.Size);
+            if (rc is VersionResource)
+            {
+                Dump(rc as VersionResource);
+            }
+            else if (rc is IconResource)
+            {
+                Dump(rc as IconResource);
+            }
+            else if (rc is ManifestResource)
+            {
+                Dump(rc as ManifestResource);
+            }
+        }
+
+        public static void Dump(ManifestResource rc)
+        {
+            Console.WriteLine("Manifest type: {0}", rc.ManifestType);
+            Console.WriteLine(rc.Manifest.OuterXml);
         }
 
         public static void Dump(VersionResource rc)
         {
             Console.WriteLine("File version: {0}", rc.FileVersion);
             Console.WriteLine("Product version: {0}", rc.ProductVersion);
+            Console.WriteLine("Language: {0}", rc.Language);
             Dictionary<string, ResourceTable>.Enumerator resourceEnumerator = rc.Resources.GetEnumerator();
             while (resourceEnumerator.MoveNext())
             {
