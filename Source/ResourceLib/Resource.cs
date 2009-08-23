@@ -15,11 +15,11 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Resource type.
         /// </summary>
-        protected IntPtr _type;
+        protected ResourceId _type;
         /// <summary>
         /// Resource name.
         /// </summary>
-        protected IntPtr _name;
+        protected ResourceId _name;
         /// <summary>
         /// Resource language.
         /// </summary>
@@ -66,22 +66,22 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Resource type.
         /// </summary>
-        public string Type
+        public ResourceId Type
         {
             get
             {
-                return ResourceUtil.GetResourceName(_type);
+                return _type;
             }
         }
 
         /// <summary>
         /// Resource name.
         /// </summary>
-        public string Name
+        public ResourceId Name
         {
             get
             {
-                return ResourceUtil.GetResourceName(_name);
+                return _name;
             }
         }
 
@@ -98,21 +98,17 @@ namespace Vestris.ResourceLib
         /// </summary>
         /// <param name="hModule">Module handle.</param>
         /// <param name="hResource">Resource handle.</param>
-        /// <param name="type">Type of resource.</param>
+        /// <param name="type">Resource type.</param>
         /// <param name="name">Resource name.</param>
-        /// <param name="wIDLanguage">Language ID.</param>
+        /// <param name="language">Language ID.</param>
         /// <param name="size">Resource size.</param>
-        internal Resource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
+        internal Resource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
         {
             _hModule = hModule;
             // copy string values, the memory pointed to by type and name will be released
-            _type = ResourceUtil.IsIntResource(type)
-                ? type
-                : Marshal.StringToHGlobalUni(ResourceUtil.GetResourceName(type));
-            _name = ResourceUtil.IsIntResource(name) 
-                ? name
-                : Marshal.StringToHGlobalUni(ResourceUtil.GetResourceName(name));
-            _language = wIDLanguage;
+            _type = type;
+            _name = name;
+            _language = language;
             _hResource = hResource;
             _size = size;
         }
@@ -125,7 +121,7 @@ namespace Vestris.ResourceLib
         /// <param name="type">Resource type.</param>
         /// <param name="lang">Resource language.</param>
         /// <returns>Resource data.</returns>
-        internal static byte[] LoadBytesFrom(string filename, IntPtr name, IntPtr type, UInt16 lang)
+        internal static byte[] LoadBytesFrom(string filename, ResourceId name, ResourceId type, UInt16 lang)
         {
             IntPtr hModule = IntPtr.Zero;
 
@@ -137,7 +133,7 @@ namespace Vestris.ResourceLib
                 if (IntPtr.Zero == hModule)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
-                IntPtr hRes = Kernel32.FindResourceEx(hModule, type, name, lang);
+                IntPtr hRes = Kernel32.FindResourceEx(hModule, type.Id, name.Id, lang);
                 if (IntPtr.Zero == hRes)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
@@ -173,7 +169,7 @@ namespace Vestris.ResourceLib
         /// <param name="name">Resource name.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="lang">Resource language.</param>
-        internal void LoadFrom(string filename, IntPtr name, IntPtr type, UInt16 lang)
+        internal void LoadFrom(string filename, ResourceId name, ResourceId type, UInt16 lang)
         {
             IntPtr hModule = IntPtr.Zero;
 
@@ -185,7 +181,7 @@ namespace Vestris.ResourceLib
                 if (IntPtr.Zero == hModule)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
-                IntPtr hRes = Kernel32.FindResourceEx(hModule, type, name, lang);
+                IntPtr hRes = Kernel32.FindResourceEx(hModule, type.Id, name.Id, lang);
                 if (IntPtr.Zero == hRes)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
 
@@ -249,7 +245,7 @@ namespace Vestris.ResourceLib
         /// <param name="name">Resource name.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="langid">Language id.</param>
-        internal void SaveTo(string filename, IntPtr name, IntPtr type, UInt16 langid)
+        internal void SaveTo(string filename, ResourceId name, ResourceId type, UInt16 langid)
         {
             byte[] data = WriteAndGetBytes();
             SaveTo(filename, name, type, langid, data);
@@ -271,7 +267,7 @@ namespace Vestris.ResourceLib
         /// <param name="name">Resource name.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="lang">Resource language.</param>
-        internal static void Delete(string filename, IntPtr name, IntPtr type, UInt16 lang)
+        internal static void Delete(string filename, ResourceId name, ResourceId type, UInt16 lang)
         {
             SaveTo(filename, name, type, lang, null);
         }
@@ -284,14 +280,14 @@ namespace Vestris.ResourceLib
         /// <param name="type">Resource type.</param>
         /// <param name="lang">Resource language.</param>
         /// <param name="data">Resource data.</param>
-        internal static void SaveTo(string filename, IntPtr name, IntPtr type, UInt16 lang, byte[] data)
+        internal static void SaveTo(string filename, ResourceId name, ResourceId type, UInt16 lang, byte[] data)
         {
             IntPtr h = Kernel32.BeginUpdateResource(filename, false);
 
             if (h == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            if (!Kernel32.UpdateResource(h, type, name,
+            if (!Kernel32.UpdateResource(h, type.Id, name.Id,
                 lang, data, (data == null ? 0 : (uint) data.Length)))
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());

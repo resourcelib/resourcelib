@@ -48,10 +48,10 @@ namespace Vestris.ResourceLib
         /// <param name="hResource">Resource ID.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="name">Resource name.</param>
-        /// <param name="wIDLanguage">Language ID.</param>
+        /// <param name="language">Language ID.</param>
         /// <param name="size">Resource size.</param>
-        public VersionResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
-            : base(hModule, hResource, type, name, wIDLanguage, size)
+        public VersionResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
+            : base(hModule, hResource, type, name, language, size)
         {
             IntPtr lpRes = Kernel32.LockResource(hResource);
 
@@ -65,7 +65,12 @@ namespace Vestris.ResourceLib
         /// A new language-netural version resource.
         /// </summary>
         public VersionResource()
-            : base(IntPtr.Zero, IntPtr.Zero, new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), new IntPtr(1), ResourceUtil.USENGLISHLANGID, 0)
+            : base(IntPtr.Zero, 
+                IntPtr.Zero, 
+                new ResourceId(Kernel32.ResourceTypes.RT_VERSION), 
+                new ResourceId(1), 
+                ResourceUtil.USENGLISHLANGID, 
+                0)
         {
             _header.Header = new Kernel32.RESOURCE_HEADER((UInt16) Marshal.SizeOf(_fixedfileinfo));
         }
@@ -86,7 +91,7 @@ namespace Vestris.ResourceLib
         /// <param name="lang">Resource language.</param>
         public void LoadFrom(string filename, UInt16 lang)
         {
-            base.LoadFrom(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), lang);
+            base.LoadFrom(filename, new ResourceId(1), new ResourceId(Kernel32.ResourceTypes.RT_VERSION), lang);
         }
 
         /// <summary>
@@ -107,7 +112,10 @@ namespace Vestris.ResourceLib
         /// <returns>Resource data.</returns>
         public static byte[] LoadBytesFrom(string filename, UInt16 lang)
         {
-            return Resource.LoadBytesFrom(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION), lang);
+            return Resource.LoadBytesFrom(filename, 
+                new ResourceId(1), 
+                new ResourceId(Kernel32.ResourceTypes.RT_VERSION), 
+                lang);
         }
 
         /// <summary>
@@ -229,8 +237,11 @@ namespace Vestris.ResourceLib
         /// <param name="data">Raw version resource data.</param>
         public static void SaveTo(string filename, byte[] data)
         {
-            Resource.SaveTo(filename, new IntPtr(1), new IntPtr((uint)Kernel32.ResourceTypes.RT_VERSION), 
-                ResourceUtil.USENGLISHLANGID, data);
+            Resource.SaveTo(filename, 
+                new ResourceId(1), 
+                new ResourceId(Kernel32.ResourceTypes.RT_VERSION), 
+                ResourceUtil.USENGLISHLANGID, 
+                data);
         }
 
         /// <summary>
@@ -239,7 +250,9 @@ namespace Vestris.ResourceLib
         /// <param name="filename">Target filename.</param>
         public void SaveTo(string filename)
         {
-            base.SaveTo(filename, new IntPtr(1), new IntPtr((uint) Kernel32.ResourceTypes.RT_VERSION),
+            base.SaveTo(filename, 
+                new ResourceId(1), 
+                new ResourceId(Kernel32.ResourceTypes.RT_VERSION),
                 ResourceUtil.USENGLISHLANGID);
         }
 

@@ -16,7 +16,7 @@ namespace Vestris.ResourceLibUnitTests
             }
 
             Console.WriteLine("Resources: ");
-            Dictionary<String, List<Resource>>.Enumerator riEnumerator = ri.Resources.GetEnumerator();
+            Dictionary<ResourceId, List<Resource>>.Enumerator riEnumerator = ri.Resources.GetEnumerator();
             while (riEnumerator.MoveNext())
             {
                 Console.WriteLine("Type: {0}", riEnumerator.Current.Key);

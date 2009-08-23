@@ -32,7 +32,12 @@
             Resource.Name</code> and <code>Resource.Type</code>.</li>
         <li>Added <code>GenericResource.Data</code> read-only data bytes for unsupported resource
             types.</li>
-        <li>Added support for <code>RT_MANIFEST</code>, Windows SxS resources.</li>
+        <li>Added support for <code>RT_MANIFEST</code>, Windows SxS XML resources.</li>
+        <li>Interface change: added <code>ResourceId</code> that represents well-known and custom
+            resources alike and provides comparison and hashing that works for all resource
+            Id types. Both <code>Resource.Name</code> and <code>Resource.Type</code> now return
+            <code>ResourceId</code> and public interfaces that accepted an <code>IntPtr</code>
+            now require a <code>ResourceId</code>.</li>
     </ul>
     <h3>
         1.1 (2009-02-19)</h3>

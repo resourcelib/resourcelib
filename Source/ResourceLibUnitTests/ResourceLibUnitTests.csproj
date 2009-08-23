@@ -49,6 +49,7 @@
     <Compile Include="DumpResource.cs" />
     <Compile Include="IconResourceTests.cs" />
     <Compile Include="ManifestResourceTests.cs" />
+    <Compile Include="ResourceIdTests.cs" />
     <Compile Include="ResourceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VersionResourceTests.cs" />

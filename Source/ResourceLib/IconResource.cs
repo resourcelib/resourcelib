@@ -49,8 +49,14 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// An existing icon resource.
         /// </summary>
-        internal IconResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
-            : base(hModule, hResource, type, name, wIDLanguage, size)
+        /// <param name="hModule">Module handle.</param>
+        /// <param name="hResource">Resource ID.</param>
+        /// <param name="type">Resource type.</param>
+        /// <param name="name">Resource name.</param>
+        /// <param name="language">Language ID.</param>
+        /// <param name="size">Resource size.</param>
+        internal IconResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
+            : base(hModule, hResource, type, name, language, size)
         {
             IntPtr lpRes = Kernel32.LockResource(hResource);
 
@@ -64,6 +70,12 @@ namespace Vestris.ResourceLib
         /// A new icon resource.
         /// </summary>
         public IconResource()
+            : base(IntPtr.Zero,
+                IntPtr.Zero,
+                new ResourceId(Kernel32.ResourceTypes.RT_ICON),
+                new ResourceId(1),
+                ResourceUtil.USENGLISHLANGID, 
+                Marshal.SizeOf(typeof(Kernel32.GRPICONDIRENTRY)))
         {
 
         }
@@ -225,9 +237,9 @@ namespace Vestris.ResourceLib
         public void SaveIconTo(string filename)
         {
             SaveTo(filename, 
-                new IntPtr(_header.nID), 
-                new IntPtr((uint) Kernel32.ResourceTypes.RT_ICON), 
-                Language, 
+                new ResourceId(_header.nID), 
+                new ResourceId(Kernel32.ResourceTypes.RT_ICON), 
+                Language,
                 _image.Data);
         }
     }

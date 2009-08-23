@@ -35,20 +35,20 @@ namespace Vestris.ResourceLibUnitTests
             {
                 vi.Load(filename);
                 // version resources (well-known)
-                List<Resource> versionResources = vi.Resources["16"]; // RT_VERSION
+                List<Resource> versionResources = vi[Kernel32.ResourceTypes.RT_VERSION]; // RT_VERSION
                 Assert.IsNotNull(versionResources);
                 Assert.AreEqual(1, versionResources.Count);
                 Resource versionResource = versionResources[0];
-                Assert.AreEqual(versionResource.Name, "1");
-                Assert.AreEqual(versionResource.Type, "16");
+                Assert.AreEqual(versionResource.Name.ToString(), "1");
+                Assert.AreEqual(versionResource.Type.ToString(), "16");
                 // custom resources
-                List<Resource> customResources = vi.Resources["CUSTOM"];
+                List<Resource> customResources = vi["CUSTOM"];
                 Assert.IsNotNull(customResources);
                 Assert.AreEqual(1, customResources.Count);
                 Resource customResource = customResources[0];
                 // check whether the properties are string representations
-                Assert.AreEqual(customResource.Name, "RES_CONFIGURATION");
-                Assert.AreEqual(customResource.Type, "CUSTOM");
+                Assert.AreEqual(customResource.Name.ToString(), "RES_CONFIGURATION");
+                Assert.AreEqual(customResource.Type.ToString(), "CUSTOM");
             }
         }
     }

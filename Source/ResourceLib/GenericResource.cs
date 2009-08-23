@@ -38,10 +38,10 @@ namespace Vestris.ResourceLib
         /// <param name="hResource">Resource handle.</param>
         /// <param name="type">Type of resource.</param>
         /// <param name="name">Resource name.</param>
-        /// <param name="wIDLanguage">Language id.</param>
+        /// <param name="language">Language id.</param>
         /// <param name="size">Resource size.</param>
-        public GenericResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
-            : base(hModule, hResource, type, name, wIDLanguage, size)
+        public GenericResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
+            : base(hModule, hResource, type, name, language, size)
         {
             Read(hModule, hResource);
         }

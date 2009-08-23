@@ -63,8 +63,14 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// A hardware-independent icon resource.
         /// </summary>
-        internal GroupIconResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
-            : base(hModule, hResource, type, name, wIDLanguage, size)
+        /// <param name="hModule">Module handle.</param>
+        /// <param name="hResource">Resource ID.</param>
+        /// <param name="type">Resource type.</param>
+        /// <param name="name">Resource name.</param>
+        /// <param name="language">Language ID.</param>
+        /// <param name="size">Resource size.</param>
+        internal GroupIconResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
+            : base(hModule, hResource, type, name, language, size)
         {
             IntPtr lpRes = Kernel32.LockResource(hResource);
 
@@ -79,10 +85,10 @@ namespace Vestris.ResourceLib
         /// </summary>
         public GroupIconResource()
             : base(IntPtr.Zero, 
-                IntPtr.Zero, 
-                new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON),
-                new IntPtr(1), 
-                1033, 
+                IntPtr.Zero,
+                new ResourceId(Kernel32.ResourceTypes.RT_GROUP_ICON),
+                new ResourceId(1),
+                ResourceUtil.USENGLISHLANGID, 
                 Marshal.SizeOf(typeof(Kernel32.GRPICONDIR)))
         {
             GroupIconResourceType = GroupType.Icon;
@@ -94,8 +100,8 @@ namespace Vestris.ResourceLib
         /// <param name="filename">Name of an executable file (.exe or .dll).</param>
         public void LoadFrom(string filename)
         {
-            base.LoadFrom(filename, new IntPtr(1), 
-                new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON),
+            base.LoadFrom(filename, new ResourceId(1), 
+                new ResourceId(Kernel32.ResourceTypes.RT_GROUP_ICON), 
                 Kernel32.LANG_NEUTRAL);
         }
 
@@ -105,8 +111,9 @@ namespace Vestris.ResourceLib
         /// <param name="filename">Name of an executable file (.exe or .dll).</param>
         public void SaveTo(string filename)
         {
-            base.SaveTo(filename, new IntPtr(int.Parse(Name)), 
-                new IntPtr((uint) Kernel32.ResourceTypes.RT_GROUP_ICON), Language);
+            base.SaveTo(filename, _name,
+                new ResourceId(Kernel32.ResourceTypes.RT_GROUP_ICON), 
+                Language);
 
             foreach (IconResource icon in _icons)
             {

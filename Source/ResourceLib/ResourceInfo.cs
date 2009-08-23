@@ -12,13 +12,13 @@ namespace Vestris.ResourceLib
     public class ResourceInfo : IDisposable
     {
         private IntPtr _hModule = IntPtr.Zero;
-        private Dictionary<string, List<Resource>> _resources;
+        private Dictionary<ResourceId, List<Resource>> _resources;
         private List<string> _resourceTypes = null;
 
         /// <summary>
         /// A dictionary of resources, the key is the resource type, eg. "REGISTRY" or "16" (version).
         /// </summary>
-        public Dictionary<string, List<Resource>> Resources
+        public Dictionary<ResourceId, List<Resource>> Resources
         {
             get
             {
@@ -66,7 +66,7 @@ namespace Vestris.ResourceLib
             Unload();
 
             _resourceTypes = new List<string>();
-            _resources = new Dictionary<string, List<Resource>>();
+            _resources = new Dictionary<ResourceId, List<Resource>>();
 
             // load DLL
             _hModule = Kernel32.LoadLibraryEx(filename, IntPtr.Zero,
@@ -129,41 +129,41 @@ namespace Vestris.ResourceLib
         /// <returns>TRUE if successful.</returns>
         private bool EnumResourceLanguages(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, UInt16 wIDLanguage, IntPtr lParam)
         {
-            string type = ResourceUtil.GetResourceName(lpszType);
-
             List<Resource> resources = null;
+            ResourceId type = new ResourceId(lpszType);
             if (!_resources.TryGetValue(type, out resources))
             {
                 resources = new List<Resource>();
                 _resources[type] = resources;
             }
 
+            ResourceId name = new ResourceId(lpszName);
             IntPtr hResource = Kernel32.FindResourceEx(hModule, lpszType, lpszName, wIDLanguage);
             IntPtr hResourceGlobal = Kernel32.LoadResource(hModule, hResource);
             int size = Kernel32.SizeofResource(hModule, hResource);
 
             Resource rc = null;
-            if (ResourceUtil.IsIntResource(lpszType))
+            if (type.IsIntResource)
             {
-                switch (lpszType.ToInt32())
+                switch (type.ResourceType)
                 {
-                    case (int) Kernel32.ResourceTypes.RT_VERSION:
-                        rc = new VersionResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_VERSION:
+                        rc = new VersionResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
-                    case (int) Kernel32.ResourceTypes.RT_GROUP_ICON:
-                        rc = new GroupIconResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_GROUP_ICON:
+                        rc = new GroupIconResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
-                    case (int) Kernel32.ResourceTypes.RT_MANIFEST:
-                        rc = new ManifestResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_MANIFEST:
+                        rc = new ManifestResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
                     default:
-                        rc = new GenericResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                        rc = new GenericResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
                 }
             }
             else
             {
-                rc = new GenericResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                rc = new GenericResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
             }
 
             resources.Add(rc);
@@ -185,6 +185,40 @@ namespace Vestris.ResourceLib
         public void Dispose()
         {
             Unload();
+        }
+
+        /// <summary>
+        /// A collection of resources.
+        /// </summary>
+        /// <param name="type">Resource type.</param>
+        /// <returns>A collection of resources of a given type.</returns>
+        public List<Resource> this[Kernel32.ResourceTypes type]
+        {
+            get
+            {
+                return _resources[new ResourceId(type)];
+            }
+            set
+            {
+                _resources[new ResourceId(type)] = value;
+            }
+        }
+
+        /// <summary>
+        /// A collection of resources.
+        /// </summary>
+        /// <param name="type">Resource type.</param>
+        /// <returns>A collection of resources of a given type.</returns>
+        public List<Resource> this[string type]
+        {
+            get
+            {
+                return _resources[new ResourceId(type)];
+            }
+            set
+            {
+                _resources[new ResourceId(type)] = value;
+            }
         }
     }
 }

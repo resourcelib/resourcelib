@@ -37,11 +37,11 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return (Kernel32.ManifestType) _name;
+                return (Kernel32.ManifestType) _name.Id;
             }
             set
             {
-                _name = (IntPtr)value;
+                _name = new ResourceId((IntPtr) value);
             }
         }
 
@@ -52,10 +52,10 @@ namespace Vestris.ResourceLib
         /// <param name="hResource">Resource ID.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="name">Resource name.</param>
-        /// <param name="wIDLanguage">Language ID.</param>
+        /// <param name="language">Language ID.</param>
         /// <param name="size">Resource size.</param>
-        public ManifestResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
-            : base(hModule, hResource, type, name, wIDLanguage, size)
+        public ManifestResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
+            : base(hModule, hResource, type, name, language, size)
         {
             Read(hModule, hResource);
         }
@@ -76,8 +76,8 @@ namespace Vestris.ResourceLib
         public ManifestResource(Kernel32.ManifestType manifestType)
             : base(IntPtr.Zero, 
                 IntPtr.Zero, 
-                new IntPtr((uint) Kernel32.ResourceTypes.RT_MANIFEST), 
-                new IntPtr((uint) manifestType), 
+                new ResourceId(Kernel32.ResourceTypes.RT_MANIFEST), 
+                new ResourceId((uint) manifestType), 
                 Kernel32.LANG_NEUTRAL, 
                 0)
         {
@@ -135,8 +135,9 @@ namespace Vestris.ResourceLib
         /// <param name="manifestType">Manifest resource type.</param>
         public void LoadFrom(string filename, Kernel32.ManifestType manifestType)
         {
-            base.LoadFrom(filename, new IntPtr((uint) manifestType),
-                new IntPtr((uint)Kernel32.ResourceTypes.RT_MANIFEST),
+            base.LoadFrom(filename, 
+                new ResourceId((uint) manifestType),
+                new ResourceId(Kernel32.ResourceTypes.RT_MANIFEST),
                 Kernel32.LANG_NEUTRAL);
         }
 
@@ -147,7 +148,8 @@ namespace Vestris.ResourceLib
         public void SaveTo(string filename)
         {
             base.SaveTo(filename, _name,
-                new IntPtr((uint)Kernel32.ResourceTypes.RT_MANIFEST), Language);
+                new ResourceId(Kernel32.ResourceTypes.RT_MANIFEST), 
+                Language);
         }
     }
 }
