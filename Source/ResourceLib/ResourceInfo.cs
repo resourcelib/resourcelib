@@ -13,7 +13,7 @@ namespace Vestris.ResourceLib
     {
         private IntPtr _hModule = IntPtr.Zero;
         private Dictionary<ResourceId, List<Resource>> _resources;
-        private List<string> _resourceTypes = null;
+        private List<ResourceId> _resourceTypes = null;
 
         /// <summary>
         /// A dictionary of resources, the key is the resource type, eg. "REGISTRY" or "16" (version).
@@ -29,7 +29,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// A shortcut for available resource types.
         /// </summary>
-        public List<string> ResourceTypes
+        public List<ResourceId> ResourceTypes
         {
             get
             {
@@ -65,7 +65,7 @@ namespace Vestris.ResourceLib
         {
             Unload();
 
-            _resourceTypes = new List<string>();
+            _resourceTypes = new List<ResourceId>();
             _resources = new Dictionary<ResourceId, List<Resource>>();
 
             // load DLL
@@ -92,8 +92,8 @@ namespace Vestris.ResourceLib
         /// <returns>TRUE if successful.</returns>
         private bool EnumResourceTypesImpl(IntPtr hModule, IntPtr lpszType, IntPtr lParam)
         {
-            string typename = ResourceUtil.GetResourceName(lpszType);
-            _resourceTypes.Add(typename);
+            ResourceId type = new ResourceId(lpszType);
+            _resourceTypes.Add(type);
 
             // enumerate resource names
             if (!Kernel32.EnumResourceNames(hModule, lpszType, new Kernel32.EnumResourceNamesDelegate(EnumResourceNamesImpl), IntPtr.Zero))
@@ -143,7 +143,7 @@ namespace Vestris.ResourceLib
             int size = Kernel32.SizeofResource(hModule, hResource);
 
             Resource rc = null;
-            if (type.IsIntResource)
+            if (type.IsIntResource())
             {
                 switch (type.ResourceType)
                 {

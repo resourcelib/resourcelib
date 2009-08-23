@@ -52,6 +52,9 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Resource Id.
         /// </summary>
+        /// <remarks>
+        /// If the resource Id is a string, it will be copied.
+        /// </remarks>
         public IntPtr Id
         {
             get
@@ -60,9 +63,9 @@ namespace Vestris.ResourceLib
             }
             set
             {
-                _name = ResourceUtil.IsIntResource(value)
+                _name = IsIntResource(value)
                     ? value
-                    : Marshal.StringToHGlobalUni(ResourceUtil.GetResourceName(value)); ;
+                    : Marshal.StringToHGlobalUni(Marshal.PtrToStringUni(value));
             }
         }
 
@@ -73,7 +76,7 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                if (ResourceUtil.IsIntResource(_name))
+                if (IsIntResource())
                     return (Kernel32.ResourceTypes) _name;
 
                 throw new InvalidCastException(string.Format(
@@ -88,12 +91,18 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Returns true if the resource is an integer resource.
         /// </summary>
-        public bool IsIntResource
+        public bool IsIntResource()
         {
-            get
-            {
-                return ResourceUtil.IsIntResource(_name);
-            }
+            return IsIntResource(_name);
+        }
+
+        /// <summary>
+        /// Returns true if the resource is an integer resource.
+        /// </summary>
+        /// <param name="value">Resource pointer.</param>
+        internal static bool IsIntResource(IntPtr value)
+        {
+            return (uint) value <= UInt16.MaxValue;
         }
 
         /// <summary>
@@ -103,10 +112,9 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                if (ResourceUtil.IsIntResource(_name))
-                    return _name.ToString();
-
-                return Marshal.PtrToStringUni(_name);
+                return IsIntResource()
+                    ? _name.ToString()
+                    : Marshal.PtrToStringUni(_name);
             }
             set
             {
@@ -130,10 +138,9 @@ namespace Vestris.ResourceLib
         /// <returns>Resource Id.</returns>
         public override int GetHashCode()
         {
-            if (ResourceUtil.IsIntResource(_name))
-                return Id.ToInt32();
-
-            return Name.GetHashCode();
+            return IsIntResource() 
+                ? Id.ToInt32() 
+                : Name.GetHashCode();
         }
 
         /// <summary>

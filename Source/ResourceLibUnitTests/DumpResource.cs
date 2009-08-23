@@ -10,7 +10,7 @@ namespace Vestris.ResourceLibUnitTests
         public static void Dump(ResourceInfo ri)
         {
             Console.WriteLine("Resource types: ");
-            foreach (string type in ri.ResourceTypes)
+            foreach (ResourceId type in ri.ResourceTypes)
             {
                 Console.WriteLine(type);
             }

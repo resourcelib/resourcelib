@@ -12,45 +12,6 @@ namespace Vestris.ResourceLib
     public abstract class ResourceUtil
     {
         /// <summary>
-        /// Returns true if the IntPtr value represents a resource identifier.
-        /// </summary>
-        /// <param name="value">Raw pointer.</param>
-        /// <returns>True if the pointer is a resource identifier.</returns>
-        public static bool IsIntResource(IntPtr value)
-        {
-            if (((uint)value) > UInt16.MaxValue)
-                return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Converts a pointer into a resource identifier.
-        /// </summary>
-        /// <param name="value">Raw pointer.</param>
-        /// <returns>Resource identifier.</returns>
-        public static uint GetResourceID(IntPtr value)
-        {
-            if (IsIntResource(value))
-                return (uint)value;
-
-            throw new System.NotSupportedException(value.ToString());
-        }
-
-        /// <summary>
-        /// Converts a pointer into a resource name.
-        /// </summary>
-        /// <param name="value">Raw pointer.</param>
-        /// <returns>Resource name.</returns>
-        public static string GetResourceName(IntPtr value)
-        {
-            if (IsIntResource(value))
-                return value.ToString();
-
-            return Marshal.PtrToStringUni(value);
-        }
-
-        /// <summary>
         /// Align an address to a 4-byte boundary.
         /// </summary>
         /// <param name="p">Address in memory.</param>
