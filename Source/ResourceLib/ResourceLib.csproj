@@ -75,7 +75,7 @@
     <Compile Include="StringFileInfo.cs" />
     <Compile Include="StringResource.cs" />
     <Compile Include="StringTable.cs" />
-    <Compile Include="UnknownResource.cs" />
+    <Compile Include="GenericResource.cs" />
     <Compile Include="VarFileInfo.cs" />
     <Compile Include="VarTable.cs" />
     <Compile Include="VersionResource.cs" />

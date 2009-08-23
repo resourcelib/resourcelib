@@ -157,13 +157,13 @@ namespace Vestris.ResourceLib
                         rc = new ManifestResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
                         break;
                     default:
-                        rc = new UnknownResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                        rc = new GenericResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
                         break;
                 }
             }
             else
             {
-                rc = new UnknownResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
+                rc = new GenericResource(hModule, hResourceGlobal, lpszType, lpszName, wIDLanguage, size);
             }
 
             resources.Add(rc);

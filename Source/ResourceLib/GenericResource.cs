@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 namespace Vestris.ResourceLib
 {
     /// <summary>
-    /// A placeholder for all unknown resources.
+    /// A generic resource.
     /// </summary>
-    public class UnknownResource : Resource
+    public class GenericResource : Resource
     {
         /// <summary>
         /// Raw resource data.
@@ -32,7 +32,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// A structured resource embedded in an executable module.
+        /// An unstructured generic resource embedded in an executable module.
         /// </summary>
         /// <param name="hModule">Module handle.</param>
         /// <param name="hResource">Resource handle.</param>
@@ -40,14 +40,14 @@ namespace Vestris.ResourceLib
         /// <param name="name">Resource name.</param>
         /// <param name="wIDLanguage">Language id.</param>
         /// <param name="size">Resource size.</param>
-        public UnknownResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
+        public GenericResource(IntPtr hModule, IntPtr hResource, IntPtr type, IntPtr name, UInt16 wIDLanguage, int size)
             : base(hModule, hResource, type, name, wIDLanguage, size)
         {
             Read(hModule, hResource);
         }
 
         /// <summary>
-        /// Read the resource.
+        /// Read a generic resource.
         /// </summary>
         /// <param name="hModule">Module handle.</param>
         /// <param name="lpRes">Pointer to the beginning of a resource.</param>
