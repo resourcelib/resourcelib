@@ -17,9 +17,9 @@ namespace Vestris.ResourceLibUnitTests
         {
             string filename = Path.Combine(Environment.SystemDirectory, "regedt32.exe");
             Assert.IsTrue(File.Exists(filename));
-            GroupIconResource groupIconResource = new GroupIconResource();
-            groupIconResource.LoadFrom(filename);
-            DumpResource.Dump(groupIconResource);
+            IconDirectoryResource iconDirectoryResource = new IconDirectoryResource();
+            iconDirectoryResource.LoadFrom(filename);
+            DumpResource.Dump(iconDirectoryResource);
         }
 
         [Test]
@@ -36,22 +36,23 @@ namespace Vestris.ResourceLibUnitTests
                 Console.WriteLine(" {0}", icon.ToString());
             }
 
-            Console.WriteLine("Converted GroupIconResource:");
-            GroupIconResource groupIconResource = iconFile.ConvertToGroupIconResource();
-            DumpResource.Dump(groupIconResource);
-            Assert.AreEqual(iconFile.Icons.Count, groupIconResource.Icons.Count);
+            Console.WriteLine("Converted IconDirectoryResource:");
+            IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource(
+                new ResourceId(Kernel32.ResourceTypes.RT_ICON));
+            DumpResource.Dump(iconDirectoryResource);
+            Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
 
             string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".exe");
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
-            groupIconResource.SaveTo(targetFilename);
+            iconDirectoryResource.SaveTo(targetFilename);
 
-            Console.WriteLine("Written GroupIconResource:");
-            GroupIconResource newGroupIconResource = new GroupIconResource();
-            newGroupIconResource.LoadFrom(targetFilename);
-            DumpResource.Dump(newGroupIconResource);
+            Console.WriteLine("Written IconDirectoryResource:");
+            IconDirectoryResource newIconDirectoryResource = new IconDirectoryResource();
+            newIconDirectoryResource.LoadFrom(targetFilename);
+            DumpResource.Dump(newIconDirectoryResource);
             File.Delete(targetFilename);
         }
 
@@ -69,22 +70,23 @@ namespace Vestris.ResourceLibUnitTests
                 Console.WriteLine(" {0}", icon.ToString());
             }
 
-            Console.WriteLine("Converted GroupIconResource:");
-            GroupIconResource groupIconResource = iconFile.ConvertToGroupIconResource();
-            DumpResource.Dump(groupIconResource);
-            Assert.AreEqual(iconFile.Icons.Count, groupIconResource.Icons.Count);
+            Console.WriteLine("Converted IconDirectoryResource:");
+            IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource(
+                new ResourceId(Kernel32.ResourceTypes.RT_ICON));
+            DumpResource.Dump(iconDirectoryResource);
+            Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
 
             string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "write.exe");
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
-            groupIconResource.SaveTo(targetFilename);
+            iconDirectoryResource.SaveTo(targetFilename);
 
-            Console.WriteLine("Written GroupIconResource:");
-            GroupIconResource newGroupIconResource = new GroupIconResource();
-            newGroupIconResource.LoadFrom(targetFilename);
-            DumpResource.Dump(newGroupIconResource);
+            Console.WriteLine("Written IconDirectoryResource:");
+            IconDirectoryResource newIconDirectoryResource = new IconDirectoryResource();
+            newIconDirectoryResource.LoadFrom(targetFilename);
+            DumpResource.Dump(newIconDirectoryResource);
         }
     }
 }

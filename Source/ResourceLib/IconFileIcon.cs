@@ -112,11 +112,13 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Convert into an icon resource that can be written into an executable.
         /// </summary>
+        /// <param name="type">Icon type.</param>
         /// <param name="id">Icon ID.</param>
         /// <returns>An icon resource.</returns>
-        public IconResource ConvertToIconResource(UInt16 id)
+        public IconResource ConvertToIconResource(ResourceId type, ResourceId id)
         {
-            IconResource iconResource = new IconResource();
+            IconResource iconResource = iconResource = new IconResource(type);
+            iconResource.Name = id;
             Kernel32.GRPICONDIRENTRY header = new Kernel32.GRPICONDIRENTRY();
             header.bColors = _header.bColors;
             header.bHeight = _header.bHeight;
@@ -125,7 +127,7 @@ namespace Vestris.ResourceLib
             header.dwImageSize = _header.dwImageSize;
             header.wBitsPerPixel = _header.wBitsPerPixel;
             header.wPlanes = _header.wPlanes;
-            header.nID = id;
+            header.nID = (UInt16) id.Id;
             iconResource.Header = header;
             iconResource.Image = _image;
             return iconResource;

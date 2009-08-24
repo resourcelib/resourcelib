@@ -69,12 +69,12 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// A new icon resource.
         /// </summary>
-        public IconResource()
+        public IconResource(ResourceId type)
             : base(IntPtr.Zero,
                 IntPtr.Zero,
-                new ResourceId(Kernel32.ResourceTypes.RT_ICON),
-                new ResourceId(1),
-                ResourceUtil.USENGLISHLANGID, 
+                type,
+                new ResourceId(IntPtr.Zero),
+                ResourceUtil.NEUTRALLANGID, 
                 Marshal.SizeOf(typeof(Kernel32.GRPICONDIRENTRY)))
         {
 
@@ -132,8 +132,8 @@ namespace Vestris.ResourceLib
             _header = (Kernel32.GRPICONDIRENTRY)Marshal.PtrToStructure(
                 lpRes, typeof(Kernel32.GRPICONDIRENTRY));
 
-            IntPtr hIconInfo = Kernel32.FindResource(
-                hModule, new IntPtr(_header.nID), (IntPtr) Kernel32.ResourceTypes.RT_ICON);
+            IntPtr hIconInfo = Kernel32.FindResourceEx(
+                hModule, _type.Id, (IntPtr) _header.nID, _language);
 
             if (hIconInfo == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -238,7 +238,7 @@ namespace Vestris.ResourceLib
         {
             SaveTo(filename, 
                 new ResourceId(_header.nID), 
-                new ResourceId(Kernel32.ResourceTypes.RT_ICON), 
+                _type,
                 Language,
                 _image.Data);
         }

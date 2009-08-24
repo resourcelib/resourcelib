@@ -117,22 +117,13 @@ namespace Vestris.ResourceLib
         /// Convert a collection of icons into a group icon resource that can be embedded into an executable file.
         /// </summary>
         /// <returns>A harware-independent icon resource.</returns>
-        public GroupIconResource ConvertToGroupIconResource()
+        public IconDirectoryResource ConvertToIconDirectoryResource(ResourceId type)
         {
-            GroupIconResource groupIconResource = new GroupIconResource();
-            switch (Type)
-            {
-                case GroupType.Icon:
-                    groupIconResource.GroupIconResourceType = GroupIconResource.GroupType.Icon;
-                    break;
-                case GroupType.Cursor:
-                    groupIconResource.GroupIconResourceType = GroupIconResource.GroupType.Cursor;
-                    break;
-            }
+            IconDirectoryResource groupIconResource = new IconDirectoryResource();
 
-            for (int id = 0; id < Icons.Count; id++)
+            for (UInt16 id = 0; id < Icons.Count; id++)
             {
-                IconResource iconResource = Icons[id].ConvertToIconResource((UInt16) id);
+                IconResource iconResource = Icons[id].ConvertToIconResource(type, new ResourceId(id));
                 groupIconResource.Icons.Add(iconResource);
             }
 

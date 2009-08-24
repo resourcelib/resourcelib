@@ -12,19 +12,7 @@ namespace Vestris.ResourceLibUnitTests
 {
     [TestFixture]
     public class VersionInfoTests
-    {
-        [Test]
-        public void TestLoad()
-        {
-            string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
-            Assert.IsTrue(File.Exists(filename));
-            using (ResourceInfo vi = new ResourceInfo())
-            {
-                vi.Load(filename);
-                DumpResource.Dump(vi);
-            }
-        }
-
+    {      
         [Test]
         public void TestCustom()
         {

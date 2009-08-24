@@ -150,8 +150,11 @@ namespace Vestris.ResourceLib
                     case Kernel32.ResourceTypes.RT_VERSION:
                         rc = new VersionResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
+                    case Kernel32.ResourceTypes.RT_GROUP_CURSOR:
+                        rc = new CursorDirectoryResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                        break;                       
                     case Kernel32.ResourceTypes.RT_GROUP_ICON:
-                        rc = new GroupIconResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                        rc = new IconDirectoryResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
                     case Kernel32.ResourceTypes.RT_MANIFEST:
                         rc = new ManifestResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);

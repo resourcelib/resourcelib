@@ -29,19 +29,17 @@ namespace Vestris.ResourceLibUnitTests
 
         public static void Dump(Resource rc)
         {
-            Console.WriteLine("Resource: {0} of type {1}, {2} byte(s)", rc.Name, rc.Type, rc.Size);
+            Console.WriteLine("Resource: {0} of type {1}, {2} byte(s)", rc.Name, rc.TypeName, rc.Size);
             if (rc is VersionResource)
-            {
                 Dump(rc as VersionResource);
-            }
+            else if (rc is IconDirectoryResource)
+                Dump(rc as IconDirectoryResource);
+            else if (rc is CursorDirectoryResource)
+                Dump(rc as CursorDirectoryResource);
             else if (rc is IconResource)
-            {
                 Dump(rc as IconResource);
-            }
             else if (rc is ManifestResource)
-            {
                 Dump(rc as ManifestResource);
-            }
         }
 
         public static void Dump(ManifestResource rc)
@@ -62,9 +60,18 @@ namespace Vestris.ResourceLibUnitTests
             }
         }
 
-        public static void Dump(GroupIconResource rc)
+        public static void Dump(IconDirectoryResource rc)
         {
-            Console.WriteLine(" GroupIconResource: {0}, {1}", rc.Name, rc.Type);
+            Console.WriteLine(" IconDirectoryResource: {0}, {1}", rc.Name, rc.TypeName);
+            foreach (IconResource icon in rc.Icons)
+            {
+                Dump(icon);
+            }
+        }
+
+        public static void Dump(CursorDirectoryResource rc)
+        {
+            Console.WriteLine(" GroupCursorResource: {0}, {1}", rc.Name, rc.TypeName);
             foreach (IconResource icon in rc.Icons)
             {
                 Dump(icon);

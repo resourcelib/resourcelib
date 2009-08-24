@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8284c63b-d122-40ec-8593-32bf42b2a9bc" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        This section demonstrates how to use this library for manipulating cursor resources.
+        When ResourceInfo encouters a resource of type <literal>"12"</literal> (<literal>RT_GROUP_CURSOR</literal>), it creates an object
+        of type CursorDirectoryResource, much like string and version resources. The latter creates an CursorResource, since cursors and icons are
+        virtually identical, which loads an CursorImage.
+        <list class="bullet">
+          <listItem>A CursorDirectoryResource represents a collection of cursor resources.</listItem>
+          <listItem>An CursorResource represents a single cursor with many images.</listItem>
+          <listItem>
+            An CursorImage is not a resource per-se, but raw data embedded in the file at an offset defined by the cursor resource and
+            represents a single cursor bitmap, for example in a BMP format.
+          </listItem>
+        </list>
+      </para>
+    </introduction>
+    <section address="cursors_readingcursors">
+      <title>Reading Cursors</title>
+      <content>
+        <para>
+          The following example loads a cursor resource directly, without enumerating all resources.
+          <code language="cs">
+            <![CDATA[
+string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll");
+CursorDirectoryResource rc = new CursorDirectoryResource();
+rc.Name = new ResourceId("HORZLINE");
+rc.LoadFrom(filename);
+Console.WriteLine("CursorDirectoryResource: {0}, {1}", rc.Name, rc.Type);
+foreach (IconResource icon in rc.Icons)
+{
+ Console.WriteLine(" Cursor: {0} ({1} byte(s))",
+     icon.ToString(), icon.ImageSize);
+ Console.WriteLine("  {0} ({1}x{2})",
+     icon.Image.Header.BitmapCompression, icon.Image.Header.biHeight, icon.Image.Header.biWidth);
+}
+      ]]>
+          </code>
+          GUtils.dll contains two cursor groups, including "HORZLINE".
+          <code language="cmd">
+            <![CDATA[
+CursorDirectoryResource: 1, 14
+Cursor: 32x32 4-bit 16 Colors (744 byte(s))
+ BI_RGB (64x32)
+      ]]>
+          </code>
+        </para>
+      </content>
+    </section>
+    <section address="icons_writingicons">
+      <title>Writing Cursor Resources</title>
+      <content>
+        <para>
+          In order to embed an existing icon from a .ico file into an executable (.exe or .dll) we load the .ico file and convert
+          it to a CursorDirectoryResource. The structure in an .ico file is similar to the structure of the icon in an executable.
+          The only difference is that the executable headers store the icon ID, while a .ico header contains the offset of icon data.
+          <code language="cs">
+            <![CDATA[
+CursorFile iconFile = new CursorFile("Cursor1.ico");
+CursorDirectoryResource groupCursorResource = iconFile.ConvertToCursorDirectoryResource();
+groupCursorResource.SaveTo("test.dll");
+]]>
+          </code>
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>

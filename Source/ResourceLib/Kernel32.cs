@@ -465,16 +465,6 @@ namespace Vestris.ResourceLib
         internal delegate bool EnumResourceLanguagesDelegate(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, UInt16 wIDLanguage, IntPtr lParam);
 
         /// <summary>
-        /// Determines the location of a resource with the specified type and name in the specified module.
-        /// </summary>
-        /// <param name="hModule">Handle to the module whose executable file contains the resource.</param>
-        /// <param name="lpszName">Specifies the name of the resource.</param>
-        /// <param name="lpszType">Specifies the resource type.</param>
-        /// <returns>If the function succeeds, the return value is a handle to the specified resource's information block.</returns>
-        [DllImport("kernel32.dll", EntryPoint = "FindResource", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern IntPtr FindResource(IntPtr hModule, IntPtr lpszName, IntPtr lpszType);
-
-        /// <summary>
         /// Determines the location of the resource with the specified type, name, and language in the specified module.
         /// </summary>
         /// <param name="hModule">Handle to the module whose executable file contains the resource.</param>

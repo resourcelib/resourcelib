@@ -75,6 +75,19 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// String representation of the resource type.
+        /// </summary>
+        public string TypeName
+        {
+            get
+            {
+                return _type.IsIntResource()
+                    ? _type.ResourceType.ToString()
+                    : _type.Name;
+            }
+        }
+
+        /// <summary>
         /// Resource name.
         /// </summary>
         public ResourceId Name
@@ -82,6 +95,10 @@ namespace Vestris.ResourceLib
             get
             {
                 return _name;
+            }
+            set
+            {
+                _name = value;
             }
         }
 

@@ -281,11 +281,11 @@ public struct GRPICONDIR
    font-family: Courier New">ResourceInfo </span>encouters a resource of type "14"
   (<span style="color: #990000; font-family: Courier New">RT_GROUP_ICON</span>), it
   creates an object of type <span style="color: #990000; font-family: Courier New">
-   GroupIconResource</span>, much like string and version resources. The latter creates
+   IconDirectoryResource</span>, much like string and version resources. The latter creates
   an <span style="color: #990000; font-family: Courier New">IconResource</span>, which
   loads an <span style="color: #990000; font-family: Courier New">IconImage</span>.</p>
  <ul>
-  <li>A <span style="color: #990000; font-family: Courier New">GroupIconResource </span>
+  <li>A <span style="color: #990000; font-family: Courier New">IconDirectoryResource </span>
    represents a collection of icon resources.</li>
   <li>An <span style="color: #990000; font-family: Courier New">IconResource </span>
    represents a single icon with many images.</li>
@@ -296,12 +296,12 @@ public struct GRPICONDIR
  <p>
   In order to embed an existing icon from a .ico file into an executable (.exe or
   .dll) we load the .ico file and convert it to a <span style="color: #990000; font-family: Courier New">
-   GroupIconResource</span>. The structure in an .ico file is similar to the structure
+   IconDirectoryResource</span>. The structure in an .ico file is similar to the structure
   of the icon in an executable. The only difference is that the executable headers
   store the icon ID, while a .ico header contains the offset of icon data. See <span
    style="color: #990000; font-family: Courier New">IconFile </span>and <span style="color: #990000;
     font-family: Courier New">IconFileIcon</span> classes for implementation details.
-  The <span style="color: #990000; font-family: Courier New">GroupIconResource </span>
+  The <span style="color: #990000; font-family: Courier New">IconDirectoryResource </span>
   is written to the target file, then each icon resource is written separately. Note
   that the current implementation would replace icons with the same ID in the executable,
   but doesn't delete old icons if you're storing less icon images than the previous
