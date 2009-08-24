@@ -117,7 +117,7 @@ namespace Vestris.ResourceLib
         /// <returns>An icon resource.</returns>
         public IconResource ConvertToIconResource(ResourceId type, ResourceId id)
         {
-            IconResource iconResource = iconResource = new IconResource(type);
+            IconResource iconResource = new IconResource(type);
             iconResource.Name = id;
             Kernel32.GRPICONDIRENTRY header = new Kernel32.GRPICONDIRENTRY();
             header.bColors = _header.bColors;
@@ -129,7 +129,7 @@ namespace Vestris.ResourceLib
             header.wPlanes = _header.wPlanes;
             header.nID = (UInt16) id.Id;
             iconResource.Header = header;
-            iconResource.Image = _image;
+            iconResource.Image = new IconImage(_image);
             return iconResource;
         }
     }

@@ -78,12 +78,23 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Load an existing (.ico) file.
+        /// Load an existing (.ico or .cur) file.
         /// </summary>
-        /// <param name="filename">Path to an .ico file.</param>
+        /// <param name="filename">Path to an .ico or .cur file.</param>
         public IconImage(string filename)
         {
             Data = File.ReadAllBytes(filename);
+        }
+
+        /// <summary>
+        /// Create a copy of an image.
+        /// </summary>
+        /// <param name="image">Source image.</param>
+        public IconImage(IconImage image)
+        {
+            _data = new byte[image._data.Length];
+            Buffer.BlockCopy(image._data, 0, _data, 0, image._data.Length);
+            _header = image._header;
         }
 
         /// <summary>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Vestris.ResourceLib;
+using System.Globalization;
 
 namespace Vestris.ResourceLibUnitTests
 {
@@ -9,17 +10,14 @@ namespace Vestris.ResourceLibUnitTests
     {
         public static void Dump(ResourceInfo ri)
         {
-            Console.WriteLine("Resource types: ");
-            foreach (ResourceId type in ri.ResourceTypes)
-            {
-                Console.WriteLine(type);
-            }
-
             Console.WriteLine("Resources: ");
             Dictionary<ResourceId, List<Resource>>.Enumerator riEnumerator = ri.Resources.GetEnumerator();
             while (riEnumerator.MoveNext())
             {
-                Console.WriteLine("Type: {0}", riEnumerator.Current.Key);
+                Console.WriteLine("Type: {0} ({1})", riEnumerator.Current.Key, 
+                    riEnumerator.Current.Key.IsIntResource() ? 
+                        riEnumerator.Current.Key.ResourceType.ToString() 
+                        : riEnumerator.Current.Key.Name);
                 foreach (Resource r in riEnumerator.Current.Value)
                 {
                     Dump(r);
@@ -29,7 +27,13 @@ namespace Vestris.ResourceLibUnitTests
 
         public static void Dump(Resource rc)
         {
-            Console.WriteLine("Resource: {0} of type {1}, {2} byte(s)", rc.Name, rc.TypeName, rc.Size);
+            
+            Console.WriteLine("Resource: {0} of type {1}, {2} byte(s) [{3}]",
+                rc.Name, rc.TypeName, rc.Size,
+                rc.Language == ResourceUtil.NEUTRALLANGID 
+                    ? "Neutral" 
+                    : CultureInfo.GetCultureInfo(rc.Language).Name);
+
             if (rc is VersionResource)
                 Dump(rc as VersionResource);
             else if (rc is IconDirectoryResource)
@@ -80,10 +84,8 @@ namespace Vestris.ResourceLibUnitTests
 
         public static void Dump(IconResource rc)
         {
-            Console.WriteLine(" Icon: {0} ({1} byte(s))",
-                rc.ToString(), rc.ImageSize);
-            Console.WriteLine("  {0} ({1}x{2})",
-                rc.Image.Header.BitmapCompression, rc.Image.Header.biHeight, rc.Image.Header.biWidth);
+            Console.WriteLine(" Icon {0}: {1} ({2} byte(s)) - {3} byte(s) of image {4}x{5} data",
+                rc.Header.nID, rc.ToString(), rc.ImageSize, rc.Image.Size, rc.Image.Header.biHeight, rc.Image.Header.biWidth);
         }
 
         public static void Dump(ResourceTable rc)

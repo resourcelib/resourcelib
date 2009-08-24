@@ -37,14 +37,13 @@ namespace Vestris.ResourceLibUnitTests
             }
 
             Console.WriteLine("Converted IconDirectoryResource:");
-            IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource(
-                new ResourceId(Kernel32.ResourceTypes.RT_ICON));
+            IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource();
             DumpResource.Dump(iconDirectoryResource);
             Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
 
             string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
             Assert.IsTrue(File.Exists(filename));
-            string targetFilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".exe");
+            string targetFilename = Path.Combine(Path.GetTempPath(), "testLoadAndSaveIconResource.exe");
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             iconDirectoryResource.SaveTo(targetFilename);
@@ -53,7 +52,6 @@ namespace Vestris.ResourceLibUnitTests
             IconDirectoryResource newIconDirectoryResource = new IconDirectoryResource();
             newIconDirectoryResource.LoadFrom(targetFilename);
             DumpResource.Dump(newIconDirectoryResource);
-            File.Delete(targetFilename);
         }
 
         [Test]
@@ -71,8 +69,7 @@ namespace Vestris.ResourceLibUnitTests
             }
 
             Console.WriteLine("Converted IconDirectoryResource:");
-            IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource(
-                new ResourceId(Kernel32.ResourceTypes.RT_ICON));
+            IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource();
             DumpResource.Dump(iconDirectoryResource);
             Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
 

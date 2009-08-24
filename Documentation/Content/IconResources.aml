@@ -7,7 +7,7 @@
     When ResourceInfo encouters a resource of type <literal>"14"</literal> (<literal>RT_GROUP_ICON</literal>), it creates an object
     of type IconDirectoryResource, much like string and version resources. The latter creates an IconResource, which loads an IconImage.
     <list class="bullet">
-     <listItem>A IconDirectoryResource represents a collection of icon resources.</listItem>
+     <listItem>An IconDirectoryResource represents a collection of icon resources.</listItem>
      <listItem>An IconResource represents a single icon with many images.</listItem>
      <listItem>
       An IconImage is not a resource per-se, but raw data embedded in the file at an offset defined by the icon resource and
@@ -57,8 +57,8 @@ Icon: 32x32 4-bit 16 Colors (744 byte(s))
      <code language="cs">
       <![CDATA[
 IconFile iconFile = new IconFile("Icon1.ico");
-IconDirectoryResource groupIconResource = iconFile.ConvertToIconDirectoryResource();
-groupIconResource.SaveTo("test.dll");
+IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource();
+iconDirectoryResource.SaveTo("test.dll");
 ]]>
      </code>
     </para>

@@ -32,6 +32,21 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// Embedded icon Id.
+        /// </summary>
+        public ushort Id
+        {
+            get
+            {
+                return _header.nID;
+            }
+            set
+            {
+                _header.nID = value;
+            }
+        }
+
+        /// <summary>
         /// An icon image.
         /// </summary>
         public IconImage Image
@@ -146,7 +161,7 @@ namespace Vestris.ResourceLib
             if (dibBits == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            _image.Read(dibBits, (uint) Kernel32.SizeofResource(hModule, hIconRes));
+            _image.Read(dibBits, (uint) Kernel32.SizeofResource(hModule, hIconInfo));
 
             return new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
         }
@@ -233,13 +248,13 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Save icon to a file.
         /// </summary>
-        /// <param name="filename">Target file (.ico).</param>
+        /// <param name="filename">Target executable file.</param>
         public void SaveIconTo(string filename)
-        {
+        {            
             SaveTo(filename, 
                 new ResourceId(_header.nID), 
                 _type,
-                Language,
+                _language,
                 _image.Data);
         }
     }

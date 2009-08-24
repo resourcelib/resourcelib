@@ -153,7 +153,7 @@ namespace Vestris.ResourceLib
         };
 
         /// <summary>
-        /// A hardware-independent icon resource header.
+        /// A hardware-independent icon directory resource header.
         /// http://msdn.microsoft.com/en-us/library/ms997538.aspx
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 2)]
@@ -237,11 +237,13 @@ namespace Vestris.ResourceLib
             /// </summary>
             public Byte bReserved;
             /// <summary>
-            /// Number of bitmap planes.
+            /// Number of bitmap planes for icons.
+            /// Horizontal hotspot for cursors.
             /// </summary>
             public UInt16 wPlanes;
             /// <summary>
-            /// Bits per pixel.
+            /// Bits per pixel for icons.
+            /// Vertical hostpot for cursors.
             /// </summary>
             public UInt16 wBitsPerPixel;
             /// <summary>

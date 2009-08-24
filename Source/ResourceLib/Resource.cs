@@ -166,7 +166,7 @@ namespace Vestris.ResourceLib
                 int size = Kernel32.SizeofResource(hModule, hRes);
                 if (size <= 0)
                     throw new Win32Exception(Marshal.GetLastWin32Error());
-                
+
                 byte[] bytes = new byte[size];
                 Marshal.Copy(lpRes, bytes, 0, size);
 
@@ -191,41 +191,53 @@ namespace Vestris.ResourceLib
             IntPtr hModule = IntPtr.Zero;
 
             try
-            {                
+            {
                 hModule = Kernel32.LoadLibraryEx(filename, IntPtr.Zero,
                     Kernel32.DONT_RESOLVE_DLL_REFERENCES | Kernel32.LOAD_LIBRARY_AS_DATAFILE);
 
-                if (IntPtr.Zero == hModule)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                IntPtr hRes = Kernel32.FindResourceEx(hModule, type.Id, name.Id, lang);
-                if (IntPtr.Zero == hRes)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                IntPtr hGlobal = Kernel32.LoadResource(hModule, hRes);
-                if (IntPtr.Zero == hGlobal)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                IntPtr lpRes = Kernel32.LockResource(hGlobal);
-
-                if (lpRes == IntPtr.Zero)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                _size = Kernel32.SizeofResource(hModule, hRes);
-                if (_size <= 0)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                _type = type;
-                _name = name;
-                _language = lang;
-
-                Read(hModule, lpRes);
+                LoadFrom(hModule, name, type, lang);
             }
             finally
             {
                 if (hModule != IntPtr.Zero)
                     Kernel32.FreeLibrary(hModule);
             }
+        }
+
+        /// <summary>
+        /// Load a resource from an executable (.exe or .dll) module.
+        /// </summary>
+        /// <param name="hModule">An executable (.exe or .dll) module.</param>
+        /// <param name="name">Resource name.</param>
+        /// <param name="type">Resource type.</param>
+        /// <param name="lang">Resource language.</param>
+        internal void LoadFrom(IntPtr hModule, ResourceId name, ResourceId type, UInt16 lang)
+        {
+            if (IntPtr.Zero == hModule)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            IntPtr hRes = Kernel32.FindResourceEx(hModule, type.Id, name.Id, lang);
+            if (IntPtr.Zero == hRes)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            IntPtr hGlobal = Kernel32.LoadResource(hModule, hRes);
+            if (IntPtr.Zero == hGlobal)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            IntPtr lpRes = Kernel32.LockResource(hGlobal);
+
+            if (lpRes == IntPtr.Zero)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            _size = Kernel32.SizeofResource(hModule, hRes);
+            if (_size <= 0)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            _type = type;
+            _name = name;
+            _language = lang;
+
+            Read(hModule, lpRes);
         }
 
         /// <summary>
@@ -305,7 +317,7 @@ namespace Vestris.ResourceLib
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
             if (!Kernel32.UpdateResource(h, type.Id, name.Id,
-                lang, data, (data == null ? 0 : (uint) data.Length)))
+                lang, data, (data == null ? 0 : (uint)data.Length)))
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             }

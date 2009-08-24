@@ -114,20 +114,50 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Convert a collection of icons into a group icon resource that can be embedded into an executable file.
+        /// Convert a collection of icons into a directory cursor resource that can be embedded into an executable file.
         /// </summary>
-        /// <returns>A harware-independent icon resource.</returns>
-        public IconDirectoryResource ConvertToIconDirectoryResource(ResourceId type)
+        /// <returns>A harware-independent cursor directory resource.</returns>
+        public IconDirectoryResource ConvertToIconDirectoryResource()
         {
-            IconDirectoryResource groupIconResource = new IconDirectoryResource();
+            return ConvertToDirectoryResource<IconDirectoryResource>();
+        }
+
+        /// <summary>
+        /// Convert a collection of icons into a directory icon resource that can be embedded into an executable file.
+        /// </summary>
+        /// <returns>A harware-independent icon directory resource.</returns>
+        public CursorDirectoryResource ConvertToCursorDirectoryResource()
+        {
+            CursorDirectoryResource cursorDirectoryResource = ConvertToDirectoryResource<CursorDirectoryResource>();
+            foreach (IconResource iconResource in cursorDirectoryResource.Icons)
+            {
+                // todo: hotspot information should be publicly visible and editable
+                byte[] dataWithHotspot = new byte[iconResource.Image.Data.Length + 4];
+                Buffer.BlockCopy(iconResource.Image.Data, 0, dataWithHotspot, 4, iconResource.Image.Data.Length);
+                iconResource.Image.Data = dataWithHotspot;
+            }
+            return cursorDirectoryResource;
+        }
+
+        /// <summary>
+        /// Convert a collection of icons into a group resource that can be embedded into an executable file.
+        /// </summary>
+        /// <returns>A harware-independent resource directory.</returns>
+        private T ConvertToDirectoryResource<T>()
+            where T : DirectoryResource, new()
+        {
+            T directoryResource = new T();
 
             for (UInt16 id = 0; id < Icons.Count; id++)
             {
-                IconResource iconResource = Icons[id].ConvertToIconResource(type, new ResourceId(id));
-                groupIconResource.Icons.Add(iconResource);
+                IconResource iconResource = Icons[id].ConvertToIconResource(
+                    new ResourceId(directoryResource.ResourceType),
+                    new ResourceId(id));
+
+                directoryResource.Icons.Add(iconResource);
             }
 
-            return groupIconResource;
+            return directoryResource;
         }
     }
 }
