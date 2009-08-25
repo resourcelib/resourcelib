@@ -43,7 +43,7 @@ Console.WriteLine("IconDirectoryResource: {0}, {1}", rc.Name, rc.TypeName);
 foreach (IconResource icon in rc.Icons)
 {
   Console.WriteLine(" Icon {0}: {1} ({2} byte(s))",
-      rc.Header.nID, rc.ToString(), rc.ImageSize);
+      icon.Header.nID, icon.ToString(), icon.ImageSize);
 }
 ]]>
           </code>
@@ -68,7 +68,7 @@ Icon 1: 32x32 4-bit 16 Colors (744 byte(s))
           <code language="cs">
             <![CDATA[
 IconFile iconFile = new IconFile("Icon1.ico");
-IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource();
+IconDirectoryResource iconDirectoryResource = new IconDirectoryResource(iconFile);
 iconDirectoryResource.SaveTo("test.dll");
 ]]>
           </code>

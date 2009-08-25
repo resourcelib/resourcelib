@@ -24,6 +24,9 @@ namespace Vestris.ResourceLibUnitTests
                 CursorDirectoryResource cursorDirectoryResource = new CursorDirectoryResource();
                 cursorDirectoryResource.Name = new ResourceId(cursorName);
                 cursorDirectoryResource.LoadFrom(filename);
+                Assert.AreEqual(cursorDirectoryResource.Icons.Count, 1);
+                Assert.AreEqual(cursorDirectoryResource.Icons[0].HotspotX, 16);
+                Assert.AreEqual(cursorDirectoryResource.Icons[0].HotspotY, 16);
                 DumpResource.Dump(cursorDirectoryResource);
             }
         }
@@ -97,9 +100,13 @@ namespace Vestris.ResourceLibUnitTests
             }
 
             Console.WriteLine("Converted CursorDirectoryResource:");
-            CursorDirectoryResource cursorDirectoryResource = cursorFile.ConvertToCursorDirectoryResource();
+            CursorDirectoryResource cursorDirectoryResource = new CursorDirectoryResource(cursorFile);
+            Assert.AreEqual(16, cursorDirectoryResource.Icons[0].HotspotX);
+            Assert.AreEqual(16, cursorDirectoryResource.Icons[0].HotspotY);
             cursorDirectoryResource.Name = new ResourceId("RESOURCELIB");
             cursorDirectoryResource.Language = ResourceUtil.USENGLISHLANGID;
+            cursorDirectoryResource.Icons[0].HotspotX = 12;
+            cursorDirectoryResource.Icons[0].HotspotY = 12;
             cursorDirectoryResource.Icons[0].Id = 3;
             cursorDirectoryResource.Icons[0].Language = ResourceUtil.USENGLISHLANGID;
             DumpResource.Dump(cursorDirectoryResource);

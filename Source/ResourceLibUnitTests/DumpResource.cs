@@ -40,10 +40,14 @@ namespace Vestris.ResourceLibUnitTests
                 Dump(rc as IconDirectoryResource);
             else if (rc is CursorDirectoryResource)
                 Dump(rc as CursorDirectoryResource);
-            else if (rc is IconResource)
-                Dump(rc as IconResource);
+            else if (rc is IconImageResource)
+                Dump(rc as IconImageResource);
             else if (rc is ManifestResource)
                 Dump(rc as ManifestResource);
+            else if (rc is IconResource)
+                Dump(rc as IconResource);
+            else if (rc is CursorResource)
+                Dump(rc as CursorResource);
         }
 
         public static void Dump(ManifestResource rc)
@@ -76,16 +80,22 @@ namespace Vestris.ResourceLibUnitTests
         public static void Dump(CursorDirectoryResource rc)
         {
             Console.WriteLine(" CursorDirectoryResource: {0}, {1}", rc.Name, rc.TypeName);
-            foreach (IconResource icon in rc.Icons)
+            foreach (CursorResource cursor in rc.Icons)
             {
-                Dump(icon);
+                Dump(cursor);
             }
+        }
+
+        public static void Dump(CursorResource rc)
+        {
+            Console.WriteLine(" Cursor {0}: {1} ({2} byte(s)), hotspot @ {3}:{4}",
+                rc.Header.nID, rc.ToString(), rc.ImageSize, rc.HotspotX, rc.HotspotY);
         }
 
         public static void Dump(IconResource rc)
         {
-            Console.WriteLine(" Icon {0}: {1} ({2} byte(s)) - {3} byte(s) of image {4}x{5} data",
-                rc.Header.nID, rc.ToString(), rc.ImageSize, rc.Image.Size, rc.Image.Header.biHeight, rc.Image.Header.biWidth);
+            Console.WriteLine(" Icon {0}: {1} ({2} byte(s))",
+                rc.Header.nID, rc.ToString(), rc.ImageSize);
         }
 
         public static void Dump(ResourceTable rc)

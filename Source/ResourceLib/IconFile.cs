@@ -75,12 +75,12 @@ namespace Vestris.ResourceLib
         /// <param name="filename">An existing icon (.ico) file.</param>
         public void LoadFrom(string filename)
         {
-            byte[] _data = File.ReadAllBytes(filename);
+            byte[] data = File.ReadAllBytes(filename);
 
-            IntPtr lpData = Marshal.AllocHGlobal(_data.Length);
+            IntPtr lpData = Marshal.AllocHGlobal(data.Length);
             try
             {
-                Marshal.Copy(_data, 0, lpData, _data.Length);
+                Marshal.Copy(data, 0, lpData, data.Length);
                 Read(lpData);
             }
             finally
@@ -111,53 +111,6 @@ namespace Vestris.ResourceLib
             }
 
             return lpEntry;
-        }
-
-        /// <summary>
-        /// Convert a collection of icons into a directory cursor resource that can be embedded into an executable file.
-        /// </summary>
-        /// <returns>A harware-independent cursor directory resource.</returns>
-        public IconDirectoryResource ConvertToIconDirectoryResource()
-        {
-            return ConvertToDirectoryResource<IconDirectoryResource>();
-        }
-
-        /// <summary>
-        /// Convert a collection of icons into a directory icon resource that can be embedded into an executable file.
-        /// </summary>
-        /// <returns>A harware-independent icon directory resource.</returns>
-        public CursorDirectoryResource ConvertToCursorDirectoryResource()
-        {
-            CursorDirectoryResource cursorDirectoryResource = ConvertToDirectoryResource<CursorDirectoryResource>();
-            foreach (IconResource iconResource in cursorDirectoryResource.Icons)
-            {
-                // todo: hotspot information should be publicly visible and editable
-                byte[] dataWithHotspot = new byte[iconResource.Image.Data.Length + 4];
-                Buffer.BlockCopy(iconResource.Image.Data, 0, dataWithHotspot, 4, iconResource.Image.Data.Length);
-                iconResource.Image.Data = dataWithHotspot;
-            }
-            return cursorDirectoryResource;
-        }
-
-        /// <summary>
-        /// Convert a collection of icons into a group resource that can be embedded into an executable file.
-        /// </summary>
-        /// <returns>A harware-independent resource directory.</returns>
-        private T ConvertToDirectoryResource<T>()
-            where T : DirectoryResource, new()
-        {
-            T directoryResource = new T();
-
-            for (UInt16 id = 0; id < Icons.Count; id++)
-            {
-                IconResource iconResource = Icons[id].ConvertToIconResource(
-                    new ResourceId(directoryResource.ResourceType),
-                    new ResourceId(id));
-
-                directoryResource.Icons.Add(iconResource);
-            }
-
-            return directoryResource;
         }
     }
 }

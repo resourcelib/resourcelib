@@ -37,7 +37,7 @@ namespace Vestris.ResourceLibUnitTests
             }
 
             Console.WriteLine("Converted IconDirectoryResource:");
-            IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource();
+            IconDirectoryResource iconDirectoryResource = new IconDirectoryResource(iconFile);
             DumpResource.Dump(iconDirectoryResource);
             Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
 
@@ -69,7 +69,7 @@ namespace Vestris.ResourceLibUnitTests
             }
 
             Console.WriteLine("Converted IconDirectoryResource:");
-            IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource();
+            IconDirectoryResource iconDirectoryResource = new IconDirectoryResource(iconFile);
             DumpResource.Dump(iconDirectoryResource);
             Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
 

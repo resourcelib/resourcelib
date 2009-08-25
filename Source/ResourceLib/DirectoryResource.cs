@@ -10,10 +10,11 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// This structure depicts the organization of data in a hardware-independent icon resource.
     /// </summary>
-    public class DirectoryResource : Resource
+    public class DirectoryResource<ImageResourceType> : Resource
+        where ImageResourceType : IconImageResource, new()
     {
         Kernel32.GRPICONDIR _header = new Kernel32.GRPICONDIR();
-        List<IconResource> _icons = new List<IconResource>();
+        List<ImageResourceType> _icons = new List<ImageResourceType>();
 
         /// <summary>
         /// Returns the type of the resource in this group.
@@ -37,7 +38,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Icons contained in this hardware-independent icon resource.
         /// </summary>
-        public List<IconResource> Icons
+        public List<ImageResourceType> Icons
         {
             get
             {
@@ -116,7 +117,7 @@ namespace Vestris.ResourceLib
                 _type,
                 _language);
 
-            foreach (IconResource icon in _icons)
+            foreach (ImageResourceType icon in _icons)
             {
                 icon.SaveIconTo(filename);
             }
@@ -139,9 +140,9 @@ namespace Vestris.ResourceLib
 
             for (UInt16 i = 0; i < _header.wImageCount; i++)
             {
-                IconResource iconResource = new IconResource(new ResourceId(ResourceType));
-                pEntry = iconResource.Read(hModule, pEntry);
-                _icons.Add(iconResource);
+                ImageResourceType iconImageResource = new ImageResourceType();
+                pEntry = iconImageResource.Read(hModule, pEntry);
+                _icons.Add(iconImageResource);
             }
 
             return pEntry;
@@ -157,7 +158,7 @@ namespace Vestris.ResourceLib
             w.Write((UInt16)_header.wType);
             w.Write((UInt16)_icons.Count);
             ResourceUtil.PadToWORD(w);
-            foreach (IconResource icon in _icons)
+            foreach (ImageResourceType icon in _icons)
             {
                 icon.Write(w);
             }

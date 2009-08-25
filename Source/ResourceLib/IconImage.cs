@@ -32,18 +32,6 @@ namespace Vestris.ResourceLib
             set
             {
                 _data = value;
-
-                IntPtr pData = Marshal.AllocHGlobal(Marshal.SizeOf(_header));
-                try
-                {
-                    Marshal.Copy(_data, 0, pData, Marshal.SizeOf(_header));
-                    _header = (Gdi32.BITMAPINFOHEADER)Marshal.PtrToStructure(
-                        pData, typeof(Gdi32.BITMAPINFOHEADER));
-                }
-                finally
-                {
-                    Marshal.FreeHGlobal(pData);
-                }
             }
         }
 
@@ -83,7 +71,19 @@ namespace Vestris.ResourceLib
         /// <param name="filename">Path to an .ico or .cur file.</param>
         public IconImage(string filename)
         {
-            Data = File.ReadAllBytes(filename);
+            _data = File.ReadAllBytes(filename);
+
+            IntPtr pData = Marshal.AllocHGlobal(Marshal.SizeOf(_header));
+            try
+            {
+                Marshal.Copy(_data, 0, pData, Marshal.SizeOf(_header));
+                _header = (Gdi32.BITMAPINFOHEADER)Marshal.PtrToStructure(
+                    pData, typeof(Gdi32.BITMAPINFOHEADER));
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(pData);
+            }
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Vestris.ResourceLib
         public IconImage(IconImage image)
         {
             _data = new byte[image._data.Length];
-            Buffer.BlockCopy(image._data, 0, _data, 0, image._data.Length);
+            Buffer.BlockCopy(image._data, 0, _data, 0, image._data.Length);            
             _header = image._header;
         }
 

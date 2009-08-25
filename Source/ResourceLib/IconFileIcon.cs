@@ -108,29 +108,5 @@ namespace Vestris.ResourceLib
         {
             return string.Format("{0}x{1}", Width, Height);
         }
-
-        /// <summary>
-        /// Convert into an icon resource that can be written into an executable.
-        /// </summary>
-        /// <param name="type">Icon type.</param>
-        /// <param name="id">Icon ID.</param>
-        /// <returns>An icon resource.</returns>
-        public IconResource ConvertToIconResource(ResourceId type, ResourceId id)
-        {
-            IconResource iconResource = new IconResource(type);
-            iconResource.Name = id;
-            Kernel32.GRPICONDIRENTRY header = new Kernel32.GRPICONDIRENTRY();
-            header.bColors = _header.bColors;
-            header.bHeight = _header.bHeight;
-            header.bReserved = _header.bReserved;
-            header.bWidth = _header.bWidth;
-            header.dwImageSize = _header.dwImageSize;
-            header.wBitsPerPixel = _header.wBitsPerPixel;
-            header.wPlanes = _header.wPlanes;
-            header.nID = (UInt16) id.Id;
-            iconResource.Header = header;
-            iconResource.Image = new IconImage(_image);
-            return iconResource;
-        }
     }
 }
