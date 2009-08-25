@@ -1,19 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="C73DDB0A-3EC4-4fa4-A341-6A054FDA07DC" revisionNumber="1">
- <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <introduction>
-   <para>
-    This is a framework that enumerates resources and implements both read and write of the file version (<literal>VS_VERSIONINFO</literal>), 
-    string resources (company, copyright and product information), icon (<literal>RT_GROUP_ICON</literal>, <literal>RT_ICON</literal>) 
-    resources and SxS manifest (<literal>RT_MANIFEST</literal>) resources. It can be further extended to other resource types, easily.
-   </para>
-   <para>
-    This library is maintained on CodePlex at
-    <externalLink>
-     <linkHref>http://resourcelib.codeplex.com/</linkHref>
-     <linkText>http://resourcelib.codeplex.com/</linkText>
-    </externalLink>.
-   </para>
-  </introduction>
- </developerConceptualDocument>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        ResourceLib is a framework that enumerates resources and implements both read and write of the file version, company, 
+        copyright and product information (<literal>RT_VERSION</literal>, <literal>VS_VERSIONINFO</literal>), 
+        <literal>StringTable</literal> and <literal>VarFileInfo</literal>, icon (<literal>RT_GROUP_ICON</literal>, 
+        <literal>RT_ICON</literal>), cursor (<literal>RT_GROUP_CURSOR</literal>, <literal>RT_CURSOR</literal>)
+        and SxS manifest (<literal>RT_MANIFEST</literal>) resources.
+      </para>
+      <para>
+        It can be further extended to other resource types, easily.
+      </para>
+      <para>
+        This library is maintained on CodePlex at
+        <externalLink>
+          <linkHref>http://resourcelib.codeplex.com/</linkHref>
+          <linkText>http://resourcelib.codeplex.com/</linkText>
+        </externalLink>.
+      </para>
+    </introduction>
+    <section address="usingresourcelib">
+      <title>Using the ResourceLib Library</title>
+      <content>
+        <para>
+          <list class="bullet">
+            <listItem>              
+              <link topicType_id="DAC3A6A0-C863-4E5B-8F65-79EFC6A4BA09" xlink:href="a6f46303-b703-4ff3-9572-55d8131eb883" />
+            </listItem>
+            <listItem>
+              <link topicType_id="DAC3A6A0-C863-4E5B-8F65-79EFC6A4BA09" xlink:href="473bb06e-99af-4e35-bc79-832501bdd403" />
+            </listItem>
+            <listItem>
+              <link topicType_id="DAC3A6A0-C863-4E5B-8F65-79EFC6A4BA09" xlink:href="8162f211-25a7-4c74-870b-8beba385902a" />
+            </listItem>
+            <listItem>
+              <link topicType_id="DAC3A6A0-C863-4E5B-8F65-79EFC6A4BA09" xlink:href="8284c63b-d122-40ec-8593-32bf42b2a9bc" />
+            </listItem>
+            <listItem>
+              <link topicType_id="DAC3A6A0-C863-4E5B-8F65-79EFC6A4BA09" xlink:href="065f0818-f488-451b-ac63-1c5e24299041" />
+            </listItem>
+          </list>
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
 </topic>

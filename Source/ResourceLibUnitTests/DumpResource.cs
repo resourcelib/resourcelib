@@ -75,7 +75,7 @@ namespace Vestris.ResourceLibUnitTests
 
         public static void Dump(CursorDirectoryResource rc)
         {
-            Console.WriteLine(" GroupCursorResource: {0}, {1}", rc.Name, rc.TypeName);
+            Console.WriteLine(" CursorDirectoryResource: {0}, {1}", rc.Name, rc.TypeName);
             foreach (IconResource icon in rc.Icons)
             {
                 Dump(icon);

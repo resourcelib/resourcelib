@@ -1,68 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="8162f211-25a7-4c74-870b-8beba385902a" revisionNumber="1">
- <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <introduction>
-   <para>
-    This section demonstrates how to use this library for manipulating icon resources.
-    When ResourceInfo encouters a resource of type <literal>"14"</literal> (<literal>RT_GROUP_ICON</literal>), it creates an object
-    of type IconDirectoryResource, much like string and version resources. The latter creates an IconResource, which loads an IconImage.
-    <list class="bullet">
-     <listItem>An IconDirectoryResource represents a collection of icon resources.</listItem>
-     <listItem>An IconResource represents a single icon with many images.</listItem>
-     <listItem>
-      An IconImage is not a resource per-se, but raw data embedded in the file at an offset defined by the icon resource and
-      represents a single icon bitmap, for example in a BMP format.
-     </listItem>
-    </list>
-   </para>
-  </introduction>
-  <section address="icons_readingicons">
-   <title>Reading Icons</title>
-   <content>
-    <para>
-     The following example loads icon resources directly, without enumerating all resources.
-     <code language="cs">
-      <![CDATA[
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        This section demonstrates how to use this library for manipulating icon resources.
+      </para>
+      <para>
+        When <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.ResourceInfo</codeEntityReference>
+        encouters a resource of type <literal>14</literal> (<literal>RT_GROUP_ICON</literal>), it creates an object
+        of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconDirectoryResource</codeEntityReference>.
+        The latter creates an <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconResource</codeEntityReference>, which
+        loads an <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference>.
+        <list class="bullet">
+          <listItem>
+            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconDirectoryResource</codeEntityReference>
+            represents a collection of icon resources.
+          </listItem>
+          <listItem>
+            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconResource</codeEntityReference> represents a
+            single icon with many images of type
+            <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference>.
+          </listItem>
+          <listItem>
+            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference> is not a resource
+            per-se, but raw data embedded in the file at an offset defined by the icon resource and
+            represents a single icon bitmap, for example in a BMP format.
+          </listItem>
+        </list>
+      </para>
+    </introduction>
+    <section address="icons_readingicons">
+      <title>Reading Icon Resources</title>
+      <content>
+        <para>
+          The following example loads icon resources directly, without enumerating all resources.
+          <code language="cs">
+            <![CDATA[
 string filename = Path.Combine(Environment.SystemDirectory, "regedt32.exe");
 IconDirectoryResource rc = new IconDirectoryResource();
 rc.LoadFrom(filename);
-Console.WriteLine("IconDirectoryResource: {0}, {1}", rc.Name, rc.Type);
+Console.WriteLine("IconDirectoryResource: {0}, {1}", rc.Name, rc.TypeName);
 foreach (IconResource icon in rc.Icons)
 {
- Console.WriteLine(" Icon: {0} ({1} byte(s))",
-     icon.ToString(), icon.ImageSize);
- Console.WriteLine("  {0} ({1}x{2})",
-     icon.Image.Header.BitmapCompression, icon.Image.Header.biHeight, icon.Image.Header.biWidth);
+  Console.WriteLine(" Icon {0}: {1} ({2} byte(s))",
+      rc.Header.nID, rc.ToString(), rc.ImageSize);
 }
-      ]]>
-     </code>
-     Regedt32.exe contains a single 16-color, 32x32 icon.
-     <code language="cmd">
-      <![CDATA[
-IconDirectoryResource: 1, 14
-Icon: 32x32 4-bit 16 Colors (744 byte(s))
- BI_RGB (64x32)
-      ]]>
-     </code>
-    </para>
-   </content>
-  </section>
-  <section address="icons_writingicons">
-   <title>Writing Icon Resources</title>
-   <content>
-    <para>
-     In order to embed an existing icon from a .ico file into an executable (.exe or .dll) we load the .ico file and convert
-     it to a IconDirectoryResource. The structure in an .ico file is similar to the structure of the icon in an executable.
-     The only difference is that the executable headers store the icon ID, while a .ico header contains the offset of icon data.
-     <code language="cs">
-      <![CDATA[
+]]>
+          </code>
+          Regedt32.exe contains a single 16-color, 32x32 icon. The following output is generated from the example above.
+          <code language="cmd">
+            <![CDATA[
+IconDirectoryResource: 1, RT_GROUP_ICON
+Icon 1: 32x32 4-bit 16 Colors (744 byte(s))
+]]>
+          </code>
+        </para>
+      </content>
+    </section>
+    <section address="icons_writingicons">
+      <title>Writing Icon Resources</title>
+      <content>
+        <para>
+          In order to embed an existing icon from a .ico file into an executable (.exe or .dll) we load the .ico file and convert
+          it to an <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconDirectoryResource</codeEntityReference>.
+          The structure in an .ico file is similar to the structure of the icon in an executable. The only difference is that
+          the executable headers store the icon Id, while a .ico header contains the offset of icon data.
+          <code language="cs">
+            <![CDATA[
 IconFile iconFile = new IconFile("Icon1.ico");
 IconDirectoryResource iconDirectoryResource = iconFile.ConvertToIconDirectoryResource();
 iconDirectoryResource.SaveTo("test.dll");
 ]]>
-     </code>
-    </para>
-   </content>
-  </section>
- </developerConceptualDocument>
+          </code>
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
 </topic>

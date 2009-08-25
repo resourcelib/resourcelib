@@ -4,18 +4,22 @@
     <introduction>
       <para>
         This section demonstrates how to use this library for manipulating Side-by-Side Assembly XML manifest resources.
-        When ResourceInfo encouters a resource of type <literal>"24"</literal> (<literal>RT_MANIFEST</literal>), it creates an object
-        of type ManifestResource. The latter loads the embedded SxS manifest as an XML document.
+      </para>
+      <para>
+        When <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.ResourceInfo</codeEntityReference>
+        encouters a resource of type <literal>24</literal> (<literal>RT_MANIFEST</literal>), it creates an object
+        of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.ManifestResource</codeEntityReference>.
+        The latter loads the embedded SxS manifest as an XML document.
       </para>
       <para>
         See <externalLink>
           <linkHref>http://msdn.microsoft.com/en-us/library/aa375365(VS.85).aspx</linkHref>
           <linkText>Isolated Applications and Side-by-Side Assemblies Manifests</linkText>
-        </externalLink> for more information.        
+        </externalLink> for more information.
       </para>
     </introduction>
     <section address="readingmanifest">
-      <title>Reading SxS Manifests</title>
+      <title>Reading Manifest Resources</title>
       <content>
         <para>
           The following example loads the SxS manifest directly, without enumerating all resources.
@@ -35,7 +39,7 @@ Console.WriteLine(rc.Manifest.OuterXml);
       <title>Writing Manifest Resources</title>
       <content>
         <para>
-          A manifest can be written directly to an existing binary file, adding a new manifest or replacing an existing one.          
+          A manifest can be written directly to an existing binary file, adding a new manifest or replacing an existing one.
           <code language="cs">
             <![CDATA[
 ManifestResource manifestResource = new ManifestResource(Kernel32.ManifestType.CreateProcess);
@@ -48,7 +52,7 @@ manifestResource.SaveTo(targetFilename);
         <alert type="note">
           <para>
             Rewriting an identical manifest does not necessarily preserve the size of the RT_MANIFEST resource because
-            new lines in attribute values are normalized. See the 
+            new lines in attribute values are normalized. See the
             <externalLink>
               <linkHref>http://www.w3.org/TR/REC-xml/#AVNormalize</linkHref>
               <linkText>W3C spec section 3.3.3</linkText>

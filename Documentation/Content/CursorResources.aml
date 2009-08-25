@@ -4,46 +4,55 @@
     <introduction>
       <para>
         This section demonstrates how to use this library for manipulating cursor resources.
-        When ResourceInfo encouters a resource of type <literal>"12"</literal> (<literal>RT_GROUP_CURSOR</literal>), it creates an object
-        of type CursorDirectoryResource, much like string and version resources. The latter creates an CursorResource, since cursors and icons are
-        virtually identical, which loads an CursorImage.
+      </para>
+      <para>
+        When <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.ResourceInfo</codeEntityReference>
+        encouters a resource of type <literal>12</literal> (<literal>RT_GROUP_CURSOR</literal>),
+        it creates an object of type
+        <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.CursorDirectoryResource</codeEntityReference>.
+        The latter creates a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconResource</codeEntityReference>,
+        since cursors and icons are virtually identical, which loads an
+        <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference>.
         <list class="bullet">
-          <listItem>A CursorDirectoryResource represents a collection of cursor resources.</listItem>
-          <listItem>An CursorResource represents a single cursor with many images.</listItem>
           <listItem>
-            An CursorImage is not a resource per-se, but raw data embedded in the file at an offset defined by the cursor resource and
-            represents a single cursor bitmap, for example in a BMP format.
+            A <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.CursorDirectoryResource</codeEntityReference>
+            represents a collection of cursor resources.
+          </listItem>
+          <listItem>
+            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconResource</codeEntityReference>
+            represents a single cursor with multiple images of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference>.
+          </listItem>
+          <listItem>
+            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference> is not a resource per-se, but raw data
+            embedded in the file at an offset defined by the cursor resource and represents a single cursor bitmap.
           </listItem>
         </list>
       </para>
     </introduction>
     <section address="cursors_readingcursors">
-      <title>Reading Cursors</title>
+      <title>Reading Cursor Resources</title>
       <content>
         <para>
-          The following example loads a cursor resource directly, without enumerating all resources.
+          The following example loads a known cursor resource directly from <localUri>guitils.dll</localUri>,
+          without enumerating all resources.
           <code language="cs">
             <![CDATA[
 string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll");
 CursorDirectoryResource rc = new CursorDirectoryResource();
 rc.Name = new ResourceId("HORZLINE");
 rc.LoadFrom(filename);
-Console.WriteLine("CursorDirectoryResource: {0}, {1}", rc.Name, rc.Type);
+Console.WriteLine("CursorDirectoryResource: {0}, {1}", rc.Name, rc.TypeName);
 foreach (IconResource icon in rc.Icons)
 {
- Console.WriteLine(" Cursor: {0} ({1} byte(s))",
-     icon.ToString(), icon.ImageSize);
- Console.WriteLine("  {0} ({1}x{2})",
-     icon.Image.Header.BitmapCompression, icon.Image.Header.biHeight, icon.Image.Header.biWidth);
-}
-      ]]>
+  Console.WriteLine(" Icon {0}: {1} ({2} byte(s))",
+      rc.Header.nID, rc.ToString(), rc.ImageSize);
+}]]>
           </code>
-          GUtils.dll contains two cursor groups, including "HORZLINE".
+          GUtils.dll contains two cursor groups, including "HORZLINE". The following output is generated from the example above.
           <code language="cmd">
             <![CDATA[
-CursorDirectoryResource: 1, 14
-Cursor: 32x32 4-bit 16 Colors (744 byte(s))
- BI_RGB (64x32)
+CursorDirectoryResource: HORZLINE, RT_GROUP_CURSOR
+Icon 2: 32x0 1-bit B/W (308 byte(s))
       ]]>
           </code>
         </para>
@@ -53,14 +62,23 @@ Cursor: 32x32 4-bit 16 Colors (744 byte(s))
       <title>Writing Cursor Resources</title>
       <content>
         <para>
-          In order to embed an existing icon from a .ico file into an executable (.exe or .dll) we load the .ico file and convert
-          it to a CursorDirectoryResource. The structure in an .ico file is similar to the structure of the icon in an executable.
-          The only difference is that the executable headers store the icon ID, while a .ico header contains the offset of icon data.
+          In order to embed an existing cursor from a .cur file into an executable (.exe or .dll) we load the .cur file and convert
+          it to a CursorDirectoryResource. The structure in a .cur file is similar to the structure of the cursor in an executable
+          with two major differences: the executable stores cursor hotspot information and the header contains the cursor Id,
+          while a .cur header simply contains the offset of cursor data.
+        </para>
+        <para>
+          It's also important to identify existing cursor resources in the executable and define the cursor Id. For example,
+          if there're 2 existing RT_GROUP_CURSOR resources in the target binary, the added resource's Id must be 3.
           <code language="cs">
             <![CDATA[
-CursorFile iconFile = new CursorFile("Cursor1.ico");
-CursorDirectoryResource groupCursorResource = iconFile.ConvertToCursorDirectoryResource();
-groupCursorResource.SaveTo("test.dll");
+CursorFile cursorFile = new CursorFile("Cursor1.ico");
+CursorDirectoryResource cursorDirectoryResource = cursorFile.ConvertToCursorDirectoryResource();
+cursorDirectoryResource.Name = new ResourceId("TEST");
+cursorDirectoryResource.Language = ResourceUtil.USENGLISHLANGID;
+cursorDirectoryResource.Icons[0].Id = 3;
+cursorDirectoryResource.Icons[0].Language = ResourceUtil.USENGLISHLANGID;
+cursorDirectoryResource.SaveTo("test.dll");
 ]]>
           </code>
         </para>

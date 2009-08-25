@@ -21,7 +21,7 @@
       <para>
        The following example demonstrates enumerating resources by type. From the sample atl.dll in the Windows system directory,
        you will typically get the following resources: <literal>MUI</literal>, <literal>REGISTRY</literal>, <literal>TYPELIB</literal>,
-       and <literal>"16"</literal>, which is the <literal>RT_VERSION</literal> resource.
+       and <literal>RT_VERSION</literal> resource.
       </para>
       <code language="cs">
        <![CDATA[
