@@ -47,6 +47,19 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// A generic resource.
+        /// </summary>
+        /// <param name="name">Resource name.</param>
+        /// <param name="type">Resource type.</param>
+        /// <param name="language">Resource language.</param>
+        public GenericResource(ResourceId type, ResourceId name, UInt16 language)
+        {
+            _type = type;
+            _name = name;
+            _language = language;
+        }
+
+        /// <summary>
         /// Read a generic resource.
         /// </summary>
         /// <param name="hModule">Module handle.</param>
@@ -69,7 +82,33 @@ namespace Vestris.ResourceLib
         /// <param name="w">Binary stream.</param>
         internal override void Write(BinaryWriter w)
         {
-            throw new NotImplementedException();
+            w.Write(_data);
+        }
+
+        /// <summary>
+        /// Save a generic reosurce.
+        /// </summary>
+        /// <param name="filename">Name of an executable file (.exe or .dll).</param>
+        public void SaveTo(string filename)
+        {
+            base.SaveTo(filename,
+                _name,
+                _type,
+                _language);
+        }
+
+        /// <summary>
+        /// Load a generic resource.
+        /// </summary>
+        /// <param name="filename">Source file.</param>
+        /// <param name="lang">Resource language.</param>
+        public void LoadFrom(string filename)
+        {
+            base.LoadFrom(
+                filename, 
+                _name,
+                _type,
+                _language);
         }
     }
 }

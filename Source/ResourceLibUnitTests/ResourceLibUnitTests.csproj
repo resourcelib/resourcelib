@@ -48,6 +48,7 @@
     <Compile Include="ByteUtils.cs" />
     <Compile Include="CursorResourceTests.cs" />
     <Compile Include="DumpResource.cs" />
+    <Compile Include="GenericResourceTests.cs" />
     <Compile Include="IconResourceTests.cs" />
     <Compile Include="ManifestResourceTests.cs" />
     <Compile Include="ResourceIdTests.cs" />
