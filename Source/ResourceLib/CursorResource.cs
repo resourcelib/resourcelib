@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Vestris.ResourceLib
 {
+    /// <summary>
+    /// This structure depicts the organization of data in a cursor resource.
+    /// </summary>
     public class CursorResource : IconImageResource
     {
         /// <summary>
@@ -33,11 +36,12 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Convert into an icon resource that can be written into an executable.
         /// </summary>
-        /// <param name="type">Icon type.</param>
-        /// <param name="id">Icon ID.</param>
+        /// <param name="icon">Icon image.</param>
+        /// <param name="id">Icon Id.</param>
+        /// <param name="language">Language.</param>
         /// <returns>An icon resource.</returns>
-        public CursorResource(IconFileIcon icon, ResourceId id)
-            : base(icon, new ResourceId(Kernel32.ResourceTypes.RT_CURSOR), id)
+        public CursorResource(IconFileIcon icon, ResourceId id, UInt16 language)
+            : base(icon, new ResourceId(Kernel32.ResourceTypes.RT_CURSOR), id, language)
         {
 
         }

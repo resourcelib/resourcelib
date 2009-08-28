@@ -45,7 +45,7 @@ namespace Vestris.ResourceLib
             for (UInt16 id = 0; id < iconFile.Icons.Count; id++)
             {
                 CursorResource cursorResource = new CursorResource(
-                    iconFile.Icons[id], new ResourceId(id));
+                    iconFile.Icons[id], new ResourceId(id), _language);
                 // add hotspot data on top of the resource, not present in the same structure in the .cur file
                 byte[] dataWithHotspot = new byte[cursorResource.Image.Data.Length + 4];
                 Buffer.BlockCopy(cursorResource.Image.Data, 0, dataWithHotspot, 4, cursorResource.Image.Data.Length);

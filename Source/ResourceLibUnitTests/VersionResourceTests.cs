@@ -19,7 +19,8 @@ namespace Vestris.ResourceLibUnitTests
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
             Assert.IsTrue(File.Exists(filename));
             VersionResource versionResource = new VersionResource();
-            versionResource.LoadFrom(filename, ResourceUtil.USENGLISHLANGID);
+            versionResource.Language = ResourceUtil.USENGLISHLANGID;
+            versionResource.LoadFrom(filename);
             DumpResource.Dump(versionResource);
         }
 
@@ -29,7 +30,8 @@ namespace Vestris.ResourceLibUnitTests
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
             Assert.IsTrue(File.Exists(filename));
             VersionResource versionResource = new VersionResource();
-            versionResource.LoadFrom(filename, ResourceUtil.USENGLISHLANGID);
+            versionResource.Language = ResourceUtil.USENGLISHLANGID;
+            versionResource.LoadFrom(filename);
             DumpResource.Dump(versionResource);
         }
 
@@ -41,7 +43,8 @@ namespace Vestris.ResourceLibUnitTests
             Assert.IsTrue(File.Exists(filename));
 
             VersionResource versionResource = new VersionResource();
-            versionResource.LoadFrom(filename, ResourceUtil.USENGLISHLANGID);
+            versionResource.Language = ResourceUtil.USENGLISHLANGID;
+            versionResource.LoadFrom(filename);
             DumpResource.Dump(versionResource); 
 
             versionResource.FileVersion = "1.2.3.4";
@@ -60,7 +63,8 @@ namespace Vestris.ResourceLibUnitTests
             versionResource.SaveTo(targetFilename);
 
             VersionResource newVersionResource = new VersionResource();
-            newVersionResource.LoadFrom(targetFilename, ResourceUtil.USENGLISHLANGID);
+            newVersionResource.Language = ResourceUtil.USENGLISHLANGID;
+            newVersionResource.LoadFrom(targetFilename);
             DumpResource.Dump(versionResource);
 
             Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
@@ -90,14 +94,15 @@ namespace Vestris.ResourceLibUnitTests
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             VersionResource versionResource = new VersionResource();
-            versionResource.LoadFrom(targetFilename, ResourceUtil.USENGLISHLANGID);
+            versionResource.Language = ResourceUtil.USENGLISHLANGID;
+            versionResource.LoadFrom(targetFilename);
             Console.WriteLine("Name: {0}", versionResource.Name);
             Console.WriteLine("Type: {0}", versionResource.Type);
             Console.WriteLine("Language: {0}", versionResource.Language);
             versionResource.DeleteFrom(targetFilename);
             try
             {
-                versionResource.LoadFrom(targetFilename, ResourceUtil.USENGLISHLANGID);
+                versionResource.LoadFrom(targetFilename);
                 Assert.Fail("Expected that the deleted resource cannot be found");
             }
             catch (Win32Exception ex)
@@ -113,8 +118,9 @@ namespace Vestris.ResourceLibUnitTests
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
             Assert.IsTrue(File.Exists(filename));
             VersionResource existingVersionResource = new VersionResource();
+            existingVersionResource.Language = ResourceUtil.USENGLISHLANGID;
             Console.WriteLine("Loading {0}", filename);
-            existingVersionResource.LoadFrom(filename, ResourceUtil.USENGLISHLANGID);
+            existingVersionResource.LoadFrom(filename);
             DumpResource.Dump(existingVersionResource);
 
             VersionResource versionResource = new VersionResource();
@@ -172,7 +178,8 @@ namespace Vestris.ResourceLibUnitTests
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             VersionResource existingVersionResource = new VersionResource();
-            existingVersionResource.LoadFrom(targetFilename, ResourceUtil.USENGLISHLANGID);
+            existingVersionResource.Language = ResourceUtil.USENGLISHLANGID;
+            existingVersionResource.LoadFrom(targetFilename);
             DumpResource.Dump(existingVersionResource);
             existingVersionResource.DeleteFrom(targetFilename);
 
@@ -290,21 +297,6 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [Test]
-        public void TestLoadAndSaveOriginalVersionResource()
-        {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
-            Assert.IsTrue(File.Exists(filename));
-
-            string targetFilename = Path.Combine(Path.GetTempPath(), "test.dll");
-            Console.WriteLine(targetFilename);
-            File.Copy(filename, targetFilename, true);
-
-            byte[] data = VersionResource.LoadBytesFrom(filename);
-            VersionResource.SaveTo(targetFilename, data);
-        }
-
-        [Test]
         public void TestVersionResourceBytes()
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -312,12 +304,14 @@ namespace Vestris.ResourceLibUnitTests
             Assert.IsTrue(File.Exists(filename));
 
             VersionResource versionResource = new VersionResource();
-            versionResource.LoadFrom(filename, 
-                ResourceUtil.USENGLISHLANGID);
+            versionResource.Language = ResourceUtil.USENGLISHLANGID;
+            versionResource.LoadFrom(filename);
             Console.WriteLine("File version: {0}", versionResource.FileVersion);
 
-            byte[] expectedBytes = VersionResource.LoadBytesFrom(filename, 
-                ResourceUtil.USENGLISHLANGID);
+            byte[] expectedBytes = Resource.LoadBytesFrom(filename,
+                new ResourceId(Kernel32.ResourceTypes.RT_VERSION),
+                new ResourceId(1), ResourceUtil.USENGLISHLANGID);
+
             byte[] testedBytes = versionResource.WriteAndGetBytes();
 
             ByteUtils.CompareBytes(expectedBytes, testedBytes);            

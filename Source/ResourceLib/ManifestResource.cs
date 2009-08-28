@@ -120,15 +120,6 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Load a CreateProcess manifest resource from an executable file.
-        /// </summary>
-        /// <param name="filename">Name of an executable file (.exe or .dll).</param>
-        public void LoadFrom(string filename)
-        {
-            LoadFrom(filename, Kernel32.ManifestType.CreateProcess);
-        }
-
-        /// <summary>
         /// Load a manifest resource from an executable file.
         /// </summary>
         /// <param name="filename">Name of an executable file (.exe or .dll).</param>
@@ -139,17 +130,6 @@ namespace Vestris.ResourceLib
                 new ResourceId((uint) manifestType),
                 new ResourceId(Kernel32.ResourceTypes.RT_MANIFEST),
                 Kernel32.LANG_NEUTRAL);
-        }
-
-        /// <summary>
-        /// Save a manifest resource to an executable file.
-        /// </summary>
-        /// <param name="filename">Name of an executable file (.exe or .dll).</param>
-        public void SaveTo(string filename)
-        {
-            base.SaveTo(filename, _name,
-                new ResourceId(Kernel32.ResourceTypes.RT_MANIFEST), 
-                Language);
         }
     }
 }

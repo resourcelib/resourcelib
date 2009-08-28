@@ -84,31 +84,5 @@ namespace Vestris.ResourceLib
         {
             w.Write(_data);
         }
-
-        /// <summary>
-        /// Save a generic reosurce.
-        /// </summary>
-        /// <param name="filename">Name of an executable file (.exe or .dll).</param>
-        public void SaveTo(string filename)
-        {
-            base.SaveTo(filename,
-                _name,
-                _type,
-                _language);
-        }
-
-        /// <summary>
-        /// Load a generic resource.
-        /// </summary>
-        /// <param name="filename">Source file.</param>
-        /// <param name="lang">Resource language.</param>
-        public void LoadFrom(string filename)
-        {
-            base.LoadFrom(
-                filename, 
-                _name,
-                _type,
-                _language);
-        }
     }
 }

@@ -122,7 +122,6 @@ namespace Vestris.ResourceLib
         internal Resource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
         {
             _hModule = hModule;
-            // copy string values, the memory pointed to by type and name will be released
             _type = type;
             _name = name;
             _language = language;
@@ -138,7 +137,7 @@ namespace Vestris.ResourceLib
         /// <param name="type">Resource type.</param>
         /// <param name="lang">Resource language.</param>
         /// <returns>Resource data.</returns>
-        internal static byte[] LoadBytesFrom(string filename, ResourceId name, ResourceId type, UInt16 lang)
+        public static byte[] LoadBytesFrom(string filename, ResourceId type, ResourceId name, UInt16 lang)
         {
             IntPtr hModule = IntPtr.Zero;
 
@@ -183,10 +182,19 @@ namespace Vestris.ResourceLib
         /// Load a resource from an executable (.exe or .dll) file.
         /// </summary>
         /// <param name="filename">An executable (.exe or .dll) file.</param>
+        public virtual void LoadFrom(string filename)
+        {
+            LoadFrom(filename, _type, _name, _language);
+        }
+
+        /// <summary>
+        /// Load a resource from an executable (.exe or .dll) file.
+        /// </summary>
+        /// <param name="filename">An executable (.exe or .dll) file.</param>
         /// <param name="name">Resource name.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="lang">Resource language.</param>
-        internal void LoadFrom(string filename, ResourceId name, ResourceId type, UInt16 lang)
+        internal void LoadFrom(string filename, ResourceId type, ResourceId name, UInt16 lang)
         {
             IntPtr hModule = IntPtr.Zero;
 
@@ -195,7 +203,7 @@ namespace Vestris.ResourceLib
                 hModule = Kernel32.LoadLibraryEx(filename, IntPtr.Zero,
                     Kernel32.DONT_RESOLVE_DLL_REFERENCES | Kernel32.LOAD_LIBRARY_AS_DATAFILE);
 
-                LoadFrom(hModule, name, type, lang);
+                LoadFrom(hModule, type, name, lang);
             }
             finally
             {
@@ -208,10 +216,10 @@ namespace Vestris.ResourceLib
         /// Load a resource from an executable (.exe or .dll) module.
         /// </summary>
         /// <param name="hModule">An executable (.exe or .dll) module.</param>
-        /// <param name="name">Resource name.</param>
         /// <param name="type">Resource type.</param>
+        /// <param name="name">Resource name.</param>
         /// <param name="lang">Resource language.</param>
-        internal void LoadFrom(IntPtr hModule, ResourceId name, ResourceId type, UInt16 lang)
+        internal void LoadFrom(IntPtr hModule, ResourceId type, ResourceId name, UInt16 lang)
         {
             if (IntPtr.Zero == hModule)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -268,25 +276,34 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// Save a resource.
+        /// </summary>
+        /// <param name="filename">Name of an executable file (.exe or .dll).</param>
+        public virtual void SaveTo(string filename)
+        {
+            SaveTo(filename, _type, _name, _language);
+        }
+
+        /// <summary>
         /// Save a resource to an executable (.exe or .dll) file.
         /// </summary>
         /// <param name="filename">Path to an executable file.</param>
         /// <param name="name">Resource name.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="langid">Language id.</param>
-        internal void SaveTo(string filename, ResourceId name, ResourceId type, UInt16 langid)
+        internal void SaveTo(string filename, ResourceId type, ResourceId name, UInt16 langid)
         {
             byte[] data = WriteAndGetBytes();
-            SaveTo(filename, name, type, langid, data);
+            SaveTo(filename, type, name, langid, data);
         }
 
         /// <summary>
         /// Delete a resource from an executable (.exe or .dll) file.
         /// </summary>
         /// <param name="filename">Path to an executable file.</param>
-        public void DeleteFrom(string filename)
+        public virtual void DeleteFrom(string filename)
         {
-            Delete(filename, _name, _type, _language);
+            Delete(filename, _type, _name, _language);
         }
 
         /// <summary>
@@ -296,9 +313,9 @@ namespace Vestris.ResourceLib
         /// <param name="name">Resource name.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="lang">Resource language.</param>
-        internal static void Delete(string filename, ResourceId name, ResourceId type, UInt16 lang)
+        internal static void Delete(string filename, ResourceId type, ResourceId name, UInt16 lang)
         {
-            SaveTo(filename, name, type, lang, null);
+            SaveTo(filename, type, name, lang, null);
         }
 
         /// <summary>
@@ -309,7 +326,7 @@ namespace Vestris.ResourceLib
         /// <param name="type">Resource type.</param>
         /// <param name="lang">Resource language.</param>
         /// <param name="data">Resource data.</param>
-        internal static void SaveTo(string filename, ResourceId name, ResourceId type, UInt16 lang, byte[] data)
+        internal static void SaveTo(string filename, ResourceId type, ResourceId name, UInt16 lang, byte[] data)
         {
             IntPtr h = Kernel32.BeginUpdateResource(filename, false);
 

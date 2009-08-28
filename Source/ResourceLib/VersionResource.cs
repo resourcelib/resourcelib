@@ -76,49 +76,6 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Load language-neutral version resource.
-        /// </summary>
-        /// <param name="filename">Source file.</param>
-        public void LoadFrom(string filename)
-        {
-            LoadFrom(filename, ResourceUtil.NEUTRALLANGID);
-        }
-
-        /// <summary>
-        /// Load version resource data.
-        /// </summary>
-        /// <param name="filename">Source file.</param>
-        /// <param name="lang">Resource language.</param>
-        public void LoadFrom(string filename, UInt16 lang)
-        {
-            base.LoadFrom(filename, new ResourceId(1), new ResourceId(Kernel32.ResourceTypes.RT_VERSION), lang);
-        }
-
-        /// <summary>
-        /// Load language-neutral version resource data.
-        /// </summary>
-        /// <param name="filename">Source filename.</param>
-        /// <returns>Resource data.</returns>
-        public static byte[] LoadBytesFrom(string filename)
-        {
-            return LoadBytesFrom(filename, ResourceUtil.NEUTRALLANGID);
-        }
-
-        /// <summary>
-        /// Load version resource data.
-        /// </summary>
-        /// <param name="filename">Source filename.</param>
-        /// <param name="lang">Resource language.</param>
-        /// <returns>Resource data.</returns>
-        public static byte[] LoadBytesFrom(string filename, UInt16 lang)
-        {
-            return Resource.LoadBytesFrom(filename, 
-                new ResourceId(1), 
-                new ResourceId(Kernel32.ResourceTypes.RT_VERSION), 
-                lang);
-        }
-
-        /// <summary>
         /// Read a version resource from a previously loaded module.
         /// </summary>
         /// <param name="hModule">Module handle.</param>
@@ -228,32 +185,6 @@ namespace Vestris.ResourceLib
             }
 
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
-        }
-
-        /// <summary>
-        /// Save version resource bytes to a file.
-        /// </summary>
-        /// <param name="filename">Target filename.</param>
-        /// <param name="data">Raw version resource data.</param>
-        public static void SaveTo(string filename, byte[] data)
-        {
-            Resource.SaveTo(filename, 
-                new ResourceId(1), 
-                new ResourceId(Kernel32.ResourceTypes.RT_VERSION), 
-                ResourceUtil.USENGLISHLANGID, 
-                data);
-        }
-
-        /// <summary>
-        /// Save this version resource to a file.
-        /// </summary>
-        /// <param name="filename">Target filename.</param>
-        public void SaveTo(string filename)
-        {
-            base.SaveTo(filename, 
-                new ResourceId(1), 
-                new ResourceId(Kernel32.ResourceTypes.RT_VERSION),
-                ResourceUtil.USENGLISHLANGID);
         }
 
         /// <summary>

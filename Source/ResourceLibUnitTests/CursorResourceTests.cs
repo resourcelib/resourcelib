@@ -122,6 +122,7 @@ namespace Vestris.ResourceLibUnitTests
             Console.WriteLine("Written CursorDirectoryResource:");
             CursorDirectoryResource newCursorDirectoryResource = new CursorDirectoryResource();
             newCursorDirectoryResource.Name = new ResourceId("RESOURCELIB");
+            newCursorDirectoryResource.Language = ResourceUtil.USENGLISHLANGID;
             newCursorDirectoryResource.LoadFrom(targetFilename);
             Assert.AreEqual(1, newCursorDirectoryResource.Icons.Count);
             Assert.AreEqual(cursorFile.Icons[0].Image.Size + 4, newCursorDirectoryResource.Icons[0].Image.Size);

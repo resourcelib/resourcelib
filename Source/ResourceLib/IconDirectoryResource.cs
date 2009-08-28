@@ -45,7 +45,7 @@ namespace Vestris.ResourceLib
             for (UInt16 id = 0; id < iconFile.Icons.Count; id++)
             {
                 IconResource iconResource = new IconResource(
-                    iconFile.Icons[id], new ResourceId(id));
+                    iconFile.Icons[id], new ResourceId(id), _language);
                 Icons.Add(iconResource);
             }
         }

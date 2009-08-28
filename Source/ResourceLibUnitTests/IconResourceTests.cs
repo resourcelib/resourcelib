@@ -70,6 +70,7 @@ namespace Vestris.ResourceLibUnitTests
 
             Console.WriteLine("Converted IconDirectoryResource:");
             IconDirectoryResource iconDirectoryResource = new IconDirectoryResource(iconFile);
+            iconDirectoryResource.Language = ResourceUtil.USENGLISHLANGID;
             DumpResource.Dump(iconDirectoryResource);
             Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
 

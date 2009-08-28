@@ -13,7 +13,14 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class IconImageResource : Resource
     {
+        /// <summary>
+        /// Directory header.
+        /// </summary>
         protected Kernel32.GRPICONDIRENTRY _header;
+
+        /// <summary>
+        /// Actual image.
+        /// </summary>
         protected IconImage _image = new IconImage();
 
         /// <summary>
@@ -101,10 +108,12 @@ namespace Vestris.ResourceLib
         /// <param name="icon">File icon.</param>
         /// <param name="type">Resource type.</param>
         /// <param name="name">Resource id.</param>
-        public IconImageResource(IconFileIcon icon, ResourceId type, ResourceId name)
+        /// <param name="language">Resource language.</param>
+        public IconImageResource(IconFileIcon icon, ResourceId type, ResourceId name, UInt16 language)
         {
             _name = name;
             _type = type;
+            _language = language;
             _header.bColors = icon.Header.bColors;
             _header.bHeight = icon.Header.bHeight;
             _header.bReserved = icon.Header.bReserved;
@@ -276,9 +285,9 @@ namespace Vestris.ResourceLib
         /// <param name="filename">Target executable file.</param>
         public void SaveIconTo(string filename)
         {            
-            SaveTo(filename, 
-                new ResourceId(_header.nID), 
+            SaveTo(filename,
                 _type,
+                new ResourceId(_header.nID), 
                 _language,
                 _image.Data);
         }

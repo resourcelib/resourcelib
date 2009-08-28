@@ -95,27 +95,12 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Load a hardware-independent icon resource from an executable file.
-        /// </summary>
-        /// <param name="filename">Name of an executable file (.exe or .dll).</param>
-        public void LoadFrom(string filename)
-        {
-            base.LoadFrom(filename, 
-                _name,
-                _type,
-                _language);
-        }
-
-        /// <summary>
         /// Save a hardware-independent icon resource to an executable file.
         /// </summary>
         /// <param name="filename">Name of an executable file (.exe or .dll).</param>
-        public void SaveTo(string filename)
+        public override void SaveTo(string filename)
         {
-            base.SaveTo(filename, 
-                _name,
-                _type,
-                _language);
+            base.SaveTo(filename);
 
             foreach (ImageResourceType icon in _icons)
             {
