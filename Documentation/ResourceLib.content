@@ -2,10 +2,13 @@
 <Topics defaultTopic="C73DDB0A-3EC4-4fa4-A341-6A054FDA07DC">
   <Topic id="C73DDB0A-3EC4-4fa4-A341-6A054FDA07DC" visible="True" title="ResourceLib.NET">
     <Topic id="a6f46303-b703-4ff3-9572-55d8131eb883" visible="True" title="Getting Started" />
-    <Topic id="473bb06e-99af-4e35-bc79-832501bdd403" visible="True" title="Version Resources" />
-    <Topic id="8284c63b-d122-40ec-8593-32bf42b2a9bc" visible="True" title="Cursor Resources" />
-    <Topic id="8162f211-25a7-4c74-870b-8beba385902a" visible="True" title="Icon Resources" />
-    <Topic id="065f0818-f488-451b-ac63-1c5e24299041" visible="True" title="Manifest Resources" />
+    <Topic id="0d2c8fed-c106-4db9-a6cb-ba70664f9598" visible="True" noFile="True" title="Resources">
+      <Topic id="8284c63b-d122-40ec-8593-32bf42b2a9bc" visible="True" title="Cursor (RT_CURSOR)" />
+      <Topic id="f8c0040f-899e-4a98-8e29-c2fbd36025bf" visible="True" title="Bitmap (RT_BITMAP)" />
+      <Topic id="8162f211-25a7-4c74-870b-8beba385902a" visible="True" title="Icon (RT_ICON)" />
+      <Topic id="473bb06e-99af-4e35-bc79-832501bdd403" visible="True" title="Version (RT_VERSION)" />
+      <Topic id="065f0818-f488-451b-ac63-1c5e24299041" visible="True" title="Manifest (RT_MANIFEST)" />
+    </Topic>
     <Topic id="bfd78578-6e10-47e5-8b41-44426e0a1ac1" visible="True" title="License" />
   </Topic>
 </Topics>

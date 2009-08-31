@@ -77,36 +77,6 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// An existing device independent bitmap.
-        /// </summary>
-        /// <param name="filename">A file in a .bmp format.</param>
-        public DeviceIndependentBitmap(string filename)
-        {
-            byte[] data = File.ReadAllBytes(filename);
-            
-            // read the file header
-            Gdi32.BITMAPFILEHEADER fileHeader = new Gdi32.BITMAPFILEHEADER();
-            IntPtr pFileHeaderData = Marshal.AllocHGlobal(Marshal.SizeOf(fileHeader));
-            try
-            {
-                Marshal.Copy(data, 0, pFileHeaderData, Marshal.SizeOf(fileHeader));
-                fileHeader = (Gdi32.BITMAPFILEHEADER) Marshal.PtrToStructure(
-                    pFileHeaderData, typeof(Gdi32.BITMAPFILEHEADER));
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(pFileHeaderData);
-            }
-
-            // read the bitmap header
-            Int32 size = data.Length - Marshal.SizeOf(fileHeader);
-            byte[] bitmapData = new byte[size];
-            Buffer.BlockCopy(data, Marshal.SizeOf(fileHeader), bitmapData, 0, size);
-
-            Data = bitmapData;
-        }
-
-        /// <summary>
         /// A device-independent bitmap.
         /// </summary>
         /// <param name="data">Bitmap data.</param>

@@ -165,8 +165,8 @@ namespace Vestris.ResourceLibUnitTests
 
         public static void Dump(BitmapResource rc)
         {
-            Console.WriteLine("Image: {0}x{1}, {2}", 
-                rc.Header.biWidth, rc.Header.biHeight, rc.PixelFormatString);
+            Console.WriteLine("Image: {0}x{1}, {2}",
+                rc.Bitmap.Header.biWidth, rc.Bitmap.Header.biHeight, rc.Bitmap.Header.PixelFormatString);
 
             Console.Write(" Mask: {0}x{1}", rc.Bitmap.Mask.Width, rc.Bitmap.Mask.Height);
             Console.Write(" Color: {0}x{1}", rc.Bitmap.Color.Width, rc.Bitmap.Color.Height);

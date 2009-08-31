@@ -52,12 +52,15 @@
   any type of resources, or any library to edit or generate version resources specifically.</p>
  <p>
   This implementation is a framework that enumerates resources and implements both
-  read and write of the file version (<code>VS_VERSIONINFO</code>), string resources
-  (company, copyright and product information), icon (<code>RT_GROUP_ICON</code>,
-   <code>RT_ICON</code>), cursor (<code>RT_GROUP_CURSOR</code>,
-   <code>RT_CURSOR</code>) and manifest (<code>RT_MANIFEST</code>) resources. The library can be easily 
-     and is being extended
-  to other resource types.</p>
+  reading and writing of the 
+  file version (<code>VS_VERSIONINFO</code>), 
+  string (company, copyright and product information), 
+  bitmap (<code>RT_BITMAP</code>), 
+  icon (<code>RT_GROUP_ICON</code>, <code>RT_ICON</code>), 
+  cursor (<code>RT_GROUP_CURSOR</code>, <code>RT_CURSOR</code>) 
+  and manifest (<code>RT_MANIFEST</code>) resources. 
+  The library can be easily and is being extended to other resource types.
+  </p>
  <h2>
   Background</h2>
  <p>
@@ -286,8 +289,8 @@ public override void Write(BinaryWriter w)
  <h2>
   Icons</h2>
  <p>
-  With above infrastructure in-place and with support for the most complicated of 
-     all resources, version resource structures, it is possible to extend the library to one 
+  With above infrastructure in-place and with support for the most complicated of all resources, 
+  version resource structures, it is possible to extend the library to one 
   of the two dozen other known resource types. We've started with icons.
  </p>
  <p>
@@ -301,9 +304,9 @@ public override void Write(BinaryWriter w)
     collection of icon resources.</li>
   <li>An <code>IconResource</code> represents a single <code>RT_ICON</code> icon with 
     one or more images.</li>
-  <li>An <code>DeviceIndependentBitmap</code> is not a resource per-se, but raw data embedded in the 
-    file at an offset defined by the icon resource and represents a single icon bitmap, 
-    for in a .bmp format.</li>
+  <li>An <code>DeviceIndependentBitmap</code> is not a resource, but raw data embedded in the 
+    file at an offset defined by the icon resource and represents a single icon bitmap
+    in a .bmp format.</li>
  </ul>
  <p>
   In order to embed an existing icon from a .ico file into an executable (.exe or
@@ -335,7 +338,7 @@ public override void Write(BinaryWriter w)
    <code>BITMAPINFOHEADER</code> structure. The hot spot of a cursor is the point to 
    which Windows refers in tracking the cursor's position.
   </li>
-  <li>An <code>DeviceIndependentBitmap</code> is not a resource per-se, but raw data embedded in the 
+  <li>An <code>DeviceIndependentBitmap</code> is not a resource, but raw data embedded in the 
    file as a resource and represents a single cursor bitmap. This data includes the image's 
    XOR bitmap followed by its AND bitmap. These two bitmaps are used together to support 
    transparency.</li>
@@ -349,6 +352,15 @@ public override void Write(BinaryWriter w)
   All common functions between icons and cursors are implemented in a shared class, 
   <code>DirectoryResource</code>. The differences are implemented in two derived 
   <code>CursorDirectoryResource</code> and <code>IconDirectoryResource</code>.
+ </p>
+ <h2>
+  Bitmaps</h2>
+ <p>
+  Bitmap resources are device-independent bitmaps stored as-is. Most implementation complications belong
+  in the <code>DeviceIndependentBitmap</code> class that is capable of separating bitmap mask and color
+  information. While technically somewhat challenging, this is not required for resource manipulation and 
+  is beyond the scope of this article. The only desirable improvement in the current implementation would 
+  to be able to assign a <code>System.Drawing.Image</code> instance to <code>DeviceIndependentBitmap.Bitmap</code>.
  </p>
  <h2>
   Side-by-Side Manifests</h2>
@@ -398,6 +410,8 @@ public override void Write(BinaryWriter w)
    Win32 Binary Resource Formats</a></li>
   <li><a href="http://blogs.msdn.com/junfeng/archive/2007/06/26/rt-manifest-resource-and-isolation-aware-enabled.aspx">MSDN:
    RT_MANIFEST Resource and Isolation-Aware and Enabled Executables</a></li>
+  <li><a href="http://www.vbaccelerator.com/home/NET/Utilities/Icon_Extractor/article.asp">VBAccelerator: 
+   .NET Icon Explorer</a></li>
  </ul>
  <h2>
   History</h2>
@@ -405,7 +419,7 @@ public override void Write(BinaryWriter w)
   <li>2008-06-30: Initial version.</li>
   <li>2008-09-28: Added support for icons.</li>
   <li>2009-02-19: Moved to CodePlex, released 1.1.</li>
-  <li>2009-08-27: Added support for cursors and SxS manifests.</li>
+  <li>2009-08-31: Added support for cursors, bitmaps and SxS manifests.</li>
  </ul>
 </body>
 </html>

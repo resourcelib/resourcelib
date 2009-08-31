@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing.Imaging;
 
 namespace Vestris.ResourceLib
 {
@@ -99,6 +100,58 @@ namespace Vestris.ResourceLib
                 get
                 {
                     return (BitmapCompression)biCompression;
+                }
+            }
+
+            /// <summary>
+            /// Bitmap pixel format.
+            /// </summary>
+            public PixelFormat PixelFormat
+            {
+                get
+                {
+                    switch (biBitCount)
+                    {
+                        case 1:
+                            return PixelFormat.Format1bppIndexed;
+                        case 4:
+                            return PixelFormat.Format4bppIndexed;
+                        case 8:
+                            return PixelFormat.Format8bppIndexed;
+                        case 16:
+                            return PixelFormat.Format16bppRgb565;
+                        case 24:
+                            return PixelFormat.Format24bppRgb;
+                        case 32:
+                            return PixelFormat.Format32bppArgb;
+                        default:
+                            return PixelFormat.Undefined;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Bitmap pixel format English standard string.
+            /// </summary>
+            public string PixelFormatString
+            {
+                get
+                {
+                    switch (PixelFormat)
+                    {
+                        case PixelFormat.Format1bppIndexed:
+                            return "1-bit B/W";
+                        case PixelFormat.Format24bppRgb:
+                            return "24-bit True Colors";
+                        case PixelFormat.Format32bppArgb:
+                        case PixelFormat.Format32bppRgb:
+                            return "32-bit Alpha Channel";
+                        case PixelFormat.Format8bppIndexed:
+                            return "8-bit 256 Colors";
+                        case PixelFormat.Format4bppIndexed:
+                            return "4-bit 16 Colors";
+                    }
+                    return "Unknown";
                 }
             }
         }

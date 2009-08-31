@@ -23,9 +23,10 @@
             <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference>.
           </listItem>
           <listItem>
-            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference> is not a 
-            resource per-se, but raw data embedded in the file at an offset defined by the cursor resource and represents 
-            a single cursor bitmap.
+            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference> is not a
+            resource, but raw data embedded in the file at an offset defined by the cursor resource and represents a single cursor
+            bitmap. This data includes the image's XOR bitmap followed by its AND bitmap. These two bitmaps are used together 
+            to support transparency.
           </listItem>
         </list>
       </para>

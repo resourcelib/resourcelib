@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C46FF-FC48-496B-9C03-E48B91A8EBAB}"
 	ProjectSection(SolutionItems) = preProject
+		Documentation\Content\BitmapResources.aml = Documentation\Content\BitmapResources.aml
 		Documentation\Content\CursorResources.aml = Documentation\Content\CursorResources.aml
 		Documentation\Content\GettingStarted.aml = Documentation\Content\GettingStarted.aml
 		Documentation\Content\IconResources.aml = Documentation\Content\IconResources.aml

@@ -5,9 +5,9 @@
       <para>
         ResourceLib is a framework that enumerates resources and implements both read and write of the file version, company, 
         copyright and product information (<literal>RT_VERSION</literal>, <literal>VS_VERSIONINFO</literal>), 
-        <literal>StringTable</literal> and <literal>VarFileInfo</literal>, icon (<literal>RT_GROUP_ICON</literal>, 
-        <literal>RT_ICON</literal>), cursor (<literal>RT_GROUP_CURSOR</literal>, <literal>RT_CURSOR</literal>)
-        and SxS manifest (<literal>RT_MANIFEST</literal>) resources.
+        <literal>StringTable</literal> and <literal>VarFileInfo</literal>, bitmap (<literal>RT_BITMAP</literal>), 
+        icon (<literal>RT_GROUP_ICON</literal>, <literal>RT_ICON</literal>), cursor (<literal>RT_GROUP_CURSOR</literal>, 
+        <literal>RT_CURSOR</literal>) and SxS manifest (<literal>RT_MANIFEST</literal>) resources.
       </para>
       <para>
         It can be further extended to other resource types, easily.
@@ -25,7 +25,10 @@
       <content>
         <para>
           <list class="bullet">
-            <listItem>              
+            <listItem>
+              <link topicType_id="DAC3A6A0-C863-4E5B-8F65-79EFC6A4BA09" xlink:href="f8c0040f-899e-4a98-8e29-c2fbd36025bf" />
+            </listItem>
+            <listItem>
               <link topicType_id="DAC3A6A0-C863-4E5B-8F65-79EFC6A4BA09" xlink:href="a6f46303-b703-4ff3-9572-55d8131eb883" />
             </listItem>
             <listItem>
