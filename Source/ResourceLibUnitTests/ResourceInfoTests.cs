@@ -16,7 +16,8 @@ namespace Vestris.ResourceLibUnitTests
             string[] files = 
             {
                 Path.Combine(Environment.SystemDirectory, "regedt32.exe"),
-                Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll")
+                Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll"),
+                Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe")
             };
 
             foreach (string filename in files)

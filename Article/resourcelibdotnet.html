@@ -295,13 +295,13 @@ public override void Write(BinaryWriter w)
   icon storage and hooking up ResourceInfo callbacks. When <code>ResourceInfo</code> 
   encouters a resource of type <code>14</code> (<code>RT_GROUP_ICON</code>), it
   creates an object of type <code>IconDirectoryResource</code>. The latter creates an 
-  <code>IconResource</code>, which loads an <code>IconImage</code>.</p>
+  <code>IconResource</code>, which loads an <code>DeviceIndependentBitmap</code>.</p>
  <ul>
   <li>A <code>IconDirectoryResource</code> represents <code>RT_GROUP_ICON</code>, a 
     collection of icon resources.</li>
   <li>An <code>IconResource</code> represents a single <code>RT_ICON</code> icon with 
     one or more images.</li>
-  <li>An <code>IconImage</code> is not a resource per-se, but raw data embedded in the 
+  <li>An <code>DeviceIndependentBitmap</code> is not a resource per-se, but raw data embedded in the 
     file at an offset defined by the icon resource and represents a single icon bitmap, 
     for in a .bmp format.</li>
  </ul>
@@ -335,7 +335,7 @@ public override void Write(BinaryWriter w)
    <code>BITMAPINFOHEADER</code> structure. The hot spot of a cursor is the point to 
    which Windows refers in tracking the cursor's position.
   </li>
-  <li>An <code>IconImage</code> is not a resource per-se, but raw data embedded in the 
+  <li>An <code>DeviceIndependentBitmap</code> is not a resource per-se, but raw data embedded in the 
    file as a resource and represents a single cursor bitmap. This data includes the image's 
    XOR bitmap followed by its AND bitmap. These two bitmaps are used together to support 
    transparency.</li>
@@ -343,7 +343,7 @@ public override void Write(BinaryWriter w)
  <p>
   The .cur files contain hot spot data in the <code>wPlanes</code> and the <code>wBitsPerPixel</code>
   fields. These are copied to the top of the <code>RT_CURSOR</code> resource when transforming
-  an <code>IconImage</code> into a <code>CursorResource</code>.
+  an <code>DeviceIndependentBitmap</code> into a <code>CursorResource</code>.
  </p>
  <p>
   All common functions between icons and cursors are implemented in a shared class, 
@@ -394,6 +394,10 @@ public override void Write(BinaryWriter w)
    Win32</a></li>
   <li><a href="http://www.devsource.com/c/a/Architecture/Resources-From-PE-I/2/">DevSource: 
    Retrieving Resources from PE Files</a></li>
+  <li><a href="http://www.skynet.ie/~caolan/publink/winresdump/winresdump/doc/resfmt.txt">Microsoft Developer Support:
+   Win32 Binary Resource Formats</a></li>
+  <li><a href="http://blogs.msdn.com/junfeng/archive/2007/06/26/rt-manifest-resource-and-isolation-aware-enabled.aspx">MSDN:
+   RT_MANIFEST Resource and Isolation-Aware and Enabled Executables</a></li>
  </ul>
  <h2>
   History</h2>

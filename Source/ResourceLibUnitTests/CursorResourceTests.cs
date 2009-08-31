@@ -25,8 +25,8 @@ namespace Vestris.ResourceLibUnitTests
                 cursorDirectoryResource.Name = new ResourceId(cursorName);
                 cursorDirectoryResource.LoadFrom(filename);
                 Assert.AreEqual(cursorDirectoryResource.Icons.Count, 1);
-                Assert.AreEqual(cursorDirectoryResource.Icons[0].HotspotX, 16);
-                Assert.AreEqual(cursorDirectoryResource.Icons[0].HotspotY, 16);
+                Assert.AreEqual(16, cursorDirectoryResource.Icons[0].HotspotX);
+                Assert.AreEqual(16, cursorDirectoryResource.Icons[0].HotspotY);
                 DumpResource.Dump(cursorDirectoryResource);
             }
         }
@@ -81,7 +81,11 @@ namespace Vestris.ResourceLibUnitTests
             Assert.IsTrue(File.Exists(cursor1filename));
             IconFile cursorFile = new IconFile(cursor1filename);
             Assert.AreEqual(cursorDirectoryResource.Icons[0].Image.Data.Length, 
-                cursorFile.Icons[0].Image.Data.Length + 4);
+                cursorFile.Icons[0].Image.Data.Length);
+            Assert.AreEqual(32, cursorDirectoryResource.Icons[0].Image.Mask.Width);
+            Assert.AreEqual(32, cursorDirectoryResource.Icons[0].Image.Mask.Height);
+            Assert.AreEqual(32, cursorDirectoryResource.Icons[0].Image.Color.Width);
+            Assert.AreEqual(32, cursorDirectoryResource.Icons[0].Image.Color.Height);
         }
 
         [Test]
@@ -125,7 +129,7 @@ namespace Vestris.ResourceLibUnitTests
             newCursorDirectoryResource.Language = ResourceUtil.USENGLISHLANGID;
             newCursorDirectoryResource.LoadFrom(targetFilename);
             Assert.AreEqual(1, newCursorDirectoryResource.Icons.Count);
-            Assert.AreEqual(cursorFile.Icons[0].Image.Size + 4, newCursorDirectoryResource.Icons[0].Image.Size);
+            Assert.AreEqual(cursorFile.Icons[0].Image.Size, newCursorDirectoryResource.Icons[0].Image.Size);
             DumpResource.Dump(newCursorDirectoryResource);
 
             using (ResourceInfo ri = new ResourceInfo())

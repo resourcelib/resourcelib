@@ -159,6 +159,9 @@ namespace Vestris.ResourceLib
                     case Kernel32.ResourceTypes.RT_MANIFEST:
                         rc = new ManifestResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
+                    case Kernel32.ResourceTypes.RT_BITMAP:
+                        rc = new BitmapResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                        break;
                     default:
                         rc = new GenericResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;

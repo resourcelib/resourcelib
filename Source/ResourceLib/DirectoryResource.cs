@@ -62,12 +62,7 @@ namespace Vestris.ResourceLib
         internal DirectoryResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
             : base(hModule, hResource, type, name, language, size)
         {
-            IntPtr lpRes = Kernel32.LockResource(hResource);
 
-            if (lpRes == IntPtr.Zero)
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-
-            Read(hModule, lpRes);
         }
 
         /// <summary>

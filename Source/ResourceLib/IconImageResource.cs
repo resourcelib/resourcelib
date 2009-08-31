@@ -21,7 +21,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Actual image.
         /// </summary>
-        protected IconImage _image = new IconImage();
+        protected DeviceIndependentBitmap _image = new DeviceIndependentBitmap();
 
         /// <summary>
         /// Hardware-independent icon directory header.
@@ -56,7 +56,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// An icon image.
         /// </summary>
-        public IconImage Image
+        public DeviceIndependentBitmap Image
         {
             get
             {
@@ -80,12 +80,7 @@ namespace Vestris.ResourceLib
         internal IconImageResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
             : base(hModule, hResource, type, name, language, size)
         {
-            IntPtr lpRes = Kernel32.LockResource(hResource);
 
-            if (lpRes == IntPtr.Zero)
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-
-            Read(hModule, lpRes);
         }
 
         /// <summary>
@@ -122,7 +117,7 @@ namespace Vestris.ResourceLib
             _header.wBitsPerPixel = icon.Header.wBitsPerPixel;
             _header.wPlanes = icon.Header.wPlanes;
             _header.nID = (UInt16) name.Id;
-            _image = new IconImage(icon.Image);
+            _image = new DeviceIndependentBitmap(icon.Image);
         }
 
         /// <summary>
@@ -195,9 +190,19 @@ namespace Vestris.ResourceLib
             if (dibBits == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            _image.Read(dibBits, (uint) Kernel32.SizeofResource(hModule, hIconInfo));
+            ReadImage(dibBits, (UInt32) Kernel32.SizeofResource(hModule, hIconInfo));
 
             return new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+        }
+
+        /// <summary>
+        /// Read the bitmap image.
+        /// </summary>
+        /// <param name="dibBits">DIB bits.</param>
+        /// <param name="size">Size of image.</param>
+        internal virtual void ReadImage(IntPtr dibBits, UInt32 size)
+        {
+            _image.Read(dibBits, size);
         }
 
         /// <summary>
@@ -283,8 +288,8 @@ namespace Vestris.ResourceLib
         /// Save icon to a file.
         /// </summary>
         /// <param name="filename">Target executable file.</param>
-        public void SaveIconTo(string filename)
-        {            
+        public virtual void SaveIconTo(string filename)
+        {
             SaveTo(filename,
                 _type,
                 new ResourceId(_header.nID), 

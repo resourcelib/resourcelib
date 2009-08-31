@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Vestris.ResourceLib;
 using System.Globalization;
+using System.Drawing;
+using System.IO;
 
 namespace Vestris.ResourceLibUnitTests
 {
@@ -26,8 +28,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         public static void Dump(Resource rc)
-        {
-            
+        {            
             Console.WriteLine("Resource: {0} of type {1}, {2} byte(s) [{3}]",
                 rc.Name, rc.TypeName, rc.Size,
                 rc.Language == ResourceUtil.NEUTRALLANGID 
@@ -48,6 +49,8 @@ namespace Vestris.ResourceLibUnitTests
                 Dump(rc as IconResource);
             else if (rc is CursorResource)
                 Dump(rc as CursorResource);
+            else if (rc is BitmapResource)
+                Dump(rc as BitmapResource);
         }
 
         public static void Dump(ManifestResource rc)
@@ -151,6 +154,23 @@ namespace Vestris.ResourceLibUnitTests
             {
                 Console.WriteLine(" 0x{0:X} => {1}", langEnumerator.Current.Key, langEnumerator.Current.Value);
             }
+        }
+
+        public static void Dump(IconImageResource rc)
+        {
+            Console.WriteLine("Image: {0}x{1}", rc.Width, rc.Height);
+            Console.WriteLine("Image size: {0}", rc.ImageSize);
+            Console.WriteLine("Pixel format: {0}", rc.PixelFormatString);
+        }
+
+        public static void Dump(BitmapResource rc)
+        {
+            Console.WriteLine("Image: {0}x{1}, {2}", 
+                rc.Header.biWidth, rc.Header.biHeight, rc.PixelFormatString);
+
+            Console.Write(" Mask: {0}x{1}", rc.Bitmap.Mask.Width, rc.Bitmap.Mask.Height);
+            Console.Write(" Color: {0}x{1}", rc.Bitmap.Color.Width, rc.Bitmap.Color.Height);
+            Console.WriteLine(" Image: {0}x{1}", rc.Bitmap.Image.Width, rc.Bitmap.Image.Height);
         }
     }
 }

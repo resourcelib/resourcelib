@@ -14,7 +14,7 @@ namespace Vestris.ResourceLib
     public class IconFileIcon 
     {
         private Kernel32.FILEGRPICONDIRENTRY _header;
-        private IconImage _image = new IconImage();
+        private DeviceIndependentBitmap _image = new DeviceIndependentBitmap();
 
         /// <summary>
         /// Icon header.
@@ -30,7 +30,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Icon bitmap.
         /// </summary>
-        public IconImage Image
+        public DeviceIndependentBitmap Image
         {
             get
             {

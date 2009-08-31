@@ -43,7 +43,7 @@ namespace Vestris.ResourceLib
         public GenericResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
             : base(hModule, hResource, type, name, language, size)
         {
-            Read(hModule, hResource);
+
         }
 
         /// <summary>

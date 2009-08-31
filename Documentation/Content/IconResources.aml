@@ -10,7 +10,7 @@
         encouters a resource of type <literal>14</literal> (<literal>RT_GROUP_ICON</literal>), it creates an object
         of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconDirectoryResource</codeEntityReference>.
         The latter creates an <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconResource</codeEntityReference>, which
-        loads an <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference>.
+        loads an <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference>.
         <list class="bullet">
           <listItem>
             An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconDirectoryResource</codeEntityReference>
@@ -19,10 +19,10 @@
           <listItem>
             An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconResource</codeEntityReference> represents a
             single icon with many images of type
-            <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference>.
+            <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference>.
           </listItem>
           <listItem>
-            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference> is not a resource
+            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference> is not a resource
             per-se, but raw data embedded in the file at an offset defined by the icon resource and
             represents a single icon bitmap, for example in a BMP format.
           </listItem>

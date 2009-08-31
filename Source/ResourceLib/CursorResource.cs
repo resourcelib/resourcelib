@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace Vestris.ResourceLib
 {
@@ -9,6 +12,9 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class CursorResource : IconImageResource
     {
+        private UInt16 _hotspotx = 0;
+        private UInt16 _hotspoty = 0;
+
         /// <summary>
         /// An existing cursor resource.
         /// </summary>
@@ -54,13 +60,11 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return (UInt16) ((Image.Data[1] << 8)
-                    + Image.Data[0]);
+                return _hotspotx;
             }
             set
             {
-                Image.Data[0] = (byte)(value & 0xFF);
-                Image.Data[1] = (byte)(value >> 8);
+                _hotspotx = value;
             }
         }
 
@@ -72,14 +76,47 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return (UInt16)((Image.Data[3] << 8)
-                    + Image.Data[2]);
+                return _hotspoty;
             }
             set
             {
-                Image.Data[2] = (byte)(value & 0xFF);
-                Image.Data[3] = (byte)(value >> 8);
+                _hotspoty = value;
             }
+        }
+
+        /// <summary>
+        /// Write the cursor data to a file.
+        /// </summary>
+        /// <param name="filename">Target executable file.</param>
+        public override void SaveIconTo(string filename)
+        {
+            byte[] dataWithHotspot = new byte[Image.Data.Length + 4];
+            Buffer.BlockCopy(Image.Data, 0, dataWithHotspot, 4, Image.Data.Length);
+            dataWithHotspot[0] = (byte)(HotspotX & 0xFF);
+            dataWithHotspot[1] = (byte)(HotspotX >> 8);
+            dataWithHotspot[2] = (byte)(HotspotY & 0xFF);
+            dataWithHotspot[3] = (byte)(HotspotY >> 8);
+
+            SaveTo(filename,
+                _type,
+                new ResourceId(_header.nID),
+                _language,
+                dataWithHotspot);
+        }
+
+        /// <summary>
+        /// Read DIB image.
+        /// </summary>
+        /// <param name="dibBits">DIB bits.</param>
+        /// <param name="size">DIB size.</param>
+        internal override void ReadImage(IntPtr dibBits, UInt32 size)
+        {
+            _hotspotx = (UInt16) Marshal.ReadInt16(dibBits);
+            dibBits = new IntPtr(dibBits.ToInt32() + sizeof(UInt16));
+            _hotspoty = (UInt16) Marshal.ReadInt16(dibBits);
+            dibBits = new IntPtr(dibBits.ToInt32() + sizeof(UInt16));
+
+            base.ReadImage(dibBits, size - 2 * sizeof(UInt16));
         }
     }
 }

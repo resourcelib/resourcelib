@@ -59,6 +59,7 @@
     <Compile Include="..\Common\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BitmapResource.cs" />
     <Compile Include="CursorResource.cs" />
     <Compile Include="Gdi32.cs" />
     <Compile Include="CursorDirectoryResource.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="DirectoryResource.cs" />
     <Compile Include="IconFile.cs" />
     <Compile Include="IconFileIcon.cs" />
-    <Compile Include="IconImage.cs" />
+    <Compile Include="DeviceIndependentBitmap.cs" />
     <Compile Include="IconImageResource.cs" />
     <Compile Include="IconResource.cs" />
     <Compile Include="Kernel32.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="StringResource.cs" />
     <Compile Include="StringTable.cs" />
     <Compile Include="GenericResource.cs" />
+    <Compile Include="User32.cs" />
     <Compile Include="VarFileInfo.cs" />
     <Compile Include="VarTable.cs" />
     <Compile Include="VersionResource.cs" />

@@ -127,6 +127,26 @@ namespace Vestris.ResourceLib
             _language = language;
             _hResource = hResource;
             _size = size;
+
+            LockAndReadResource(hModule, hResource);
+        }
+
+        /// <summary>
+        /// Lock and read the resource.
+        /// </summary>
+        /// <param name="hModule">Module handle.</param>
+        /// <param name="hResource">Resource handle.</param>
+        internal void LockAndReadResource(IntPtr hModule, IntPtr hResource)
+        {
+            if (hResource == IntPtr.Zero)
+                return;
+
+            IntPtr lpRes = Kernel32.LockResource(hResource);
+
+            if (lpRes == IntPtr.Zero)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            Read(hModule, lpRes);
         }
 
         /// <summary>

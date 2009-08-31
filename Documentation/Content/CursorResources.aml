@@ -11,7 +11,7 @@
         it creates an object of type
         <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.CursorDirectoryResource</codeEntityReference>.
         The latter creates a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.CursorResource</codeEntityReference>,
-        which loads an <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference>.
+        which loads an <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference>.
         <list class="bullet">
           <listItem>
             A <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.CursorDirectoryResource</codeEntityReference>
@@ -20,10 +20,10 @@
           <listItem>
             An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.CursorResource</codeEntityReference>
             represents a single cursor with multiple images of type 
-            <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference>.
+            <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference>.
           </listItem>
           <listItem>
-            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.IconImage</codeEntityReference> is not a 
+            An <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DeviceIndependentBitmap</codeEntityReference> is not a 
             resource per-se, but raw data embedded in the file at an offset defined by the cursor resource and represents 
             a single cursor bitmap.
           </listItem>
