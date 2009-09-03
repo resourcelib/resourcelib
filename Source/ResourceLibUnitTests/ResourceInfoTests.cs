@@ -22,6 +22,7 @@ namespace Vestris.ResourceLibUnitTests
 
             foreach (string filename in files)
             {
+                Console.WriteLine(filename);
                 Assert.IsTrue(File.Exists(filename));
                 using (ResourceInfo vi = new ResourceInfo())
                 {

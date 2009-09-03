@@ -51,6 +51,8 @@ namespace Vestris.ResourceLibUnitTests
                 Dump(rc as CursorResource);
             else if (rc is BitmapResource)
                 Dump(rc as BitmapResource);
+            else if (rc is DialogResource)
+                Dump(rc as DialogResource);
         }
 
         public static void Dump(ManifestResource rc)
@@ -171,6 +173,12 @@ namespace Vestris.ResourceLibUnitTests
             Console.Write(" Mask: {0}x{1}", rc.Bitmap.Mask.Width, rc.Bitmap.Mask.Height);
             Console.Write(" Color: {0}x{1}", rc.Bitmap.Color.Width, rc.Bitmap.Color.Height);
             Console.WriteLine(" Image: {0}x{1}", rc.Bitmap.Image.Width, rc.Bitmap.Image.Height);
+        }
+
+        public static void Dump(DialogResource rc)
+        {
+            Console.WriteLine("Dialog: [{0}x{1}][{2}x{3}]",
+                rc.Template.x, rc.Template.y, rc.Template.cx, rc.Template.cy);
         }
     }
 }

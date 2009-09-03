@@ -49,6 +49,7 @@
     <Compile Include="BitmapResourceTests.cs" />
     <Compile Include="ByteUtils.cs" />
     <Compile Include="CursorResourceTests.cs" />
+    <Compile Include="DialogResourceTests.cs" />
     <Compile Include="DumpResource.cs" />
     <Compile Include="GenericResourceTests.cs" />
     <Compile Include="IconResourceTests.cs" />

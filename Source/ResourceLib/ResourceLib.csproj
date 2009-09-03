@@ -62,6 +62,11 @@
     <Compile Include="BitmapFile.cs" />
     <Compile Include="BitmapResource.cs" />
     <Compile Include="CursorResource.cs" />
+    <Compile Include="DialogResource.cs" />
+    <Compile Include="DialogTemplate.cs" />
+    <Compile Include="DialogTemplateControl.cs" />
+    <Compile Include="DialogTemplateControlEx.cs" />
+    <Compile Include="DialogTemplateEx.cs" />
     <Compile Include="Gdi32.cs" />
     <Compile Include="CursorDirectoryResource.cs" />
     <Compile Include="IconDirectoryResource.cs" />
@@ -71,6 +76,8 @@
     <Compile Include="DeviceIndependentBitmap.cs" />
     <Compile Include="IconImageResource.cs" />
     <Compile Include="IconResource.cs" />
+    <Compile Include="DialogTemplateBase.cs" />
+    <Compile Include="DialogTemplateControlBase.cs" />
     <Compile Include="Kernel32.cs" />
     <Compile Include="ManifestResource.cs" />
     <Compile Include="ResourceInfo.cs" />
