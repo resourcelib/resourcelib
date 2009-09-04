@@ -31,7 +31,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the x-coordinate, in dialog box units, of the upper-left corner of the dialog box. 
+        /// X-coordinate, in dialog box units, of the upper-left corner of the dialog box. 
         /// </summary>
         public override Int16 x
         {
@@ -46,7 +46,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the y-coordinate, in dialog box units, of the upper-left corner of the dialog box.
+        /// Y-coordinate, in dialog box units, of the upper-left corner of the dialog box.
         /// </summary>
         public override Int16 y
         {
@@ -61,7 +61,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the width, in dialog box units, of the dialog box.
+        /// Width, in dialog box units, of the dialog box.
         /// </summary>
         public override Int16 cx
         {
@@ -76,7 +76,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the height, in dialog box units, of the dialog box.
+        /// Height, in dialog box units, of the dialog box.
         /// </summary>
         public override Int16 cy
         {
@@ -121,7 +121,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the weight of the font. 
+        /// Weight of the font. 
         /// </summary>
         public UInt16 Weight
         {
@@ -178,7 +178,7 @@ namespace Vestris.ResourceLib
             _header = (User32.DLGTEMPLATEEX)Marshal.PtrToStructure(
                 lpRes, typeof(User32.DLGTEMPLATEEX));
 
-            lpRes = base.Read(new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header)));
+            lpRes = base.Read(new IntPtr(lpRes.ToInt32() + 24)); // Marshal.SizeOf(_header)
 
             if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
                 || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.IO;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Vestris.ResourceLib
@@ -13,7 +14,7 @@ namespace Vestris.ResourceLib
         private User32.DLGITEMTEMPLATE _header = new User32.DLGITEMTEMPLATE();
 
         /// <summary>
-        /// Specifies the x-coordinate, in dialog box units, of the upper-left corner of the dialog box. 
+        /// X-coordinate, in dialog box units, of the upper-left corner of the dialog box. 
         /// </summary>
         public override Int16 x
         {
@@ -28,7 +29,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the y-coordinate, in dialog box units, of the upper-left corner of the dialog box.
+        /// Y-coordinate, in dialog box units, of the upper-left corner of the dialog box.
         /// </summary>
         public override Int16 y
         {
@@ -43,7 +44,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the width, in dialog box units, of the dialog box.
+        /// Width, in dialog box units, of the dialog box.
         /// </summary>
         public override Int16 cx
         {
@@ -58,7 +59,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the height, in dialog box units, of the dialog box.
+        /// Height, in dialog box units, of the dialog box.
         /// </summary>
         public override Int16 cy
         {
@@ -103,9 +104,9 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the control identifier.
+        /// Control identifier.
         /// </summary>
-        public UInt16 Id
+        public Int16 Id
         {
             get
             {
@@ -130,7 +131,7 @@ namespace Vestris.ResourceLib
             _header = (User32.DLGITEMTEMPLATE)Marshal.PtrToStructure(
                 lpRes, typeof(User32.DLGITEMTEMPLATE));
 
-            lpRes = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            lpRes = new IntPtr(lpRes.ToInt32() + 18); // Marshal.SizeOf(_header)
             lpRes = base.Read(lpRes);
 
             return lpRes;
@@ -143,8 +144,21 @@ namespace Vestris.ResourceLib
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("{0} \"{1}\" {2}, {3}, {4}, {5}, {6}",
-                ControlClass, CaptionId, Id, x, y, cx, cy);
+            
+            sb.AppendFormat("{0} \"{1}\" {2}, {3}, {4}, {5}, {6}, {7}",
+                ControlClass, CaptionId, Id, x, y, cx, cy,
+                DialogTemplateUtil.StyleToString<User32.WindowStyles, User32.DialogStyles>(Style));
+
+            switch (ControlClass)
+            {
+                case User32.DialogItemClass.Button:
+                    sb.AppendFormat("| {0}", (User32.ButtonControlStyles) (Style & 0xFFFF));
+                    break;
+                case User32.DialogItemClass.Edit:
+                    sb.AppendFormat("| {0}", DialogTemplateUtil.StyleToString<User32.EditControlStyles>(Style & 0xFFFF));
+                    break;
+            }
+            
             return sb.ToString();
         }
     }

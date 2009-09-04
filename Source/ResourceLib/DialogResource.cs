@@ -68,6 +68,7 @@ namespace Vestris.ResourceLib
 
             // dialog structure itself
             lpRes = _dlgtemplate.Read(lpRes);
+
             // dialog items
             lpRes = _dlgtemplate.ReadControls(lpRes);
 

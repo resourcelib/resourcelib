@@ -28,23 +28,59 @@ namespace Vestris.ResourceLibUnitTests
             }
         }
 
+        private struct TestLoadDialogResourceTestDataEntry
+        {
+            private string _filename;
+            private ResourceId _resourceId;
+
+            public string Filename
+            {
+                get
+                {
+                    return _filename;
+                }
+            }
+
+            public ResourceId ResourceId
+            {
+                get
+                {
+                    return _resourceId;
+                }
+            }
+
+            public TestLoadDialogResourceTestDataEntry(string filename, ResourceId resourceId)
+            {
+                _filename = filename;
+                _resourceId = resourceId;
+            }
+        }
+        
         [Test]
         public void TestLoadDialogResource()
         {
+            TestLoadDialogResourceTestDataEntry[] testdata = 
             {
-                string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll");
-                DialogResource rc = new DialogResource();
-                rc.Name = new ResourceId("STRINGINPUT");
-                rc.LoadFrom(filename);
-                Console.WriteLine("DialogResource: {0}, {1}", rc.Name, rc.TypeName);
-                Console.WriteLine(rc);
-            }
+                new TestLoadDialogResourceTestDataEntry(Path.Combine(
+                    Environment.GetEnvironmentVariable("WINDIR"), "hteweb.dll"), 
+                    new ResourceId(212)),
+                new TestLoadDialogResourceTestDataEntry(Path.Combine(
+                    Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll"), 
+                    new ResourceId("GABRTDLG")),
+                new TestLoadDialogResourceTestDataEntry(
+                    Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll"), 
+                    new ResourceId("STRINGINPUT")),
+                new TestLoadDialogResourceTestDataEntry(
+                    Path.Combine(Environment.SystemDirectory, "audiogenie2.dll"), 
+                    new ResourceId(103)),
+            };
 
+            foreach (TestLoadDialogResourceTestDataEntry test in testdata)
             {
-                string filename = Path.Combine(Environment.SystemDirectory, "audiogenie2.dll");
+                Console.WriteLine("{0}: {1}", test.Filename, test.ResourceId);
                 DialogResource rc = new DialogResource();
-                rc.Name = new ResourceId(103);
-                rc.LoadFrom(filename);
+                rc.Name = test.ResourceId;
+                rc.LoadFrom(test.Filename);
                 Console.WriteLine("DialogResource: {0}, {1}", rc.Name, rc.TypeName);
                 Console.WriteLine(rc);
             }

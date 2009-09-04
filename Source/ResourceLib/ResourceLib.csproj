@@ -67,6 +67,7 @@
     <Compile Include="DialogTemplateControl.cs" />
     <Compile Include="DialogTemplateControlEx.cs" />
     <Compile Include="DialogTemplateEx.cs" />
+    <Compile Include="DialogTemplateUtil.cs" />
     <Compile Include="Gdi32.cs" />
     <Compile Include="CursorDirectoryResource.cs" />
     <Compile Include="IconDirectoryResource.cs" />

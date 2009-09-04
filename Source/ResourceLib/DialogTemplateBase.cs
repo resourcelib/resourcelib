@@ -11,27 +11,27 @@ namespace Vestris.ResourceLib
     public abstract class DialogTemplateBase
     {
         /// <summary>
-        /// Specifies the x-coordinate, in dialog box units, of the upper-left corner of the dialog box. 
+        /// X-coordinate, in dialog box units, of the upper-left corner of the dialog box. 
         /// </summary>
         public abstract Int16 x { get; set; }
         /// <summary>
-        /// Specifies the y-coordinate, in dialog box units, of the upper-left corner of the dialog box.
+        /// Y-coordinate, in dialog box units, of the upper-left corner of the dialog box.
         /// </summary>
         public abstract Int16 y { get; set; }
         /// <summary>
-        /// Specifies the width, in dialog box units, of the dialog box.
+        /// Width, in dialog box units, of the dialog box.
         /// </summary>
         public abstract Int16 cx { get; set; }
         /// <summary>
-        /// Specifies the height, in dialog box units, of the dialog box.
+        /// Height, in dialog box units, of the dialog box.
         /// </summary>
         public abstract Int16 cy { get; set; }
         /// <summary>
-        /// Specifies the style of the dialog box.
+        /// Style of the dialog box.
         /// </summary>
         public abstract UInt32 Style { get; set; }
         /// <summary>
-        /// Specifies the optional extended style of the dialog box.
+        /// Optional extended style of the dialog box.
         /// </summary>
         public abstract UInt32 ExtendedStyle { get; set; }
         /// <summary>
@@ -62,7 +62,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Specifies the point size of the font to use for the text in the dialog box and its controls.
+        /// Point size of the font to use for the text in the dialog box and its controls.
         /// </summary>
         public UInt16 PointSize
         {
@@ -134,63 +134,6 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// String representation of the dialog style.
-        /// </summary>
-        /// <returns>String in the STYLE s1 | s2 | ... | s3 format.</returns>
-        private string StyleToString()
-        {
-            StringBuilder styleb = new StringBuilder();
-            foreach (User32.WindowStyles s in Enum.GetValues(typeof(User32.WindowStyles)))
-            {
-                if ((Style & (uint)s) > 0)
-                {
-                    styleb.Append(styleb.Length == 0 ? "STYLE " : " | ");
-                    styleb.Append(s);
-                }
-            }
-
-            foreach (User32.DialogStyles s in Enum.GetValues(typeof(User32.DialogStyles)))
-            {
-                if ((Style & (uint)s) > 0)
-                {
-                    styleb.Append(styleb.Length == 0 ? "STYLE " : " | ");
-                    styleb.Append(s);
-                }
-            }
-
-            return styleb.ToString();
-        }
-
-        /// <summary>
-        /// String representation of the dialog extended style.
-        /// </summary>
-        /// <returns>String in the EXSTYLE s1 | s2 | ... | s3 format.</returns>
-        private string ExtendedStyleToString()
-        {
-            StringBuilder styleb = new StringBuilder();
-
-            foreach (User32.WindowStyles s in Enum.GetValues(typeof(User32.WindowStyles)))
-            {
-                if ((ExtendedStyle & (uint)s) > 0)
-                {
-                    styleb.Append(styleb.Length == 0 ? "EXSTYLE " : " | ");
-                    styleb.Append(s);
-                }
-            }
-
-            foreach (User32.ExtendedDialogStyles s in Enum.GetValues(typeof(User32.ExtendedDialogStyles)))
-            {
-                if ((ExtendedStyle & (uint)s) > 0)
-                {
-                    styleb.Append(styleb.Length == 0 ? "EXSTYLE " : " | ");
-                    styleb.Append(s);
-                }
-            }
-
-            return styleb.ToString();
-        }
-
-        /// <summary>
         /// Dialog template representation in a standard text format.
         /// </summary>
         /// <returns>Multiline string.</returns>
@@ -199,13 +142,13 @@ namespace Vestris.ResourceLib
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(string.Format("{0}, {1}, {2}, {3}", x, y, x + cx, y + cy));
 
-            string style = StyleToString();
+            string style = DialogTemplateUtil.StyleToString<User32.WindowStyles, User32.DialogStyles>(Style);
             if (!string.IsNullOrEmpty(style))
-                sb.AppendLine(style);
+                sb.AppendLine("STYLE " + style);
 
-            string exstyle = ExtendedStyleToString();
+            string exstyle = DialogTemplateUtil.StyleToString<User32.WindowStyles, User32.ExtendedDialogStyles>(ExtendedStyle);
             if (!string.IsNullOrEmpty(exstyle))
-                sb.AppendLine(exstyle);
+                sb.AppendLine("EXSTYLE " + exstyle);
 
             sb.AppendLine(string.Format("CAPTION \"{0}\"", _caption));
             sb.AppendLine(string.Format("FONT {0}, \"{1}\"", _pointSize, _typeface));
@@ -238,39 +181,10 @@ namespace Vestris.ResourceLib
         internal virtual IntPtr Read(IntPtr lpRes)
         {
             // menu
-            switch ((UInt16)Marshal.ReadIntPtr(lpRes))
-            {
-                case 0x0000: // no menu and the array has no other elements
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
-                    break;
-                case 0xFFFF: // one additional element that specifies the ordinal value of a menu resource in an executable file
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
-                    MenuId = new ResourceId((UInt32)Marshal.ReadInt32(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
-                    break;
-                default: // null-terminated Unicode string that specifies the name of a menu resource in an executable file
-                    MenuId = new ResourceId(Marshal.PtrToStringUni(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + (MenuId.Name.Length + 1) * 2);
-                    break;
-            }
-
+            lpRes = DialogTemplateUtil.ReadResourceId(lpRes, out _menuId);
             // window class
-            switch ((UInt16)Marshal.ReadIntPtr(lpRes))
-            {
-                case 0x0000: // no predefined system window class
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
-                    break;
-                case 0xFFFF: // one additional element that specifies the ordinal value of a predefined system window class
-                    lpRes = new IntPtr(lpRes.ToInt32() + 4);
-                    WindowClassId = new ResourceId((UInt16) Marshal.ReadInt16(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
-                    break;
-                default: // null-terminated Unicode string that specifies the name of a predefined system window class
-                    WindowClassId = new ResourceId(Marshal.PtrToStringUni(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + (WindowClassId.Name.Length + 1) * 2);
-                    break;
-            }
-
+            lpRes = DialogTemplateUtil.ReadResourceId(lpRes, out _windowClassId);
+            // caption
             Caption = Marshal.PtrToStringUni(lpRes);
             lpRes = new IntPtr(lpRes.ToInt32() + (Caption.Length + 1) * 2);
 
@@ -285,50 +199,13 @@ namespace Vestris.ResourceLib
             return lpRes;
         }
 
-        internal virtual IntPtr ReadControl(IntPtr lpRes)
-        {
-            // window class
-            switch ((UInt16)Marshal.ReadIntPtr(lpRes))
-            {
-                case 0x0000: // no predefined system window class
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
-                    break;
-                case 0xFFFF: // one additional element that specifies the ordinal value of a predefined system window class
-                    lpRes = new IntPtr(lpRes.ToInt32() + 4);
-                    WindowClassId = new ResourceId((UInt16) Marshal.ReadInt16(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
-                    break;
-                default: // null-terminated Unicode string that specifies the name of a predefined system window class
-                    WindowClassId = new ResourceId(Marshal.PtrToStringUni(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + (WindowClassId.Name.Length + 1) * 2);
-                    break;
-            }
-
-            Caption = Marshal.PtrToStringUni(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + (Caption.Length + 1) * 2);
-
-            // optional creation data
-            // window class
-            switch ((UInt16)Marshal.ReadIntPtr(lpRes))
-            {
-                case 0x0000: // no predefined system window class
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
-                    break;
-                default: // null-terminated Unicode string that specifies the name of a predefined system window class
-                    Int16 size = Marshal.ReadInt16(lpRes);
-                    lpRes = new IntPtr(lpRes.ToInt32() + size);
-                    break;
-            }
-
-            return lpRes;
-        }
-
         internal abstract IntPtr AddControl(IntPtr lpRes);
 
         internal IntPtr ReadControls(IntPtr lpRes)
         {
             for (int i = 0; i < ControlCount; i++)
             {
+                lpRes = ResourceUtil.Align(lpRes);
                 lpRes = AddControl(lpRes);
             }
 

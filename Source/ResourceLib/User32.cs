@@ -90,7 +90,7 @@ namespace Vestris.ResourceLib
         /// also specifies the number of controls in the dialog box and therefore specifies 
         /// the number of subsequent DLGITEMTEMPLATE structures in the template.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct DLGTEMPLATE
         {
             /// <summary>
@@ -126,7 +126,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// The DLGITEMTEMPLATE structure defines the dimensions and style of a control in a dialog box.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct DLGITEMTEMPLATE
         {
             /// <summary>
@@ -137,10 +137,6 @@ namespace Vestris.ResourceLib
             /// Extended styles for a window.
             /// </summary>
             public UInt32 dwExtendedStyle;
-            /// <summary>
-            /// Specifies the number of items in the dialog box. 
-            /// </summary>
-            public UInt16 cdit;
             /// <summary>
             /// Specifies the x-coordinate, in dialog box units, of the upper-left corner of the control. 
             /// </summary>
@@ -160,7 +156,7 @@ namespace Vestris.ResourceLib
             /// <summary>
             /// Specifies the control identifier.
             /// </summary>
-            public UInt16 id;
+            public Int16 id;
         };
 
         /// <summary>
@@ -169,7 +165,7 @@ namespace Vestris.ResourceLib
         /// control in a dialog box, an extended dialog box template has a block of data that
         /// uses the DLGITEMTEMPLATEEX format to describe the control. 
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct DLGTEMPLATEEX
         {
             /// <summary>
@@ -219,7 +215,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// A control entry in an extended dialog template.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct DLGITEMTEMPLATEEX
         {
             /// <summary>
@@ -255,7 +251,7 @@ namespace Vestris.ResourceLib
             /// <summary>
             /// Specifies the control identifier.
             /// </summary>
-            public UInt32 id;
+            public Int32 id;
         };
 
         /// <summary>
@@ -348,7 +344,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Possible DLGITEMTEMPLATEEX WindowClass ordinals.
         /// </summary>
-        public enum DLGITEMTEMPLATEEX_WindowClass : uint
+        public enum DialogItemClass : uint
         {
             Button = 0x0080,
             Edit = 0x0081,
@@ -357,5 +353,99 @@ namespace Vestris.ResourceLib
             ScrollBar = 0x0084,
             ComboBox = 0x0085
         };
+
+        /// <summary>
+        /// Static control styles.
+        /// </summary>
+        public enum StaticControlStyles : uint
+        {
+            SS_LEFT = 0x00000000,
+            SS_CENTER = 0x00000001,
+            SS_RIGHT = 0x00000002,
+            SS_ICON = 0x00000003,
+            SS_BLACKRECT = 0x00000004,
+            SS_GRAYRECT = 0x00000005,
+            SS_WHITERECT = 0x00000006,
+            SS_BLACKFRAME = 0x00000007,
+            SS_GRAYFRAME = 0x00000008,
+            SS_WHITEFRAME = 0x00000009,
+            SS_USERITEM = 0x0000000A,
+            SS_SIMPLE = 0x0000000B,
+            SS_LEFTNOWORDWRAP = 0x0000000C,
+            SS_OWNERDRAW = 0x0000000D,
+            SS_BITMAP = 0x0000000E,
+            SS_ENHMETAFILE = 0x0000000F,
+            SS_ETCHEDHORZ = 0x00000010,
+            SS_ETCHEDVERT = 0x00000011,
+            SS_ETCHEDFRAME = 0x00000012,
+            SS_TYPEMASK = 0x0000001F,
+            SS_REALSIZECONTROL = 0x00000040,
+            SS_NOPREFIX = 0x00000080,/* Don't do "&" character translation */
+            SS_NOTIFY = 0x00000100,
+            SS_CENTERIMAGE = 0x00000200,
+            SS_RIGHTJUST = 0x00000400,
+            SS_REALSIZEIMAGE = 0x00000800,
+            SS_SUNKEN = 0x00001000,
+            SS_EDITCONTROL = 0x00002000,
+            SS_ENDELLIPSIS = 0x00004000,
+            SS_PATHELLIPSIS = 0x00008000,
+            SS_WORDELLIPSIS = 0x0000C000,
+            SS_ELLIPSISMASK = 0x0000C000,
+        };
+
+        /// <summary>
+        /// Button control styles.
+        /// </summary>
+        public enum ButtonControlStyles : uint
+        {
+            BS_PUSHBUTTON = 0x00000000,
+            BS_DEFPUSHBUTTON = 0x00000001,
+            BS_CHECKBOX = 0x00000002,
+            BS_AUTOCHECKBOX = 0x00000003,
+            BS_RADIOBUTTON = 0x00000004,
+            BS_3STATE = 0x00000005,
+            BS_AUTO3STATE = 0x00000006,
+            BS_GROUPBOX = 0x00000007,
+            BS_USERBUTTON = 0x00000008,
+            BS_AUTORADIOBUTTON = 0x00000009,
+            BS_PUSHBOX = 0x0000000A,
+            BS_OWNERDRAW = 0x0000000B,
+            BS_TYPEMASK = 0x0000000F,
+            BS_LEFTTEXT = 0x00000020,
+            BS_TEXT = 0x00000000,
+            BS_ICON = 0x00000040,
+            BS_BITMAP = 0x00000080,
+            BS_LEFT = 0x00000100,
+            BS_RIGHT = 0x00000200,
+            BS_CENTER = 0x00000300,
+            BS_TOP = 0x00000400,
+            BS_BOTTOM = 0x00000800,
+            BS_VCENTER = 0x00000C00,
+            BS_PUSHLIKE = 0x00001000,
+            BS_MULTILINE = 0x00002000,
+            BS_NOTIFY = 0x00004000,
+            BS_FLAT = 0x00008000,
+        };
+
+        /// <summary>
+        /// Edit control styles.
+        /// </summary>
+        public enum EditControlStyles : uint
+        {
+            ES_LEFT = 0x0000,
+            ES_CENTER = 0x0001,
+            ES_RIGHT = 0x0002,
+            ES_MULTILINE = 0x0004,
+            ES_UPPERCASE = 0x0008,
+            ES_LOWERCASE = 0x0010,
+            ES_PASSWORD = 0x0020,
+            ES_AUTOVSCROLL = 0x0040,
+            ES_AUTOHSCROLL = 0x0080,
+            ES_NOHIDESEL = 0x0100,
+            ES_OEMCONVERT = 0x0400,
+            ES_READONLY = 0x0800,
+            ES_WANTRETURN = 0x1000,
+            ES_NUMBER = 0x2000,
+        }
     }
 }
