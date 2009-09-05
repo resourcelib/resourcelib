@@ -186,7 +186,7 @@ public struct RESOURCE_HEADER
  public UInt16 wLength; 
  public UInt16 wValueLength; 
  public UInt16 wType; 
-};
+}
   </pre>
  <p>
   The header is usually followed by a Unicode string (a key) and an array of data
@@ -217,7 +217,7 @@ public struct GRPICONDIR
     public UInt16 wReserved; // reserved
     public UInt16 wType; // type, 1 = icon, 2 = cursor
     public UInt16 wImageCount; // image count
-};
+}
  </pre>
  <h3>
   Reading</h3>
@@ -365,9 +365,102 @@ public override void Write(BinaryWriter w)
  <h3>Dialogs</h3>
  <p>
   There exist two dialog resource formats. The original one is described in the Win32 documentation 
-  as part of the <code>DLGTEMPLATE</code> structure. In Windows NT 3.51, Microsoft introduced 
-  <code>DLGTEMPLATEEX</code>.
+  as part of the <code>DLGTEMPLATE</code> structure. A single <code>DLGTEMPLATE</code> can contain controls in the 
+  <code>DLGITEMTEMPLATE</code> 16-bit format. In Windows NT 3.51, Microsoft introduced 
+  <code>DLGTEMPLATEEX</code> and <code>DLGITEMTEMPLATEEX</code>, a 32-bit format. This evolution 
+  <a href="http://blogs.msdn.com/oldnewthing/archive/2004/06/23/163596.aspx">is explained in detail in MSDN's 
+  "The Old New Thing"</a>.  
  </p>
+ <p>
+  Reading dialog structures involves making a decision of whether the dialog is in a standard or extended format. 
+  Extended dialogs start with a different 0xFFFF header.
+ </p>
+ <pre lang="cs">
+internal override IntPtr Read(IntPtr hModule, IntPtr lpRes)
+{
+    switch ((uint)Marshal.ReadInt32(lpRes) >> 16)
+    {
+        case 0xFFFF:
+            _dlgtemplate = new DialogTemplateEx();
+            break;
+        default:
+            _dlgtemplate = new DialogTemplate();
+            break;
+    }
+
+    // dialog structure itself
+    return _dlgtemplate.Read(lpRes);
+}</pre>
+ <p>
+  Subsequent structures are straightforward with the additional difficulty of variable length arrays and different alignments
+  within the structure. For example, the typeface name is aligned on a 32-bit boundary, but only when present. The 
+  <code>DLGITEMTEMPLATE</code> and the <code>DLGITEMTEMPLATEEX</code> controls are aligned on a 32-bit boundary.
+ </p>
+ <p>
+  The optional fields (eg. control class id) are generally identified in three ways: a 0x0000 value indicating that the
+  value is not present, 0xFFFF indicating one additional element that specifies the ordinal value of the resource and
+  a null-terminated unicode string otherwise. This is generically implemented in the <code>DialogTemplateUtil.ReadResourceId</code>
+  and <code>DialogTemplateUtil.WriteResourceId</code> pair of functions.
+ </p>
+ <pre lang="cs">
+internal static IntPtr ReadResourceId(IntPtr lpRes, out ResourceId rc)
+{
+    rc = null;
+
+    switch ((UInt16) Marshal.ReadInt16(lpRes))
+    {
+        case 0x0000: // no predefined resource
+            lpRes = new IntPtr(lpRes.ToInt32() + 2);
+            break;
+        case 0xFFFF: // one additional element that specifies the ordinal value of the resource
+            lpRes = new IntPtr(lpRes.ToInt32() + 2);
+            rc = new ResourceId((UInt16)Marshal.ReadInt16(lpRes));
+            lpRes = new IntPtr(lpRes.ToInt32() + 2);
+            break;
+        default: // null-terminated Unicode string that specifies the name of the resource
+            rc = new ResourceId(Marshal.PtrToStringUni(lpRes));
+            lpRes = new IntPtr(lpRes.ToInt32() + (rc.Name.Length + 1) * 2);
+            break;
+    }
+
+    return lpRes;
+}
+
+internal static void WriteResourceId(BinaryWriter w, ResourceId rc)
+{
+    if (rc == null)
+    {
+        w.Write((UInt16) 0);
+    }
+    else if (rc.IsIntResource())
+    {
+        w.Write((UInt16) 0xFFFF);
+        w.Write((UInt16) rc.Id);
+    }
+    else
+    {
+        ResourceUtil.PadToWORD(w);
+        w.Write(Encoding.Unicode.GetBytes(rc.Name));
+        w.Write((UInt16)0);
+    }
+}</pre>
+ <p>
+  The implementation in the library also attempts to return a standard string representation of the dialog and its controls
+  overriding the <code>ToString</code> methods.
+ </p>
+ <pre>
+DialogResource: STRINGINPUT, RT_DIALOG
+"STRINGINPUT" DIALOG 6, 18, 166, 96
+STYLE WS_SYSMENU | WS_DLGFRAME | WS_BORDER | WS_CAPTION | WS_VISIBLE | WS_POPUP | DS_SETFONT | DS_SHELLFONT | DS_MODALFRAME
+EXSTYLE WS_OVERLAPPED | WS_EX_LTRREADING | WS_EX_LTRREADING | WS_EX_LTRREADING
+CAPTION "Set Options"
+FONT 8, "MS Shell Dlg"
+{
+ Static "Prompt goes here" 301, 9, 12, 140, 8, WS_GROUP | WS_VISIBLE | WS_CHILD
+ Edit "" 302, 18, 30, 101, 12, WS_TABSTOP | WS_BORDER | WS_CAPTION | WS_VISIBLE | WS_CHILD | DS_MODALFRAME| ES_AUTOHSCROLL
+ Button "OK" 1, 63, 55, 40, 14, WS_TABSTOP | WS_VISIBLE | WS_CHILD | DS_ABSALIGN| BS_DEFPUSHBUTTON
+ Button "Cancel" 2, 108, 55, 40, 14, WS_TABSTOP | WS_VISIBLE | WS_CHILD| BS_TEXT
+} </pre>  
  <h2>
   Side-by-Side Manifests</h2>
  <p>
@@ -427,7 +520,7 @@ public override void Write(BinaryWriter w)
   <li>2008-06-30: Initial version.</li>
   <li>2008-09-28: Added support for icons.</li>
   <li>2009-02-19: Moved to CodePlex, released 1.1.</li>
-  <li>2009-08-31: Added support for cursors, bitmaps and SxS manifests.</li>
+  <li>2009-09-05: Added support for cursors, bitmaps, dialogs and SxS manifests.</li>
  </ul>
 </body>
 </html>

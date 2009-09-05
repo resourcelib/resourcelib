@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -75,7 +76,7 @@ namespace Vestris.ResourceLib
                 _pointSize = value;
             }
         }
-        
+
         /// <summary>
         /// Dialog caption.
         /// </summary>
@@ -121,6 +122,9 @@ namespace Vestris.ResourceLib
             }
         }
 
+        /// <summary>
+        /// Controls within this dialog.
+        /// </summary>
         public List<DialogTemplateControlBase> Controls
         {
             get
@@ -188,8 +192,8 @@ namespace Vestris.ResourceLib
             Caption = Marshal.PtrToStringUni(lpRes);
             lpRes = new IntPtr(lpRes.ToInt32() + (Caption.Length + 1) * 2);
 
-            if ((Style & (uint) User32.DialogStyles.DS_SETFONT) > 0
-                || (Style & (uint) User32.DialogStyles.DS_SHELLFONT) > 0)
+            if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
+                || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)
             {
                 // point size
                 PointSize = (UInt16)Marshal.ReadInt16(lpRes);
@@ -210,6 +214,36 @@ namespace Vestris.ResourceLib
             }
 
             return lpRes;
+        }
+
+        internal void WriteControls(BinaryWriter w)
+        {
+            foreach(DialogTemplateControlBase control in Controls)
+            {
+                ResourceUtil.PadToDWORD(w);
+                control.Write(w);
+            }
+        }
+
+        /// <summary>
+        /// Write the resource to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        public virtual void Write(BinaryWriter w)
+        {
+            // menu
+            DialogTemplateUtil.WriteResourceId(w, _menuId);
+            // window class
+            DialogTemplateUtil.WriteResourceId(w, _windowClassId);
+            // caption
+            w.Write(Encoding.Unicode.GetBytes(Caption));
+            w.Write((UInt16)0);
+            // point size
+            if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
+                || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)
+            {
+                w.Write((UInt16)PointSize);
+            }
         }
     }
 }

@@ -139,6 +139,27 @@ namespace Vestris.ResourceLib
             return base.Read(lpRes);
         }
 
+        /// <summary>
+        /// Write the dialog control to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        public override void Write(BinaryWriter w)
+        {
+            w.Write((UInt32)_header.helpID);
+            w.Write((UInt32)_header.exStyle);
+            w.Write((UInt32)_header.style);
+            w.Write((Int16)_header.x);
+            w.Write((Int16)_header.y);
+            w.Write((Int16)_header.cx);
+            w.Write((Int16)_header.cy);
+            w.Write((Int32)_header.id);
+            base.Write(w);
+        }
+
+        /// <summary>
+        /// Return a string representation of the dialog control.
+        /// </summary>
+        /// <returns>A single line in the "CLASS name id, dimensions and styles' format.</returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

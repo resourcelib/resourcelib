@@ -22,16 +22,6 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Align an address to a 2-byte boundary.
-        /// </summary>
-        /// <param name="p">Address in memory.</param>
-        /// <returns>2-byte aligned pointer.</returns>
-        internal static IntPtr AlignWORD(Int32 p)
-        {
-            return new IntPtr((p + 1) & ~1);
-        }
-
-        /// <summary>
         /// Align a pointer to a 4-byte boundary.
         /// </summary>
         /// <param name="p">Pointer to an address in memory.</param>
@@ -39,16 +29,6 @@ namespace Vestris.ResourceLib
         internal static IntPtr Align(IntPtr p)
         {
             return Align(p.ToInt32());
-        }
-
-        /// <summary>
-        /// Align a pointer to a 2-byte boundary.
-        /// </summary>
-        /// <param name="p">Pointer to an address in memory.</param>
-        /// <returns>2-byte aligned pointer.</returns>
-        internal static IntPtr AlignWORD(IntPtr p)
-        {
-            return AlignWORD(p.ToInt32());
         }
 
         /// <summary>

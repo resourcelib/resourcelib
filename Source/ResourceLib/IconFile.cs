@@ -25,7 +25,7 @@ namespace Vestris.ResourceLib
             /// Cursor.
             /// </summary>
             Cursor = 2
-        };
+        }
 
         Kernel32.FILEGRPICONDIR _header = new Kernel32.FILEGRPICONDIR();
         List<IconFileIcon> _icons = new List<IconFileIcon>();

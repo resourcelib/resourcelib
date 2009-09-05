@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="58ee16d9-36ea-45cc-ac30-b68aa2388895" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        This section demonstrates how to use this library for manipulating dialog resources.
+      </para>
+      <para>
+        When <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.ResourceInfo</codeEntityReference>
+        encouters a resource of type <literal>5</literal> (<literal>RT_DIALOG</literal>), it creates an object
+        of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogResource</codeEntityReference>
+        which contains either a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplate</codeEntityReference>
+        or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateEx</codeEntityReference>. The latter
+        represent a single dialog template in a standard or extended format and include a collection of
+        <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateControl</codeEntityReference> or
+        <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateControlEx</codeEntityReference>
+        controls respectively.        
+      </para>
+    </introduction>
+    <section address="dialogs_readingdialogs">
+      <title>Reading Dialog Resources</title>
+      <content>
+        <para>
+          The following example loads all dialog resources from a file.
+          <code language="cs">
+            <![CDATA[
+string filename = Path.Combine(Environment.SystemDirectory, "acppage.dll");
+using (ResourceInfo ri = new ResourceInfo())
+{
+    ri.Load(filename);
+    foreach(DialogResource rc in ri[Kernel32.ResourceTypes.RT_DIALOG])
+    {
+        Console.WriteLine("DialogResource: {0}, {1}", rc.Name, rc.TypeName);
+        Console.WriteLine(rc.Template.ToString());
+    }
+}
+]]>
+          </code>
+          The acppage.dll contains two extended dialog resources.
+          <code language="cmd">
+            <![CDATA[
+DialogResource: 101, RT_DIALOG
+DIALOGEX 0, 0, 224, 233
+STYLE WS_DLGFRAME | WS_BORDER | WS_CAPTION | WS_DISABLED | WS_CHILD | DS_FIXEDSYS | DS_SETFONT | DS_SHELLFONT
+EXSTYLE WS_OVERLAPPED | WS_EX_LTRREADING | WS_EX_LTRREADING | WS_EX_LTRREADING
+CAPTION "Shim Layer Property Page"
+FONT 8, "MS Shell Dlg"
+{
+ Static "If you have problems with this program and it worked correctly on an earlier version of Windows, select the compatibility mode that matches that earlier version." 1013, Static, 7, 7, 210, 31, WS_GROUP | WS_VISIBLE | WS_CHILD | SS_LEFT
+ Button "Run this program in compatibility mode for:" 5000, Button, 18, 53, 149, 10, WS_TABSTOP | WS_VISIBLE | WS_CHILD | SS_LEFT| BS_AUTOCHECKBOX
+ ComboBox "" 1005, ComboBox, 18, 66, 152, 85, WS_TABSTOP | WS_VSCROLL | WS_DISABLED | WS_VISIBLE | WS_CHILD | SS_LEFT
+ ...
+}
+
+DialogResource: 5011, RT_DIALOG
+DIALOGEX 0, 0, 224, 250
+STYLE WS_DLGFRAME | WS_BORDER | WS_CAPTION | WS_DISABLED | WS_CHILD | DS_FIXEDSYS | DS_SETFONT | DS_SHELLFONT
+EXSTYLE WS_OVERLAPPED | WS_EX_LTRREADING | WS_EX_LTRREADING | WS_EX_LTRREADING
+CAPTION "Shim Layer Property Page"
+FONT 8, "MS Shell Dlg"
+{
+ Static "If you have problems with this program and it worked correctly on an earlier version of Windows, select the compatibility mode that matches that earlier version." 1013, Static, 7, 7, 210, 31, WS_GROUP | WS_VISIBLE | WS_CHILD | SS_LEFT
+ Button "Run this program in compatibility mode for:" 5000, Button, 18, 53, 149, 10, WS_TABSTOP | WS_VISIBLE | WS_CHILD | SS_LEFT| BS_AUTOCHECKBOX
+ ComboBox "" 1005, ComboBox, 18, 66, 152, 85, WS_TABSTOP | WS_VSCROLL | WS_DISABLED | WS_VISIBLE | WS_CHILD | SS_LEFT
+ Button "Run in 256 colors" 5001, Button, 18, 106, 196, 10, WS_TABSTOP | WS_VISIBLE | WS_CHILD | SS_LEFT| BS_AUTOCHECKBOX
+ ...
+}
+]]>
+          </code>
+        </para>
+      </content>
+    </section>
+    <section address="dialogs_readingdialog">
+      <title>Reading Specific Dialog Resources</title>
+      <content>
+        <para>
+          The following example loads a single dialog resource directly, without enumerating all resources.
+          <code language="cs">
+            <![CDATA[
+string filename = Path.Combine(Environment.SystemDirectory, "acppage.dll");
+DialogResource rc = new DialogResource();
+rc.Name = new ResourceId(5011);
+rc.LoadFrom(filename);
+Console.WriteLine("DialogResource: {0}, {1}", rc.Name, rc.TypeName);
+Console.WriteLine(rc.Template.ToString());
+]]>
+          </code>
+        </para>
+      </content>
+    </section>
+    <section address="dialogs_writingdialogs">
+      <title>Writing Dialog Resources</title>
+      <content>
+        <para>
+          In order to embed a dialog into an executable (.exe or .dll) create a new instance of
+          <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplate</codeEntityReference>
+          or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateEx</codeEntityReference>,
+          add controls and save it to the destination file. You may also copy a dialog from one file to another, etc.
+          <code language="cs">
+            <![CDATA[
+source sourceFilename = ...
+string targetFilename = ...
+DialogResource sourceDialog = new DialogResource();
+sourceDialog.Name = new ResourceId("DIALOGID");
+sourceDialog.LoadFrom(sourceFilename);
+sourceDialog.SaveTo(targetFilename);
+]]>
+          </code>
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>

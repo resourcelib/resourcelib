@@ -37,7 +37,7 @@ namespace Vestris.ResourceLib
                 wValueLength = valueLength;
                 wType = 0;
             }
-        };
+        }
 
         /// <summary>
         /// Resource header type.
@@ -52,7 +52,7 @@ namespace Vestris.ResourceLib
             /// String data.
             /// </summary>
             StringData = 1
-        };
+        }
 
         /// <summary>
         /// Language and code page combinations.
@@ -72,7 +72,7 @@ namespace Vestris.ResourceLib
             /// IBM code page number.
             /// </summary>
             public UInt16 wCodePageIBM;
-        };
+        }
 
         /// <summary>
         /// This structure contains version information about a file. 
@@ -150,7 +150,7 @@ namespace Vestris.ResourceLib
                 fixedFileInfo.dwFileType = 2;
                 return fixedFileInfo;
             }
-        };
+        }
 
         /// <summary>
         /// A hardware-independent icon directory resource header.
@@ -171,7 +171,7 @@ namespace Vestris.ResourceLib
             /// Number of images.
             /// </summary>
             public UInt16 wImageCount;
-        };
+        }
 
         /// <summary>
         /// Hardware-independent icon directory entry.
@@ -212,7 +212,7 @@ namespace Vestris.ResourceLib
             /// Icon ID.
             /// </summary>
             public UInt16 nID;
-        };
+        }
 
         /// <summary>
         /// Hardware-independent icon directory entry in an .ico file.
@@ -254,7 +254,7 @@ namespace Vestris.ResourceLib
             /// Offset of bitmap data from the beginning of the file.
             /// </summary>
             public UInt32 dwFileOffset;
-        };
+        }
 
         /// <summary>
         /// Hardware-independent icon structure in an .ico file.
@@ -274,7 +274,7 @@ namespace Vestris.ResourceLib
             /// Number of images.
             /// </summary>
             public UInt16 wCount;
-        };
+        }
 
         /// <summary>
         /// If this value is used, the system maps the file into the calling process's virtual address space as if it were a data file.
@@ -301,7 +301,7 @@ namespace Vestris.ResourceLib
         /// <param name="hFile">This parameter is reserved for future use.</param>
         /// <param name="dwFlags">The action to be taken when loading the module.</param>
         /// <returns></returns>
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", SetLastError = true)]
         internal static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace Vestris.ResourceLib
             /// Microsoft Windows XP: Side-by-Side Assembly XML Manifest.
             /// </summary>
             RT_MANIFEST = 24,
-        };
+        }
 
         /// <summary>
         /// Enumerates resource types within a binary module.
@@ -603,6 +603,6 @@ namespace Vestris.ResourceLib
             /// ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID
             /// </summary>
             IsolationAwareNonstaticImport = ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID
-        };
+        }
     }
 }

@@ -141,7 +141,7 @@ namespace Vestris.ResourceLib
                 lpRes = new IntPtr(lpRes.ToInt32() + (TypeFace.Length + 1) * 2);
             }
 
-            return lpRes;
+            return ReadControls(lpRes);
         }
 
         internal override IntPtr AddControl(IntPtr lpRes)
@@ -151,6 +151,36 @@ namespace Vestris.ResourceLib
             return control.Read(lpRes);
         }
 
+        /// <summary>
+        /// Write the dialog template data to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        public override void Write(BinaryWriter w)
+        {
+            w.Write(_header.style);
+            w.Write(_header.dwExtendedStyle);
+            w.Write((UInt16) Controls.Count);
+            w.Write(_header.x);
+            w.Write(_header.y);
+            w.Write(_header.cx);
+            w.Write(_header.cy);
+            
+            base.Write(w);
+            
+            if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
+                || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)
+            {
+                w.Write(Encoding.Unicode.GetBytes(TypeFace));
+                w.Write((UInt16) 0);
+            }
+
+            WriteControls(w);
+        }
+
+        /// <summary>
+        /// Returns a string representation of the dialog.
+        /// </summary>
+        /// <returns>String in the DIALOG ... format.</returns>
         public override string ToString()
         {
             return string.Format("DIALOG {0}", base.ToString());

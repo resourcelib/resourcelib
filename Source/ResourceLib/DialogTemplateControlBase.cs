@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Vestris.ResourceLib
 {
@@ -109,7 +110,6 @@ namespace Vestris.ResourceLib
                     lpRes = new IntPtr(lpRes.ToInt32() + 2);
                     break;
                 default:
-                    lpRes = ResourceUtil.AlignWORD(lpRes);
                     UInt16 size = (UInt16)Marshal.ReadInt16(lpRes);
                     _creationData = new byte[size];
                     Marshal.Copy(lpRes, _creationData, 0, _creationData.Length);
@@ -118,6 +118,29 @@ namespace Vestris.ResourceLib
             }
 
             return lpRes;
+        }
+
+        /// <summary>
+        /// Write the dialog control to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        public virtual void Write(BinaryWriter w)
+        {
+            // control class
+            DialogTemplateUtil.WriteResourceId(w, _controlClassId);
+            // caption
+            DialogTemplateUtil.WriteResourceId(w, _captionId);
+
+            if (_creationData == null)
+            {
+                w.Write((UInt16) 0);
+            }
+            else
+            {
+                ResourceUtil.PadToWORD(w);
+                w.Write((UInt16) _creationData.Length);
+                w.Write(_creationData);
+            }
         }
     }
 }

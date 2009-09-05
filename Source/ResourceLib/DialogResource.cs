@@ -5,10 +5,12 @@ using System.Runtime.InteropServices;
 
 namespace Vestris.ResourceLib
 {
+    /// <summary>
+    /// A dialog template resource.
+    /// </summary>
     public class DialogResource : Resource
     {
         private DialogTemplateBase _dlgtemplate = null;
-        private byte[] _data = null;
 
         /// <summary>
         /// A dialog template structure that describes the dialog.
@@ -67,18 +69,12 @@ namespace Vestris.ResourceLib
             }
 
             // dialog structure itself
-            lpRes = _dlgtemplate.Read(lpRes);
-
-            // dialog items
-            lpRes = _dlgtemplate.ReadControls(lpRes);
-
-            return lpRes;
+            return _dlgtemplate.Read(lpRes);
         }
 
         internal override void Write(BinaryWriter w)
         {
-            //w.Write(ResourceUtil.GetBytes(_dlgtemplate));
-            //w.Write(_data);
+            _dlgtemplate.Write(w);
         }
 
         /// <summary>

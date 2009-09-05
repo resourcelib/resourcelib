@@ -16,7 +16,8 @@ namespace Vestris.ResourceLibUnitTests
         public void TestLoadCursorResources()
         {
             // gutils.dll has two cursors
-            string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils.dll");
             Assert.IsTrue(File.Exists(filename));
             string[] cursorNames = { "HORZLINE", "VERTLINE" };
             foreach (string cursorName in cursorNames)
@@ -41,7 +42,7 @@ namespace Vestris.ResourceLibUnitTests
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
 
-            string gutilsfilename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll");
+            string gutilsfilename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils.dll");
             Assert.IsTrue(File.Exists(gutilsfilename));
             string[] cursorNames = { "HORZLINE", "VERTLINE" };
             foreach (string cursorName in cursorNames)
@@ -68,14 +69,14 @@ namespace Vestris.ResourceLibUnitTests
         public void TestCompareCursor1()
         {
             // load from gutils
-            string gutilsfilename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string gutilsfilename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils.dll");
             Assert.IsTrue(File.Exists(gutilsfilename));
             CursorDirectoryResource cursorDirectoryResource = new CursorDirectoryResource();
             cursorDirectoryResource.Name = new ResourceId("HORZLINE");
             cursorDirectoryResource.Language = ResourceUtil.USENGLISHLANGID;
             cursorDirectoryResource.LoadFrom(gutilsfilename);
             // load from cursor1.cur
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string cursor1filename = Path.Combine(Path.GetDirectoryName(
                 HttpUtility.UrlDecode(uri.AbsolutePath)), "Cursors\\Cursor1.cur");
             Assert.IsTrue(File.Exists(cursor1filename));
@@ -116,7 +117,7 @@ namespace Vestris.ResourceLibUnitTests
             DumpResource.Dump(cursorDirectoryResource);
             Assert.AreEqual(cursorFile.Icons.Count, cursorDirectoryResource.Icons.Count);
 
-            string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "gutils.dll");
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils.dll");
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "testReplaceCursorResource.dll");
             File.Copy(filename, targetFilename, true);

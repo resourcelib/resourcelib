@@ -138,6 +138,22 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// Write the dialog control to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        public override void Write(BinaryWriter w)
+        {
+            w.Write((UInt32) _header.style);
+            w.Write((UInt32) _header.dwExtendedStyle);
+            w.Write((Int16) _header.x);
+            w.Write((Int16) _header.y);
+            w.Write((Int16) _header.cx);
+            w.Write((Int16) _header.cy);
+            w.Write((Int16) _header.id);
+            base.Write(w);
+        }
+
+        /// <summary>
         /// String represetnation of a control.
         /// </summary>
         /// <returns></returns>

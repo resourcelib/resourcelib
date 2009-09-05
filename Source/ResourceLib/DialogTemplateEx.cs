@@ -178,7 +178,7 @@ namespace Vestris.ResourceLib
             _header = (User32.DLGTEMPLATEEX)Marshal.PtrToStructure(
                 lpRes, typeof(User32.DLGTEMPLATEEX));
 
-            lpRes = base.Read(new IntPtr(lpRes.ToInt32() + 24)); // Marshal.SizeOf(_header)
+            lpRes = base.Read(new IntPtr(lpRes.ToInt32() + 26)); // Marshal.SizeOf(_header)
 
             if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
                 || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)
@@ -197,7 +197,7 @@ namespace Vestris.ResourceLib
                 lpRes = new IntPtr(lpRes.ToInt32() + (TypeFace.Length + 1) * 2);
             }
 
-            return lpRes;
+            return ReadControls(lpRes);
         }
 
         internal override IntPtr AddControl(IntPtr lpRes)
@@ -207,6 +207,42 @@ namespace Vestris.ResourceLib
             return control.Read(lpRes);
         }
 
+        /// <summary>
+        /// Write dialog control to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        public override void Write(BinaryWriter w)
+        {
+            w.Write((UInt16)_header.dlgVer);
+            w.Write((UInt16)_header.signature);
+            w.Write((UInt32)_header.helpID);
+            w.Write((UInt32)_header.exStyle);
+            w.Write((UInt32)_header.style);
+            w.Write((UInt16)Controls.Count);
+            w.Write(_header.x);
+            w.Write(_header.y);
+            w.Write(_header.cx);
+            w.Write(_header.cy);
+
+            base.Write(w);
+
+            if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
+                || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)
+            {
+                w.Write((UInt16) Weight);
+                w.Write((byte) (Italic ? 1 : 0));
+                w.Write(CharacterSet);
+                w.Write(Encoding.Unicode.GetBytes(TypeFace));
+                w.Write((UInt16) 0);
+            }
+
+            WriteControls(w);
+        }
+
+        /// <summary>
+        /// String representation of the dialog.
+        /// </summary>
+        /// <returns>String in the DIALOGEX [dialog] format.</returns>
         public override string ToString()
         {
             return string.Format("DIALOGEX {0}", base.ToString());
