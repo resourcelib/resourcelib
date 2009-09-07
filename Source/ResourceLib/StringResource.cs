@@ -129,8 +129,13 @@ namespace Vestris.ResourceLib
             long valuePos = w.BaseStream.Position;
             if (_value != null)
             {
-                // Value
+                // value
                 w.Write(Encoding.Unicode.GetBytes(_value));
+                // make sure the value is double-null-terminated
+                if (_value.Length > 0 && _value[_value.Length - 1] != 0)
+                {
+                    w.Write((UInt16) 0);
+                }
             }
             ResourceUtil.WriteAt(w, (w.BaseStream.Position - valuePos) / 2, headerPos + 2);
             ResourceUtil.PadToDWORD(w);

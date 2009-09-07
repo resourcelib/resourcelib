@@ -107,8 +107,8 @@ foreach (KeyValuePair&lt;ResourceId, StringResource&gt; stringResource in string
   Writing Version Information</h3>
  <p>
   You can write updated version information back into the executable. The easiest way is to load an existing
-  binary resource, update it and save it back. Note that string resources should end
-  with an extra null terminator.</p>
+  binary resource, update it and save it back. Note that string resources should end with an extra null terminator,
+  but the library will do the dirty work for you and append it when required.</p>
  <pre lang="cs">
 string filename = Path.Combine(Environment.SystemDirectory, &quot;atl.dll&quot;);
 VersionResource versionResource = new VersionResource();
@@ -117,7 +117,7 @@ Console.WriteLine(&quot;File version: {0}&quot;, versionResource.FileVersion);
 versionResource.FileVersion = &quot;1.2.3.4&quot;;
 StringFileInfo stringFileInfo = (StringFileInfo) versionResource[&quot;StringFileInfo&quot;];
 stringFileInfo[&quot;CompanyName&quot;] = &quot;My Company\0&quot;;
-stringFileInfo[&quot;Weather&quot;] = &quot;Sunshine, beach weather.\0&quot;; 
+stringFileInfo[&quot;Weather&quot;] = &quot;Sunshine, beach weather.&quot;; 
 versionResource.SaveTo(filename);
    </pre>
  <p>
@@ -135,12 +135,12 @@ StringTable stringFileInfoStrings = new StringTable();
 stringFileInfoStrings.LanguageID = 1033;
 stringFileInfoStrings.CodePage = 1200;
 stringFileInfo.Strings.Add(stringFileInfoStrings.Key, stringFileInfoStrings);
-stringFileInfoStrings["ProductName"] = "ResourceLib\0";
-stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib\0";
-stringFileInfoStrings["CompanyName"] = "Vestris Inc.\0";
-stringFileInfoStrings["LegalCopyright"] = "All Rights Reserved\0";
-stringFileInfoStrings["Comments"] = "This file has a version resource updated by ResourceLib\0";
-stringFileInfoStrings["ProductVersion"] = string.Format("{0}\0", versionResource.ProductVersion);
+stringFileInfoStrings["ProductName"] = "ResourceLib";
+stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib";
+stringFileInfoStrings["CompanyName"] = "Vestris Inc.";
+stringFileInfoStrings["LegalCopyright"] = "All Rights Reserved";
+stringFileInfoStrings["Comments"] = "This file has a version resource updated by ResourceLib";
+stringFileInfoStrings["ProductVersion"] = versionResource.ProductVersion;
 
 VarFileInfo varFileInfo = new VarFileInfo();
 versionResource[varFileInfo.Key] = varFileInfo;

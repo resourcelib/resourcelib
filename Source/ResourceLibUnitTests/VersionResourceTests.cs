@@ -277,9 +277,9 @@ namespace Vestris.ResourceLibUnitTests
             Assert.AreEqual(1033, stringFileInfoStrings.LanguageID);
             Assert.AreEqual(1200, stringFileInfoStrings.CodePage);
             stringFileInfo.Strings.Add(stringFileInfoStrings.Key, stringFileInfoStrings);
-            stringFileInfoStrings["ProductName"] = "ResourceLib\0";
+            stringFileInfoStrings["ProductName"] = "ResourceLib";
             stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib\0";
-            stringFileInfoStrings["CompanyName"] = "Vestris Inc.\0";
+            stringFileInfoStrings["CompanyName"] = "Vestris Inc.";
             stringFileInfoStrings["LegalCopyright"] = "All Rights Reserved\0";
             stringFileInfoStrings["Comments"] = string.Format("{0}\0", Guid.NewGuid());
             stringFileInfoStrings["ProductVersion"] = string.Format("{0}\0", versionResource.ProductVersion);
