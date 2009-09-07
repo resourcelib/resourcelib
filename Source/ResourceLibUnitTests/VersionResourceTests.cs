@@ -259,7 +259,7 @@ namespace Vestris.ResourceLibUnitTests
         {
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
             Assert.IsTrue(File.Exists(filename));
-            string targetFilename = Path.Combine(Path.GetTempPath(), "atl.dll");
+            string targetFilename = Path.Combine(Path.GetTempPath(), "testDeleteAndSaveVersionResource.dll");
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             VersionResource existingVersionResource = new VersionResource();
@@ -281,6 +281,7 @@ namespace Vestris.ResourceLibUnitTests
             stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib\0";
             stringFileInfoStrings["CompanyName"] = "Vestris Inc.";
             stringFileInfoStrings["LegalCopyright"] = "All Rights Reserved\0";
+            stringFileInfoStrings["EmptyValue"] = "";
             stringFileInfoStrings["Comments"] = string.Format("{0}\0", Guid.NewGuid());
             stringFileInfoStrings["ProductVersion"] = string.Format("{0}\0", versionResource.ProductVersion);
 

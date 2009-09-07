@@ -132,7 +132,7 @@ namespace Vestris.ResourceLib
                 // value
                 w.Write(Encoding.Unicode.GetBytes(_value));
                 // make sure the value is double-null-terminated
-                if (_value.Length > 0 && _value[_value.Length - 1] != 0)
+                if (_value.Length == 0 || _value[_value.Length - 1] != 0)
                 {
                     w.Write((UInt16) 0);
                 }
