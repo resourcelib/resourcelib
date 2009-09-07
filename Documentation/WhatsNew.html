@@ -24,42 +24,55 @@
 <body>
     <h3>
         1.2 (TBD)</h3>
+    <p>
+        <b>New Features</b></p>
     <ul>
+        <li>Added support for <code>RT_MANIFEST</code>, Windows SxS XML resources.</li>
+        <li>Added support for <code>RT_GROUP_CURSOR</code> and <code>RT_CURSOR</code> cursor
+            resources, including loading .cur files and manipulating hotspot information.</li>
+        <li>Added support for <code>RT_BITMAP</code>, bitmap resources.</li>
+        <li>Added support for <code>RT_DIALOG</code>, dialog resources.</li>
+    </ul>
+    <p>
+        <b>Misc</b></p>
+    <ul>
+        <li>Added <code>Resource.TypeName</code> that provides a string representation of the
+            resource type.</li>
         <li>Added <code>StringTable.CodePage</code> and <code>StringTable.LanguageID</code>
             properties.</li>
-        <li>Bug: error deleting an English version resource which was loaded as language-neutral.</li>
-        <li>Bug: custom resources with literal string names return an invalid value in <code>
-            Resource.Name</code> and <code>Resource.Type</code>.</li>
         <li>Added <code>GenericResource.Data</code> read-only data bytes for unsupported resource
             types.</li>
-        <li>Added support for <code>RT_MANIFEST</code>, Windows SxS XML resources.</li>
         <li>Interface change: added <code>ResourceId</code> that represents well-known and custom
             resources alike and provides comparison and hashing that works for all resource
             Id types. Both <code>Resource.Name</code> and <code>Resource.Type</code> now return
             <code>ResourceId</code> and public interfaces that accepted an <code>IntPtr</code>
             now require a <code>ResourceId</code>.</li>
         <li>Interface change: <code>GroupIconResource</code> was renamed to <code>IconDirectoryResource</code>.</li>
-        <li>Added support for <code>RT_GROUP_CURSOR</code> and <code>RT_CURSOR</code> cursor
-            resources, including loading .cur files and manipulating hotspot information.</li>
-        <li>Added <code>Resource.TypeName</code> that provides a string representation of the
-            resource type.</li>
         <li><code>Resource.Name</code> is no longer read-only.</li>
         <li><code>IconImage</code> was extended and renamed to <code>DeviceIndependentBitmap</code>.
             The latter supports separating mask and color, etc.</li>
-        <li>Added support for <code>RT_BITMAP</code>, bitmap resources.</li>
-        <li>Added support for <code>RT_DIALOG</code>, dialog resources.</li>
+        <li>Automatically appending a second null-terminator to <code>StringResource</code>
+            where required.</li>
+    </ul>
+    <p>
+        <b>Bugs</b></p>
+    <ul>
+        <li>Bug: error deleting an English version resource which was loaded as language-neutral.</li>
+        <li>Bug: custom resources with literal string names return an invalid value in <code>
+            Resource.Name</code> and <code>Resource.Type</code>.</li>
     </ul>
     <h3>
         1.1 (2009-02-19)</h3>
     <ul>
         <li>First release off <a href="http://resourcelib.codeplex.com">CodePlex</a></li>.
-        <li>Added support for icons.</li>
+        <li>Added support for <code>RT_GROUP_ICON</code> and <code>RT_ICON</code>, icon resources.</li>
     </ul>
     <h3>
         1.0 (2008-06-30)</h3>
     <ul>
         <li>First release, <a href="http://www.codeproject.com/KB/library/ResourceLib.aspx">
             CodeProject Article</a>.</li>
+        <li>Support for <code>RT_VERSION</code> and <code>VS_VERSIONINFO</code>, version resources.</li>
     </ul>
 </body>
 </html>

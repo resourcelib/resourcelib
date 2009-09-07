@@ -354,5 +354,28 @@ namespace Vestris.ResourceLibUnitTests
             Assert.AreEqual(1032, vr.Language);
             vr.DeleteFrom(testDll);
         }
+
+        [Test]
+        public void TestDoubleNullTerminator()
+        {
+            StringResource sr = new StringResource("dummy");
+            string guid = Guid.NewGuid().ToString();
+            sr.Value = guid;
+            Assert.AreEqual(guid + '\0', sr.Value);
+            Assert.AreEqual(guid, sr.StringValue);
+            Assert.AreEqual(guid.Length + 1, sr.Header.wValueLength);
+            sr.Value = guid + '\0';
+            Assert.AreEqual(guid + '\0', sr.Value);
+            Assert.AreEqual(guid, sr.StringValue);
+            Assert.AreEqual(guid.Length + 1, sr.Header.wValueLength);
+            sr.Value = guid + "\0\0";
+            Assert.AreEqual(guid + "\0\0", sr.Value);
+            Assert.AreEqual(guid + '\0', sr.StringValue);
+            Assert.AreEqual(guid.Length + 2, sr.Header.wValueLength);
+            sr.Value = '\0' + guid;
+            Assert.AreEqual('\0' + guid + '\0', sr.Value);
+            Assert.AreEqual('\0' + guid, sr.StringValue);
+            Assert.AreEqual(guid.Length + 2, sr.Header.wValueLength);
+        }
     }
 }

@@ -16,6 +16,10 @@ namespace Vestris.ResourceLib
     {
         private Kernel32.RESOURCE_HEADER _header;
         private string _key;
+
+        /// <summary>
+        /// The value is always stored double-null-terminated.
+        /// </summary>
         private string _value;
 
         /// <summary>
@@ -41,16 +45,16 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// String value.
+        /// String value (removing the double-null-terminator).
         /// </summary>
         public string StringValue
         {
             get
             {
-                if (null == _value)
-                    return null;
+                if (_value == null)
+                    return _value;
 
-                return _value.Trim("\0".ToCharArray());
+                return _value.Substring(0, _value.Length - 1);
             }
         }
 
@@ -65,8 +69,21 @@ namespace Vestris.ResourceLib
             }
             set
             {
-                _value = value;
-            }       
+                if (value == null)
+                {
+                    _value = null;
+                    _header.wValueLength = 0;
+                }
+                else
+                {
+                    if (value.Length == 0 || value[value.Length - 1] != '\0')
+                        _value = value + '\0';
+                    else
+                        _value = value;
+
+                    _header.wValueLength = (UInt16) _value.Length;
+                }
+            }
         }
 
         /// <summary>
@@ -103,7 +120,9 @@ namespace Vestris.ResourceLib
             _key = Marshal.PtrToStringUni(pKey);
 
             IntPtr pValue = ResourceUtil.Align(pKey.ToInt32() + (_key.Length + 1) * 2);
-            _value = _header.wValueLength > 0 ? Marshal.PtrToStringUni(pValue, _header.wValueLength) : null;
+            _value = ((_header.wValueLength > 0)
+                ? Marshal.PtrToStringUni(pValue, _header.wValueLength)
+                : null);
         }
 
         /// <summary>
@@ -129,13 +148,8 @@ namespace Vestris.ResourceLib
             long valuePos = w.BaseStream.Position;
             if (_value != null)
             {
-                // value
+                // value (always double-null-terminated)
                 w.Write(Encoding.Unicode.GetBytes(_value));
-                // make sure the value is double-null-terminated
-                if (_value.Length == 0 || _value[_value.Length - 1] != 0)
-                {
-                    w.Write((UInt16) 0);
-                }
             }
             ResourceUtil.WriteAt(w, (w.BaseStream.Position - valuePos) / 2, headerPos + 2);
             ResourceUtil.PadToDWORD(w);

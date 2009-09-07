@@ -107,8 +107,9 @@ foreach (KeyValuePair&lt;ResourceId, StringResource&gt; stringResource in string
   Writing Version Information</h3>
  <p>
   You can write updated version information back into the executable. The easiest way is to load an existing
-  binary resource, update it and save it back. Note that string resources should end with an extra null terminator,
-  but the library will do the dirty work for you and append it when required.</p>
+  binary resource, update it and save it back. Note that internally string resources are stored with an extra 
+  null terminator. The library is consistent with this and always stores the value with two null
+  terminators while doing the dirty work for you and appending it only when required.</p>
  <pre lang="cs">
 string filename = Path.Combine(Environment.SystemDirectory, &quot;atl.dll&quot;);
 VersionResource versionResource = new VersionResource();

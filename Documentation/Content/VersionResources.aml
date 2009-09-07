@@ -79,7 +79,9 @@ versionResource.SaveTo(filename);
         </para>
         <alert type="note">
           <para>
-            Note that string resources should end with an extra null terminator, a requirement of the Windows operating system.
+            Note that internally string resources are stored with an extra null terminator, a requirement of the Windows operating
+            system. The library is consistent with this and always stores the value with two null terminators while doing the work
+            of appending it to the assigned value when required.
           </para>
         </alert>
         <para>
@@ -98,11 +100,11 @@ StringTable stringFileInfoStrings = new StringTable();
 stringFileInfoStrings.LanguageID = 1033;
 stringFileInfoStrings.CodePage = 1200;
 stringFileInfo.Strings.Add(stringFileInfoStrings.Key, stringFileInfoStrings);
-stringFileInfoStrings["ProductName"] = "ResourceLib\0";
-stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib\0";
-stringFileInfoStrings["CompanyName"] = "Vestris Inc.\0";
-stringFileInfoStrings["LegalCopyright"] = "All Rights Reserved\0";
-stringFileInfoStrings["Comments"] = "This file has a version resource updated by ResourceLib\0";
+stringFileInfoStrings["ProductName"] = "ResourceLib";
+stringFileInfoStrings["FileDescription"] = "File updated by ResourceLib";
+stringFileInfoStrings["CompanyName"] = "Vestris Inc.\0"; // \0 is optional, ResourceLib will append it
+stringFileInfoStrings["LegalCopyright"] = "All Rights Reserved";
+stringFileInfoStrings["Comments"] = "This file has a version resource updated by ResourceLib";
 stringFileInfoStrings["ProductVersion"] = string.Format("{0}\0", versionResource.ProductVersion);
 
 VarFileInfo varFileInfo = new VarFileInfo();
