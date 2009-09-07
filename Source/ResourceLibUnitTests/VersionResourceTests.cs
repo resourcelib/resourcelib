@@ -45,7 +45,7 @@ namespace Vestris.ResourceLibUnitTests
             VersionResource versionResource = new VersionResource();
             versionResource.Language = ResourceUtil.USENGLISHLANGID;
             versionResource.LoadFrom(filename);
-            DumpResource.Dump(versionResource); 
+            DumpResource.Dump(versionResource);
 
             versionResource.FileVersion = "1.2.3.4";
             versionResource.ProductVersion = "5.6.7.8";
@@ -90,7 +90,7 @@ namespace Vestris.ResourceLibUnitTests
         {
             string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
             Assert.IsTrue(File.Exists(filename));
-            string targetFilename = Path.Combine(Path.GetTempPath(), "atl.dll");
+            string targetFilename = Path.Combine(Path.GetTempPath(), "testDeleteVersionResource.dll");
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             VersionResource versionResource = new VersionResource();
@@ -109,6 +109,11 @@ namespace Vestris.ResourceLibUnitTests
             {
                 // expected exception
                 Console.WriteLine("Expected exception: {0}", ex.Message);
+            }
+            using (ResourceInfo ri = new ResourceInfo())
+            {
+                ri.Load(targetFilename);
+                DumpResource.Dump(ri);
             }
         }
 
@@ -314,7 +319,7 @@ namespace Vestris.ResourceLibUnitTests
 
             byte[] testedBytes = versionResource.WriteAndGetBytes();
 
-            ByteUtils.CompareBytes(expectedBytes, testedBytes);            
+            ByteUtils.CompareBytes(expectedBytes, testedBytes);
         }
 
         [Test]
@@ -322,20 +327,31 @@ namespace Vestris.ResourceLibUnitTests
         {
             // the 6to4svc.dll has an English version info strings resource that is loaded via netural            
             VersionResource vr = new VersionResource();
-            string testDll = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".dll");
+            string testDll = Path.Combine(Path.GetTempPath(), "testLoadNeutralDeleteEnglishResource.dll");
+            Console.WriteLine(testDll);
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\6to4svc.dll");
-            File.Copy(dll, testDll);
-            try
-            {
-                vr.LoadFrom(testDll);
-                Assert.AreEqual(1033, vr.Language);
-                vr.DeleteFrom(testDll);
-            }
-            finally
-            {
-                File.Delete(testDll);
-            }
+            File.Copy(dll, testDll, true);
+            vr.LoadFrom(testDll);
+            Assert.AreEqual(1033, vr.Language);
+            vr.DeleteFrom(testDll);
+        }
+
+        [Test]
+        public void TestLoadDeleteGreekResource()
+        {
+            // the 6to4svcgreek.dll has a Greek version info strings resource
+            VersionResource vr = new VersionResource();
+            vr.Language = 1032;
+            string testDll = Path.Combine(Path.GetTempPath(), "testLoadDeleteGreekResource.dll");
+            Console.WriteLine(testDll);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\6to4svcgreek.dll");
+            File.Copy(dll, testDll, true);
+            vr.LoadFrom(testDll);
+            DumpResource.Dump(vr);
+            Assert.AreEqual(1032, vr.Language);
+            vr.DeleteFrom(testDll);
         }
     }
 }

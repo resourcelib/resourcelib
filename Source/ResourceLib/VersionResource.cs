@@ -94,7 +94,6 @@ namespace Vestris.ResourceLib
                 {
                     case "StringFileInfo":
                         StringFileInfo sr = new StringFileInfo(pChild);
-                        _language = sr.Default.LanguageID;
                         rc = sr;
                         break;
                     default:
