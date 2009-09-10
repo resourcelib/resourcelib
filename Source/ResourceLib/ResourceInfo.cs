@@ -162,6 +162,9 @@ namespace Vestris.ResourceLib
                     case Kernel32.ResourceTypes.RT_BITMAP:
                         rc = new BitmapResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
+                    case Kernel32.ResourceTypes.RT_MENU:
+                        rc = new MenuResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                        break;
                     case Kernel32.ResourceTypes.RT_DIALOG:
                         rc = new DialogResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;

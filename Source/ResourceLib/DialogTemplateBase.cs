@@ -190,7 +190,7 @@ namespace Vestris.ResourceLib
             lpRes = DialogTemplateUtil.ReadResourceId(lpRes, out _windowClassId);
             // caption
             Caption = Marshal.PtrToStringUni(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + (Caption.Length + 1) * 2);
+            lpRes = new IntPtr(lpRes.ToInt32() + (Caption.Length + 1) * Marshal.SystemDefaultCharSize);
 
             if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
                 || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)

@@ -86,7 +86,7 @@ namespace Vestris.ResourceLib
             IntPtr pBlockKey = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
             _key = Marshal.PtrToStringUni(pBlockKey);
 
-            return ResourceUtil.Align(pBlockKey.ToInt32() + (_key.Length + 1) * 2);
+            return ResourceUtil.Align(pBlockKey.ToInt32() + (_key.Length + 1) * Marshal.SystemDefaultCharSize);
         }
 
         /// <summary>

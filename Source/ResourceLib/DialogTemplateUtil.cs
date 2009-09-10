@@ -33,7 +33,7 @@ namespace Vestris.ResourceLib
                     break;
                 default: // null-terminated Unicode string that specifies the name of the resource
                     rc = new ResourceId(Marshal.PtrToStringUni(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + (rc.Name.Length + 1) * 2);
+                    lpRes = new IntPtr(lpRes.ToInt32() + (rc.Name.Length + 1) * Marshal.SystemDefaultCharSize);
                     break;
             }
 

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Text;
 using System.IO;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Vestris.ResourceLib
 {
     /// <summary>
-    /// A container for a control within a dialog template.
+    /// A container for the DIALOGTEMPLATEEX structure.
     /// </summary>
-    public class DialogTemplateControl : DialogTemplateControlBase
+    public class DialogExTemplateControl : DialogTemplateControlBase
     {
-        private User32.DIALOGITEMTEMPLATE _header = new User32.DIALOGITEMTEMPLATE();
+        private User32.DIALOGEXITEMTEMPLATE _header = new User32.DIALOGEXITEMTEMPLATE();
 
         /// <summary>
         /// X-coordinate, in dialog box units, of the upper-left corner of the dialog box. 
@@ -95,18 +95,18 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return _header.dwExtendedStyle;
+                return _header.exStyle;
             }
             set
             {
-                _header.dwExtendedStyle = value;
+                _header.exStyle = value;
             }
         }
 
         /// <summary>
         /// Control identifier.
         /// </summary>
-        public Int16 Id
+        public Int32 Id
         {
             get
             {
@@ -119,22 +119,24 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// A standard dialog control structure.
+        /// An extended dialog control template structure.
         /// </summary>
-        public DialogTemplateControl()
+        public DialogExTemplateControl()
         {
 
         }
 
+        /// <summary>
+        /// Read the dialog control.
+        /// </summary>
+        /// <param name="lpRes">Pointer to the beginning of the dialog structure.</param>
         internal override IntPtr Read(IntPtr lpRes)
         {
-            _header = (User32.DIALOGITEMTEMPLATE)Marshal.PtrToStructure(
-                lpRes, typeof(User32.DIALOGITEMTEMPLATE));
+            _header = (User32.DIALOGEXITEMTEMPLATE)Marshal.PtrToStructure(
+                lpRes, typeof(User32.DIALOGEXITEMTEMPLATE));
 
-            lpRes = new IntPtr(lpRes.ToInt32() + 18); // Marshal.SizeOf(_header)
-            lpRes = base.Read(lpRes);
-
-            return lpRes;
+            lpRes = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            return base.Read(lpRes);
         }
 
         /// <summary>
@@ -143,38 +145,39 @@ namespace Vestris.ResourceLib
         /// <param name="w">Binary stream.</param>
         public override void Write(BinaryWriter w)
         {
-            w.Write((UInt32) _header.style);
-            w.Write((UInt32) _header.dwExtendedStyle);
-            w.Write((Int16) _header.x);
-            w.Write((Int16) _header.y);
-            w.Write((Int16) _header.cx);
-            w.Write((Int16) _header.cy);
-            w.Write((Int16) _header.id);
+            w.Write((UInt32)_header.helpID);
+            w.Write((UInt32)_header.exStyle);
+            w.Write((UInt32)_header.style);
+            w.Write((Int16)_header.x);
+            w.Write((Int16)_header.y);
+            w.Write((Int16)_header.cx);
+            w.Write((Int16)_header.cy);
+            w.Write((Int32)_header.id);
             base.Write(w);
         }
 
         /// <summary>
-        /// String represetnation of a control.
+        /// Return a string representation of the dialog control.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A single line in the "CLASS name id, dimensions and styles' format.</returns>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            
-            sb.AppendFormat("{0} \"{1}\" {2}, {3}, {4}, {5}, {6}, {7}",
-                ControlClass, CaptionId, Id, x, y, cx, cy,
-                DialogTemplateUtil.StyleToString<User32.WindowStyles, User32.DialogStyles>(Style));
+
+            sb.AppendFormat("{0} \"{1}\" {2}, {3}, {4}, {5}, {6}, {7}, {8}",
+                ControlClass, CaptionId, Id, ControlClass, x, y, cx, cy,
+                DialogTemplateUtil.StyleToString<User32.WindowStyles, User32.StaticControlStyles>(Style, ExtendedStyle));
 
             switch (ControlClass)
             {
                 case User32.DialogItemClass.Button:
-                    sb.AppendFormat("| {0}", (User32.ButtonControlStyles) (Style & 0xFFFF));
+                    sb.AppendFormat("| {0}", (User32.ButtonControlStyles)(Style & 0xFFFF));
                     break;
                 case User32.DialogItemClass.Edit:
                     sb.AppendFormat("| {0}", DialogTemplateUtil.StyleToString<User32.EditControlStyles>(Style & 0xFFFF));
                     break;
             }
-            
+
             return sb.ToString();
         }
     }

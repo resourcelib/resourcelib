@@ -85,13 +85,13 @@ namespace Vestris.ResourceLib
         internal static extern IntPtr CreateIconIndirect(ref ICONINFO piconInfo);
 
         /// <summary>
-        /// The DLGTEMPLATE structure defines the dimensions and style of a dialog box. 
+        /// The DIALOGTEMPLATE structure defines the dimensions and style of a dialog box. 
         /// This structure, always the first in a standard template for a dialog box, 
         /// also specifies the number of controls in the dialog box and therefore specifies 
-        /// the number of subsequent DLGITEMTEMPLATE structures in the template.
+        /// the number of subsequent DIALOGITEMTEMPLATE structures in the template.
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 2)]
-        public struct DLGTEMPLATE
+        public struct DIALOGTEMPLATE
         {
             /// <summary>
             /// Specifies the style of the dialog box.
@@ -124,10 +124,10 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// The DLGITEMTEMPLATE structure defines the dimensions and style of a control in a dialog box.
+        /// The DIALOGITEMTEMPLATE structure defines the dimensions and style of a control in a dialog box.
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 2)]
-        public struct DLGITEMTEMPLATE
+        public struct DIALOGITEMTEMPLATE
         {
             /// <summary>
             /// Specifies the style of the control.
@@ -160,13 +160,13 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// An extended dialog box template begins with a DLGTEMPLATEEX header that describes
+        /// An extended dialog box template begins with a DIALOGEXTEMPLATE header that describes
         /// the dialog box and specifies the number of controls in the dialog box. For each 
         /// control in a dialog box, an extended dialog box template has a block of data that
-        /// uses the DLGITEMTEMPLATEEX format to describe the control. 
+        /// uses the DIALOGEXITEMTEMPLATE format to describe the control. 
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 2)]
-        public struct DLGTEMPLATEEX
+        public struct DIALOGEXTEMPLATE
         {
             /// <summary>
             /// Specifies the version number of the extended dialog box template. This member must be 1.
@@ -216,7 +216,7 @@ namespace Vestris.ResourceLib
         /// A control entry in an extended dialog template.
         /// </summary>
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        public struct DLGITEMTEMPLATEEX
+        public struct DIALOGEXITEMTEMPLATE
         {
             /// <summary>
             /// Specifies the help context identifier for the dialog box window. When the system
@@ -376,7 +376,7 @@ namespace Vestris.ResourceLib
         {
             /// <summary>
             /// Specifying this style in the dialog template tells Windows that the dtX and dtY values
-            /// of the DLGTEMPLATE struct are relative to the screen origin, not the owner of the 
+            /// of the DIALOGTEMPLATE struct are relative to the screen origin, not the owner of the 
             /// dialog box. 
             /// </summary>
             DS_ABSALIGN = 0x01,
@@ -607,7 +607,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Possible DLGITEMTEMPLATEEX WindowClass ordinals.
+        /// Possible DIALOGEXITEMTEMPLATE WindowClass ordinals.
         /// </summary>
         public enum DialogItemClass : uint
         {
@@ -1082,6 +1082,296 @@ namespace Vestris.ResourceLib
             /// Allows only digits to be entered into the edit control. 
             /// </summary>
             ES_NUMBER = 0x2000,
+        }
+
+        /// <summary>
+        /// Defines the header for a menu template. 
+        /// A complete menu template consists of a header and one or more menu item lists. 
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        internal struct MENUTEMPLATE
+        {
+            /// <summary>
+            /// Specifies the version number. This member must be zero. 
+            /// </summary>
+            public UInt16 wVersion;
+            /// <summary>
+            /// Specifies the offset, in bytes, from the end of the header. 
+            /// The menu item list begins at this offset. Usually, this member is zero, and the menu 
+            /// item list follows immediately after the header. 
+            /// </summary>
+            public UInt16 wOffset;
+        }
+
+        /// <summary>
+        /// Defines a menu item in a menu template.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        public struct MENUITEMTEMPLATE
+        {
+            /// <summary>
+            /// Specifies one or more of the following predefined menu options that control the appearance of the menu item.
+            /// </summary>
+            public UInt16 mtOption;
+        }
+
+        /// <summary>
+        /// Defines the header for an extended menu template.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        public struct MENUEXTEMPLATE
+        {
+            /// <summary>
+            /// Template version number. This member must be 1 for extended menu templates.
+            /// </summary>
+            public UInt16 wVersion;
+            /// <summary>
+            /// Offset of the first MENUEXITEMTEMPLATE structure, relative to the end of 
+            /// this structure member. If the first item definition immediately follows the 
+            /// dwHelpId member, this member should be 4. 
+            /// </summary>
+            public UInt16 wOffset;
+            /// <summary>
+            /// Help identifier of menu bar.
+            /// </summary>
+            public UInt32 dwHelpId;
+        }
+
+        /// <summary>
+        /// Drop-down menu or submenu item.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        public struct MENUEXITEMTEMPLATE
+        {
+            /// <summary>
+            /// Menu item type. This member can be a combination of the type (beginning with MFT) values 
+            /// listed with the MENUITEMINFO structure. 
+            /// </summary>
+            public UInt32 dwType;
+            /// <summary>
+            /// Menu item state. This member can be a combination of the state (beginning with MFS) values 
+            /// listed with the MENUITEMINFO structure. 
+            /// </summary>
+            public UInt32 dwState;
+            /// <summary>
+            /// Menu item identifier. This is an application-defined value that identifies the menu item. 
+            /// </summary>
+            public UInt32 dwMenuId;
+            /// <summary>
+            /// Value specifying whether the menu item is the last item in the menu bar, drop-down menu, 
+            /// submenu, or shortcut menu and whether it is an item that opens a drop-down menu or submenu.
+            /// </summary>
+            public UInt16 dwOptions;
+        }
+
+        /// <summary>
+        /// Specifies one or more of the following predefined menu options that control the 
+        /// appearance of the menu item.
+        /// </summary>
+        public enum MenuFlags : uint
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_INSERT = 0x00000000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_CHANGE = 0x00000080,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_APPEND = 0x00000100,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_DELETE = 0x00000200,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_REMOVE = 0x00001000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_BYCOMMAND = 0x00000000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_BYPOSITION = 0x00000400,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_SEPARATOR = 0x00000800,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_ENABLED = 0x00000000,
+            /// <summary>
+            /// Indicates that the menu item is initially inactive and drawn with a gray effect.
+            /// </summary>
+            MF_GRAYED = 0x00000001,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_DISABLED = 0x00000002,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_UNCHECKED = 0x00000000,
+            /// <summary>
+            /// Indicates that the menu item has a check mark next to it.
+            /// </summary>
+            MF_CHECKED = 0x00000008,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_USECHECKBITMAPS = 0x00000200,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_STRING = 0x00000000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_BITMAP = 0x00000004,
+            /// <summary>
+            /// Indicates that the owner window of the menu is responsible for drawing all visual 
+            /// aspects of the menu item, including highlighted, selected, and inactive states. 
+            /// This option is not valid for an item in a menu bar.
+            /// </summary>
+            MF_OWNERDRAW = 0x00000100,
+            /// <summary>
+            /// Indicates that the item is one that opens a drop-down menu or submenu.
+            /// </summary>
+            MF_POPUP = 0x00000010,
+            /// <summary>
+            /// Indicates that the menu item is placed in a new column. The old and new columns 
+            /// are separated by a bar.
+            /// </summary>
+            MF_MENUBARBREAK = 0x00000020,
+            /// <summary>
+            /// Indicates that the menu item is placed in a new column.
+            /// </summary>
+            MF_MENUBREAK = 0x00000040,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_UNHILITE = 0x00000000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_HILITE = 0x00000080,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_DEFAULT = 0x00001000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_SYSMENU = 0x00002000,
+            /// <summary>
+            /// Indicates that the menu item has a vertical separator to its left.
+            /// </summary>
+            MF_HELP = 0x00004000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_RIGHTJUSTIFY = 0x00004000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_MOUSESELECT = 0x00008000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MF_END = 0x00000080,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_STRING = MF_STRING,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_BITMAP = MF_BITMAP,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_MENUBARBREAK = MF_MENUBARBREAK,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_MENUBREAK = MF_MENUBREAK,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_OWNERDRAW = MF_OWNERDRAW,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_RADIOCHECK = 0x00000200,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_SEPARATOR = MF_SEPARATOR,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_RIGHTORDER = 0x00002000,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFT_RIGHTJUSTIFY = MF_RIGHTJUSTIFY,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFS_GRAYED = 0x00000003,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFS_DISABLED = MFS_GRAYED,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFS_CHECKED = MF_CHECKED,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFS_HILITE = MF_HILITE,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFS_ENABLED = MF_ENABLED,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFS_UNCHECKED = MF_UNCHECKED,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFS_UNHILITE = MF_UNHILITE,
+            /// <summary>
+            /// 
+            /// </summary>
+            MFS_DEFAULT = MF_DEFAULT
+        }
+
+
+        /// <summary>
+        /// Specifies whether the menu item is the last item in the menu bar, drop-down menu, submenu, or shortcut 
+        /// menu and whether it is an item that opens a drop-down menu or submenu. This member can be zero or more 
+        /// of these values.
+        /// </summary>
+        public enum MenuResourceType
+        {
+            /// <summary>
+            /// Defines the last menu item in the menu bar, drop-down menu, submenu, or shortcut menu.
+            /// </summary>
+            Last = 0x80,
+            /// <summary>
+            /// Defines a item that opens a drop-down menu or submenu. Subsequent structures define menu 
+            /// items in the corresponding drop-down menu or submenu.
+            /// </summary>
+            Sub = 0x01
         }
     }
 }

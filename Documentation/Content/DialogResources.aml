@@ -10,10 +10,10 @@
         encouters a resource of type <literal>5</literal> (<literal>RT_DIALOG</literal>), it creates an object
         of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogResource</codeEntityReference>
         which contains either a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplate</codeEntityReference>
-        or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateEx</codeEntityReference>. The latter
+        or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogExTemplate</codeEntityReference>. The latter
         represent a single dialog template in a standard or extended format and include a collection of
         <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateControl</codeEntityReference> or
-        <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateControlEx</codeEntityReference>
+        <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogExTemplateControl</codeEntityReference>
         controls respectively.        
       </para>
     </introduction>
@@ -94,7 +94,7 @@ Console.WriteLine(rc.Template.ToString());
         <para>
           In order to embed a dialog into an executable (.exe or .dll) create a new instance of
           <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplate</codeEntityReference>
-          or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateEx</codeEntityReference>,
+          or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogExTemplate</codeEntityReference>,
           add controls and save it to the destination file. You may also copy a dialog from one file to another, etc.
           <code language="cs">
             <![CDATA[

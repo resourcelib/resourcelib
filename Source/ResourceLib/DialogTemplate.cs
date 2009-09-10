@@ -10,7 +10,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class DialogTemplate : DialogTemplateBase
     {
-        private User32.DLGTEMPLATE _header = new User32.DLGTEMPLATE();
+        private User32.DIALOGTEMPLATE _header = new User32.DIALOGTEMPLATE();
 
         /// <summary>
         /// X-coordinate, in dialog box units, of the upper-left corner of the dialog box. 
@@ -127,8 +127,8 @@ namespace Vestris.ResourceLib
         /// <param name="lpRes">Pointer to the beginning of the dialog structure.</param>
         internal override IntPtr Read(IntPtr lpRes)
         {
-            _header = (User32.DLGTEMPLATE) Marshal.PtrToStructure(
-                lpRes, typeof(User32.DLGTEMPLATE));
+            _header = (User32.DIALOGTEMPLATE) Marshal.PtrToStructure(
+                lpRes, typeof(User32.DIALOGTEMPLATE));
 
             lpRes = new IntPtr(lpRes.ToInt32() + 18); // Marshal.SizeOf(_header)
             lpRes = base.Read(lpRes);
@@ -138,7 +138,7 @@ namespace Vestris.ResourceLib
             {
                 // typeface
                 TypeFace = Marshal.PtrToStringUni(lpRes);
-                lpRes = new IntPtr(lpRes.ToInt32() + (TypeFace.Length + 1) * 2);
+                lpRes = new IntPtr(lpRes.ToInt32() + (TypeFace.Length + 1) * Marshal.SystemDefaultCharSize);
             }
 
             return ReadControls(lpRes);

@@ -119,7 +119,7 @@ namespace Vestris.ResourceLib
             IntPtr pKey = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
             _key = Marshal.PtrToStringUni(pKey);
 
-            IntPtr pValue = ResourceUtil.Align(pKey.ToInt32() + (_key.Length + 1) * 2);
+            IntPtr pValue = ResourceUtil.Align(pKey.ToInt32() + (_key.Length + 1) * Marshal.SystemDefaultCharSize);
             _value = ((_header.wValueLength > 0)
                 ? Marshal.PtrToStringUni(pValue, _header.wValueLength)
                 : null);

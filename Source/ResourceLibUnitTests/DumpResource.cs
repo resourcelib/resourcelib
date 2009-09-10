@@ -53,6 +53,8 @@ namespace Vestris.ResourceLibUnitTests
                 Dump(rc as BitmapResource);
             else if (rc is DialogResource)
                 Dump(rc as DialogResource);
+            else if (rc is MenuResource)
+                Dump(rc as MenuResource);
         }
 
         public static void Dump(ManifestResource rc)
@@ -179,6 +181,11 @@ namespace Vestris.ResourceLibUnitTests
         {
             Console.WriteLine("Dialog: [{0}x{1}][{2}x{3}]",
                 rc.Template.x, rc.Template.y, rc.Template.cx, rc.Template.cy);
+        }
+
+        public static void Dump(MenuResource rc)
+        {
+            Console.WriteLine("Menu: {0}", rc.Menu);
         }
     }
 }

@@ -52,7 +52,7 @@
         <li><code>IconImage</code> was extended and renamed to <code>DeviceIndependentBitmap</code>.
             The latter supports separating mask and color, etc.</li>
         <li>Automatically appending a second null-terminator to <code>StringResource</code>
-            where required.</li>
+            when required. Internal storage is now always with two null terminators.</li>
     </ul>
     <p>
         <b>Bugs</b></p>
@@ -60,6 +60,8 @@
         <li>Bug: error deleting an English version resource which was loaded as language-neutral.</li>
         <li>Bug: custom resources with literal string names return an invalid value in <code>
             Resource.Name</code> and <code>Resource.Type</code>.</li>
+        <li>Bug: <code>StringResource</code> length in its header is incorrect after the value
+            is updated.</li>
     </ul>
     <h3>
         1.1 (2009-02-19)</h3>

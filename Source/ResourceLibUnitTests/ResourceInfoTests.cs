@@ -38,5 +38,45 @@ namespace Vestris.ResourceLibUnitTests
                 }
             }
         }
+
+        //[Test]
+        //public void FindSmallestBinaryWithResources()
+        //{
+        //    FindSmallestBinaryWithResources(
+        //        Environment.SystemDirectory,
+        //        "*.exe", 
+        //        Kernel32.ResourceTypes.RT_MENU);
+        //}
+
+        private void FindSmallestBinaryWithResources(
+            string path, string ext, Kernel32.ResourceTypes rt)
+        {
+            long smallest = 0;
+            string[] files = Directory.GetFiles(path, ext);
+            foreach (string filename in files)
+            {
+                try
+                {
+                    using (ResourceInfo ri = new ResourceInfo())
+                    {
+                        ri.Load(filename);
+
+                        if (!ri.Resources.ContainsKey(new ResourceId(rt)))
+                            continue;
+
+                        FileInfo fi = new FileInfo(filename);
+                        //if (fi.Length < smallest || smallest == 0)
+                        //{
+                            Console.WriteLine("{0} {1}", filename, new FileInfo(filename).Length);
+                            smallest = fi.Length;
+                        // }
+                        break;
+                    }
+                }
+                catch
+                {
+                }
+            }
+        }
     }
 }

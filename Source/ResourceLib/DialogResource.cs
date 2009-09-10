@@ -61,7 +61,7 @@ namespace Vestris.ResourceLib
             switch ((uint)Marshal.ReadInt32(lpRes) >> 16)
             {
                 case 0xFFFF:
-                    _dlgtemplate = new DialogTemplateEx();
+                    _dlgtemplate = new DialogExTemplate();
                     break;
                 default:
                     _dlgtemplate = new DialogTemplate();

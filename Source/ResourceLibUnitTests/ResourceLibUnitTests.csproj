@@ -54,6 +54,7 @@
     <Compile Include="GenericResourceTests.cs" />
     <Compile Include="IconResourceTests.cs" />
     <Compile Include="ManifestResourceTests.cs" />
+    <Compile Include="MenuResourceTests.cs" />
     <Compile Include="ResourceIdTests.cs" />
     <Compile Include="ResourceInfoTests.cs" />
     <Compile Include="ResourceTests.cs" />

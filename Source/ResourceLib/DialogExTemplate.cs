@@ -8,9 +8,9 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// A container for the DIALOGTEMPLATEEX structure.
     /// </summary>
-    public class DialogTemplateEx : DialogTemplateBase
+    public class DialogExTemplate : DialogTemplateBase
     {
-        User32.DLGTEMPLATEEX _header = new User32.DLGTEMPLATEEX();
+        User32.DIALOGEXTEMPLATE _header = new User32.DIALOGEXTEMPLATE();
         private byte _characterSet = 0;
         private UInt16 _weight = 0;
         private bool _italic = false;
@@ -164,7 +164,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// An extended dialog structure.
         /// </summary>
-        public DialogTemplateEx()
+        public DialogExTemplate()
         {
 
         }
@@ -175,8 +175,8 @@ namespace Vestris.ResourceLib
         /// <param name="lpRes">Pointer to the beginning of the dialog structure.</param>
         internal override IntPtr Read(IntPtr lpRes)
         {
-            _header = (User32.DLGTEMPLATEEX)Marshal.PtrToStructure(
-                lpRes, typeof(User32.DLGTEMPLATEEX));
+            _header = (User32.DIALOGEXTEMPLATE)Marshal.PtrToStructure(
+                lpRes, typeof(User32.DIALOGEXTEMPLATE));
 
             lpRes = base.Read(new IntPtr(lpRes.ToInt32() + 26)); // Marshal.SizeOf(_header)
 
@@ -194,7 +194,7 @@ namespace Vestris.ResourceLib
                 lpRes = new IntPtr(lpRes.ToInt32() + 1);
                 // typeface
                 TypeFace = Marshal.PtrToStringUni(lpRes);
-                lpRes = new IntPtr(lpRes.ToInt32() + (TypeFace.Length + 1) * 2);
+                lpRes = new IntPtr(lpRes.ToInt32() + (TypeFace.Length + 1) * Marshal.SystemDefaultCharSize);
             }
 
             return ReadControls(lpRes);
@@ -202,7 +202,7 @@ namespace Vestris.ResourceLib
 
         internal override IntPtr AddControl(IntPtr lpRes)
         {
-            DialogTemplateControlEx control = new DialogTemplateControlEx();
+            DialogExTemplateControl control = new DialogExTemplateControl();
             Controls.Add(control);
             return control.Read(lpRes);
         }
