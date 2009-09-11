@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// A command menu item.
     /// </summary>
-    public class MenuExTemplateItemCommand : MenuExTemplateItemBase
+    public class MenuExTemplateItemCommand : MenuExTemplateItem
     {
         /// <summary>
         /// A command menu item.
@@ -16,22 +17,6 @@ namespace Vestris.ResourceLib
         public MenuExTemplateItemCommand()
         {
 
-        }
-
-        /// <summary>
-        /// Read a command menu item.
-        /// </summary>
-        /// <param name="lpRes">Address in memory.</param>
-        /// <returns>End of the menu item structure.</returns>
-        internal override IntPtr Read(IntPtr lpRes)
-        {
-            _header = (User32.MENUEXITEMTEMPLATE)Marshal.PtrToStructure(
-                lpRes, typeof(User32.MENUEXITEMTEMPLATE));
-
-            lpRes = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
-            lpRes = base.Read(lpRes);
-
-            return lpRes;
         }
 
         /// <summary>

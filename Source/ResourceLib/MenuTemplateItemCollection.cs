@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// A collection of menu items.
     /// </summary>
-    public class MenuTemplateItemCollection : List<MenuTemplateItemBase>
+    public class MenuTemplateItemCollection : List<MenuTemplateItem>
     {
         /// <summary>
         /// A collection of menu items.
@@ -30,7 +31,7 @@ namespace Vestris.ResourceLib
                 User32.MENUITEMTEMPLATE childItem = (User32.MENUITEMTEMPLATE)Marshal.PtrToStructure(
                     lpRes, typeof(User32.MENUITEMTEMPLATE));
 
-                MenuTemplateItemBase childMenu = null;
+                MenuTemplateItem childMenu = null;
                 if ((childItem.mtOption & (uint)User32.MenuFlags.MF_POPUP) > 0)
                     childMenu = new MenuTemplateItemPopup();
                 else 
@@ -44,6 +45,18 @@ namespace Vestris.ResourceLib
             }
 
             return lpRes;
+        }
+
+        /// <summary>
+        /// Write the menu collection to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal void Write(BinaryWriter w)
+        {
+            foreach (MenuTemplateItem menuItem in this)
+            {
+                menuItem.Write(w);
+            }
         }
 
         /// <summary>
@@ -66,7 +79,7 @@ namespace Vestris.ResourceLib
             if (Count > 0)
             {
                 sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent)));
-                foreach (MenuTemplateItemBase child in this)
+                foreach (MenuTemplateItem child in this)
                 {
                     sb.Append(child.ToString(indent + 1));
                 }

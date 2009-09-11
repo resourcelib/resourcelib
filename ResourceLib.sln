@@ -34,6 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C
 		Documentation\Content\License.aml = Documentation\Content\License.aml
 		Documentation\Content\Main.aml = Documentation\Content\Main.aml
 		Documentation\Content\ManifestResources.aml = Documentation\Content\ManifestResources.aml
+		Documentation\Content\MenuResources.aml = Documentation\Content\MenuResources.aml
 		Documentation\Content\VersionResources.aml = Documentation\Content\VersionResources.aml
 	EndProjectSection
 EndProject

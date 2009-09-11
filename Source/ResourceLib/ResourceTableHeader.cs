@@ -7,9 +7,9 @@ using System.IO;
 namespace Vestris.ResourceLib
 {
     /// <summary>
-    /// A resource table.
+    /// A resource table header.
     /// </summary>
-    public class ResourceTable
+    public class ResourceTableHeader
     {
         /// <summary>
         /// Resource table header.
@@ -48,18 +48,18 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// A new resource table.
+        /// A new resource table header.
         /// </summary>
-        public ResourceTable()
+        public ResourceTableHeader()
         {
 
         }
 
         /// <summary>
-        /// An existing resource table.
+        /// An resource table header with a specific key.
         /// </summary>
         /// <param name="key">resource key</param>
-        public ResourceTable(string key)
+        public ResourceTableHeader(string key)
         {
             _key = key;
         }
@@ -68,7 +68,7 @@ namespace Vestris.ResourceLib
         /// An existing resource table.
         /// </summary>
         /// <param name="lpRes">Pointer to resource table data.</param>
-        internal ResourceTable(IntPtr lpRes)
+        internal ResourceTableHeader(IntPtr lpRes)
         {
             Read(lpRes);
         }
@@ -96,15 +96,15 @@ namespace Vestris.ResourceLib
         internal virtual void Write(BinaryWriter w)
         {
             // wLength
-            w.Write((UInt16)_header.wLength);
+            w.Write((UInt16) _header.wLength);
             // wValueLength
-            w.Write((UInt16)_header.wValueLength);
+            w.Write((UInt16) _header.wValueLength);
             // wType
-            w.Write((UInt16)_header.wType);
+            w.Write((UInt16) _header.wType);
             // write key
             w.Write(Encoding.Unicode.GetBytes(_key));
             // null-terminator
-            w.Write((UInt16)0);
+            w.Write((UInt16) 0);
             // pad fixed info
             ResourceUtil.PadToDWORD(w);
         }

@@ -52,6 +52,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Content\MenuResources.aml" />
     <None Include="Content\DialogResources.aml" />
     <None Include="Content\BitmapResources.aml" />
     <None Include="Content\ManifestResources.aml" />

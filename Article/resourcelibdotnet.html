@@ -45,27 +45,26 @@
  <h2>
   Introduction</h2>
  <p>
-  There are several good articles about reading and writing resources from/to a compiled
-  binary. Most focus on retrieving module version information and modifying version
+  There are several good articles about reading and writing resources from and back 
+     to a Windows executable or DLL. Most focus on retrieving module version information and modifying version
   information, mostly in C++. Some detail the same operations for cursors, icons or
-  dialog resources. There's, however, no single managed .NET library to retrieve and save
-  any type of resources, or any library to edit or generate version resources specifically.</p>
+  dialog resources. Some have limitations and can only edit structures in-place. There's, however, no single managed .NET library to retrieve and save
+  any type of resources, no library to edit or generate version resources and no 
+     library that has a consistent programming model for all resource types.</p>
  <p>
-  This implementation is a framework that enumerates resources and implements both
-  reading and writing of the 
-  file version (<code>VS_VERSIONINFO</code>), 
-  string (company, copyright and product information), 
-  bitmap (<code>RT_BITMAP</code>), 
-  icon (<code>RT_GROUP_ICON</code>, <code>RT_ICON</code>), 
-  cursor (<code>RT_GROUP_CURSOR</code>, <code>RT_CURSOR</code>) 
-  and manifest (<code>RT_MANIFEST</code>) resources. 
-  The library can be easily and is being extended to other resource types.
-  </p>
+  This implementation is a framework that enumerates resources and implements both reading and writing of the 
+  file version (<code>VS_VERSIONINFO</code>), string (company, copyright and product information), 
+  bitmap (<code>RT_BITMAP</code>), icon (<code>RT_GROUP_ICON</code>, <code>RT_ICON</code>), dialog 
+  (<code>RT_DIALOG</code>), menu (<code>RT_MENU</code>), cursor (<code>RT_GROUP_CURSOR</code>, 
+  <code>RT_CURSOR</code>) and SxS manifest (<code>RT_MANIFEST</code>) resources. Overtime this library 
+  was extended through these resource types and can be easily extended for all the other missing ones.
+ </p>
  <h2>
   Background</h2>
  <p>
   Initially, I started porting the version resource implementation from <a href="VerInfoLib.aspx">
-   Denis Zabavchik's C++ VerInfoLib</a>. Then, it grew bigger ...</p>
+   Denis Zabavchik's C++ VerInfoLib</a> for the <a href="http://dotnetinstaller.codeplex.com">dotNetInstaller Bootstrapper</a> 
+   open-source project. Then, it grew bigger ...</p>
  <h2>
   Using the Code</h2>
  <h3>
@@ -73,8 +72,8 @@
  <p>
   The following example demonstrates enumerating resources by type. From the sample
   <em>atl.dll</em> in the Windows <em>system</em> directory, you will typically get
-  the following resources: MUI, REGISTRY, TYPELIB, and &quot;16&quot;, which is the
-  <code>RT_VERSION</code> resource.</p>
+  the following resources: <code>MUI</code>, <code>REGISTRY</code>, <code>TYPELIB</code> 
+     and <code>RT_VERSION</code>.</p>
  <pre lang="cs">
 string filename = Path.Combine(Environment.SystemDirectory, &quot;atl.dll&quot;);
 using (ResourceInfo vi = new ResourceInfo()) 
@@ -85,7 +84,8 @@ using (ResourceInfo vi = new ResourceInfo())
   Console.WriteLine(type);
   foreach (Resource resource in vi.Resources[type])
   {
-   Console.WriteLine(&quot;{0} ({1}) - {2} byte(s)&quot;, resource.Name, resource.Language, resource.Size);
+   Console.WriteLine(&quot;{0} ({1}) - {2} byte(s)&quot;, 
+    resource.Name, resource.Language, resource.Size);
   }
  }
 }</pre>
@@ -156,18 +156,35 @@ versionResource.SaveTo(targetFilename);</pre>
   makes a copy of atl.dll from the Windows system directory into the temporary folder,
   deletes its version resource, generates a new one without copying any data and updates
   the copy.</p>
+ <h3>
+  Other Resource Types</h3>
+ <p>
+  You can load and save other resource types in a similar manner. The class that gives you access to all
+  resources is <code>ResourceInfo</code>, while each resource class (eg. <code>MenuResource</code>) can
+  be used directly to <code>LoadFrom</code> an executable or <code>SaveTo</code> the same or another
+  executable.
+ </p>
+ <p>
+  For example, the following code loads an English <code>MenuResource</code> with ID 204 from 
+  <em>explorer.exe</em>.  
+ </p>
+ <pre>
+MenuResource menuResource = new MenuResource();
+menuResource.Name = new ResourceId(204);
+menuResource.Language = ResourceUtil.USENGLISHLANGID;
+menuResource.LoadFrom("explorer.exe"); </pre>
  <h2>
   Implementation</h2>
  <h3>
   Resource Identity and Type</h3>
  <p>
   Every resource has a resource identity and a resource type, implemented in <em>ResourceId.cs</em>.
-  A resource identity can either be a positive number or a string. The Windows API 
-  requires a raw pointer for each of these parameters. If the value is between 
-  1-65535, it is an integer identity. Otherwise it's a pointer to a string. This 
-  introduces a needless complication into managed code - the correct PInvoke parameters are 
-  <code>IntPtr</code> and neither <code>String</code> nor <code>int</code>.
-  </p>  
+  A resource identity can either be a positive integer or a string. The Windows API requires a raw pointer 
+  for each of these parameters. If the value is between 1-65535, it is an integer identity. Otherwise it's
+  a pointer to a string. This adds a pointless complication into managed code - the correct PInvoke parameters 
+  for Win32 functions that manipulate resources are <code>IntPtr</code> and neither <code>String</code> nor 
+  <code>int</code>.
+ </p>  
 <pre lang="cs">
 [DllImport("kernel32.dll", EntryPoint = "FindResourceExW", CharSet = CharSet.Unicode, SetLastError = true)]
 internal static extern IntPtr FindResourceEx(IntPtr hModule, IntPtr type, IntPtr name, UInt16 language);     
@@ -187,8 +204,7 @@ public struct RESOURCE_HEADER
  public UInt16 wLength; 
  public UInt16 wValueLength; 
  public UInt16 wType; 
-}
-  </pre>
+}  </pre>
  <p>
   The header is usually followed by a Unicode string (a key) and an array of data
   structures, each with a similar resource header.
@@ -197,11 +213,15 @@ public struct RESOURCE_HEADER
   Alignment
  </h3>
  <p>
-  All version resource structures are <a href="http://msdn.microsoft.com/en-us/library/aa290049.aspx">
-   aligned</a> to 32-bit boundaries (<code>DWORD</code>), while icon resources are aligned to a
-  16-bit boundary (<code>WORD</code>). The resource library uses both math to align pointers (
-  <code>ResourceUtil.Align</code>) to align to <code>DWORD</code>, and struct alignment 
-  (<code>Pack = 2</code>) to align icon structures to <code>WORD</code>.</p>
+  Most resource structures have evolved from 16-bit Windows and are <a href="http://msdn.microsoft.com/en-us/library/aa290049.aspx">aligned</a>
+  to 16-bit <code>WORD</code> boundaries. Newer structures in 32-bit Windows are algigned to 32-bit 
+  <code>DWORD</code> boundaries. For example, all version resource structures are aligned to <code>DWORD</code>, 
+  while icon resources are aligned to <code>WORD</code>. Other resource types may have specific alignment 
+  requirements for various fields. The resource library uses both math to align pointers (
+  <code>ResourceUtil.Align</code>) to align pointers to <code>DWORD</code>, and struct alignment 
+  (<code>Pack = 2</code>) to align structures to <code>WORD</code>. The latter is preferred where possible because
+  it's automatic.
+ </p>
 <pre lang="cs">public static IntPtr Align(Int32 p)
 {
     return new IntPtr((p + 3) & ~3);
@@ -277,7 +297,7 @@ public override void Write(BinaryWriter w)
   resource is capable of reading from raw data and writing back the raw data. All
   lengths and sizes are recalculated at write time. The exception to the rule is the 
   side-by-side manifest resources: rewriting an identical manifest does not necessarily 
-  preserve the size of the RT_MANIFEST resource because new lines in attribute values 
+  preserve the size of the <code>RT_MANIFEST</code> resource because new lines in attribute values 
   are normalized per 
   <a href="http://www.w3.org/TR/REC-xml/#AVNormalize" target="_blank">W3C spec section 3.3.3</a>.
 </p>
@@ -287,8 +307,18 @@ public override void Write(BinaryWriter w)
   of the data without any structural fields (lengths, number of elements, etc.), writing
   the copy to a vector of bytes and comparing the two. An example of such a test is
   <code>VersionResourceTests.TestDeepCopyBytes</code>.</p>
- <h2>
-  Icons</h2>
+ <h2>Version</h2>
+ <p>
+  Version resources are amongst the most complex resource structures. The top of the version resource
+  is a <code>VS_VERSION_INFO</code> resource table header followed by a <code>VS_FIXEDFILEINFO</code>
+  structure that depicts the static portion of the version resource which contains binary file
+  version information that you see in file properties in Windows Explorer. This is followed by
+  two resource tables, <code>StringFileInfo</code> and <code>VarFileInfo</code>. These contain the 
+  version information that can be displayed for a particular language and code page and information 
+  not dependent on a particular language and code page combination respectively. This is also what 
+  you see in the file properties in Windows Explorer, but the information may be different depending 
+  on the language and region of the operating system and the user logged-in.</p>
+ <h2>Icons</h2>
  <p>
   With above infrastructure in-place and with support for the most complicated of all resources, 
   version resource structures, it is possible to extend the library to one 
@@ -363,14 +393,14 @@ public override void Write(BinaryWriter w)
   is beyond the scope of this article. The only desirable improvement in the current implementation would 
   to be able to assign a <code>System.Drawing.Image</code> instance to <code>DeviceIndependentBitmap.Bitmap</code>.
  </p>
- <h3>Dialogs</h3>
+ <h2>Dialogs</h2>
  <p>
-  There exist two dialog resource formats. The original one is described in the Win32 documentation 
+  There're two dialog resource formats. The original one is described in the Win32 documentation 
   as part of the <code>DIALOGTEMPLATE</code> structure. A single <code>DIALOGTEMPLATE</code> can contain controls in the 
   <code>DIALOGITEMTEMPLATE</code> 16-bit format. In Windows NT 3.51, Microsoft introduced 
   <code>DIALOGEXTEMPLATE</code> and <code>DIALOGEXITEMTEMPLATE</code>, a 32-bit format. This evolution 
-  <a href="http://blogs.msdn.com/oldnewthing/archive/2004/06/23/163596.aspx">is explained in detail in MSDN's 
-  "The Old New Thing"</a>.  
+  <a href="http://blogs.msdn.com/oldnewthing/archive/2004/06/23/163596.aspx">is explained in detail in Raymond
+  Chen's "The Old New Thing" on MSDN</a>.  
  </p>
  <p>
   Reading dialog structures involves making a decision of whether the dialog is in a standard or extended format. 
@@ -462,6 +492,67 @@ FONT 8, "MS Shell Dlg"
  Button "OK" 1, 63, 55, 40, 14, WS_TABSTOP | WS_VISIBLE | WS_CHILD | DS_ABSALIGN| BS_DEFPUSHBUTTON
  Button "Cancel" 2, 108, 55, 40, 14, WS_TABSTOP | WS_VISIBLE | WS_CHILD| BS_TEXT
 } </pre>  
+ <h2>Menus</h2>
+ <p>
+  There're two kinds of menu resources: classic 16 bit menus and 32-bit extended menus. The latter was
+  introduced in Windows 95 and remains the menu format through Windows Vista. This evolution 
+  <a href="http://blogs.msdn.com/oldnewthing/archive/2008/07/16/8735896.aspx">is explained in detail in Raymond
+  Chen's "The Old New Thing" on MSDN</a>. Similarly to dialogs, we implement a <code>MenuResource</code>
+  that contains a menu in either a <code>MenuTemplate</code> or <code>MenuExTemplate</code> format. Each
+  menu contains a <code>MenuTemplateItemCollection</code> or <code>MenuExTemplateItemCollection</code> of
+  menu entries. The latter can be <code>MenuTemplateItemCommand</code> and <code>MenuTemplateItemPopup</code>
+  for 16-bit classic menus and <code>MenuExTemplateItemCommand</code> and <code>MenuExTemplateItemPopup</code>
+  for 32-bit extended menus.
+ </p>
+ <p>
+  A <code>MenuTemplate</code> is a straightforward header and a collection of menu items. A popup (one additional
+  level deeper) is indentified by the <code>MF_POPUP</code> flag in the <code>mtOption</code> field in the menu
+  item's header, while the last item in a collection by the <code>MF_END</code> flag. Each item and each menu 
+  string are aligned on <code>WORD</code> boundaries.
+ </p>
+ <p>
+  A <code>MenuExTemplate</code> is more complicated. The <code>MENUEXTEMPLATE</code> header has a strange
+  offset construct: the first item starts at an offset from the offset header value itself.
+     Therefore the implementation of reading and writing the menu may seem odd.</p>
+ <pre lang="cs">
+internal override IntPtr Read(IntPtr lpRes)
+{
+    _header = (User32.MENUEXTEMPLATE) Marshal.PtrToStructure(
+        lpRes, typeof(User32.MENUEXTEMPLATE));
+
+    IntPtr lpMenuItem = new IntPtr(lpRes.ToInt32() 
+        + _header.wOffset // offset from offset field
+        + 4 // offset of the offset field
+        );
+
+    return _menuItems.Read(lpMenuItem);
+} 
+
+internal override void Write(System.IO.BinaryWriter w)
+{
+    long head = w.BaseStream.Position;
+    // write header
+    w.Write(_header.wVersion);
+    w.Write(_header.wOffset);
+    w.Write(_header.dwHelpId);
+    // pad to match the offset value
+    ResourceUtil.Pad(w, (UInt16) (_header.wOffset - 4));
+    // seek to the beginning of the menu item per offset value
+    // this may be behind, ie. the help id structure is part of the first popup menu
+    w.BaseStream.Seek(head + _header.wOffset + 4, System.IO.SeekOrigin.Begin);
+    // write menu items
+    _menuItems.Write(w);
+}</pre>
+ <p>
+  Each collection of items has a prefix that contains the a context help ID. The popup items and last items 
+  in a collection are identified by a special field reserved for this purpose and not a flag as in the 16-bit 
+  structure. Each item and each menu string are aligned on <code>DWORD</code> boundaries.
+ </p>
+ <p>
+  Menu separators are an interesting special case. There're two ways of identifying a separator: the menu flags
+  or type field contains the <code>MFT_SEPARATOR</code> option or both the type and the menu string are zero and 
+  <code>NULL</code> respectively.
+ </p>
  <h2>
   Side-by-Side Manifests</h2>
  <p>

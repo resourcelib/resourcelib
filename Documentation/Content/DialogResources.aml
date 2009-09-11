@@ -10,8 +10,8 @@
         encouters a resource of type <literal>5</literal> (<literal>RT_DIALOG</literal>), it creates an object
         of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogResource</codeEntityReference>
         which contains either a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplate</codeEntityReference>
-        or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogExTemplate</codeEntityReference>. The latter
-        represent a single dialog template in a standard or extended format and include a collection of
+        or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogExTemplate</codeEntityReference>. 
+        These structures represent a single dialog template in a standard or extended format and include a collection of
         <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplateControl</codeEntityReference> or
         <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogExTemplateControl</codeEntityReference>
         controls respectively.        
@@ -31,7 +31,7 @@ using (ResourceInfo ri = new ResourceInfo())
     foreach(DialogResource rc in ri[Kernel32.ResourceTypes.RT_DIALOG])
     {
         Console.WriteLine("DialogResource: {0}, {1}", rc.Name, rc.TypeName);
-        Console.WriteLine(rc.Template.ToString());
+        Console.WriteLine(rc.ToString());
     }
 }
 ]]>
@@ -82,7 +82,7 @@ DialogResource rc = new DialogResource();
 rc.Name = new ResourceId(5011);
 rc.LoadFrom(filename);
 Console.WriteLine("DialogResource: {0}, {1}", rc.Name, rc.TypeName);
-Console.WriteLine(rc.Template.ToString());
+Console.WriteLine(rc.ToString());
 ]]>
           </code>
         </para>
@@ -95,7 +95,8 @@ Console.WriteLine(rc.Template.ToString());
           In order to embed a dialog into an executable (.exe or .dll) create a new instance of
           <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogTemplate</codeEntityReference>
           or a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogExTemplate</codeEntityReference>,
-          add controls and save it to the destination file. You may also copy a dialog from one file to another, etc.
+          add controls, assign it to a <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.DialogResource</codeEntityReference>
+          and save it to the destination file. You may also copy a dialog from one file to another, etc.
           <code language="cs">
             <![CDATA[
 source sourceFilename = ...

@@ -11,7 +11,7 @@ namespace Vestris.ResourceLib
     /// and code page formatting information for the strings. A code page is an ordered character set.
     /// See http://msdn.microsoft.com/en-us/library/aa909192.aspx for more information.
     /// </summary>
-    public class StringTable : ResourceTable
+    public class StringTable : ResourceTableHeader
     {
         Dictionary<string, StringResource> _strings = new Dictionary<string,StringResource>();
 

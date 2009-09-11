@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
@@ -8,7 +9,7 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// A base menu template item.
     /// </summary>
-    public abstract class MenuTemplateItemBase
+    public abstract class MenuTemplateItem
     {
         /// <summary>
         /// Menu item header.
@@ -42,14 +43,34 @@ namespace Vestris.ResourceLib
         /// <returns>End of the menu item structure.</returns>
         internal virtual IntPtr Read(IntPtr lpRes)
         {
-            _menuString = (Marshal.ReadInt16(lpRes) == 0) 
-                ? null
-                : Marshal.PtrToStringUni(lpRes);
-
-            lpRes = new IntPtr(lpRes.ToInt32() + 
-                (_menuString == null ? 2 : (_menuString.Length + 1) * Marshal.SystemDefaultCharSize));
+            switch ((UInt16) Marshal.ReadInt16(lpRes))
+            {
+                case 0:
+                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
+                    break;
+                default:
+                    _menuString = Marshal.PtrToStringUni(lpRes);
+                    lpRes = new IntPtr(lpRes.ToInt32() +
+                        (_menuString.Length + 1) * Marshal.SystemDefaultCharSize);
+                    break;
+            }
 
             return lpRes;
+        }
+
+        internal virtual void Write(BinaryWriter w)
+        {
+            // menu string
+            if (_menuString == null)
+            {
+                w.Write((UInt16) 0);
+            }
+            else
+            {
+                w.Write(Encoding.Unicode.GetBytes(_menuString));
+                w.Write((UInt16) 0);
+                ResourceUtil.PadToWORD(w);
+            }
         }
 
         /// <summary>

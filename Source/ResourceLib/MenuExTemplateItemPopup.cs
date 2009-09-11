@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -8,7 +9,7 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// An extended popup menu item.
     /// </summary>
-    public class MenuExTemplateItemPopup : MenuExTemplateItemBase
+    public class MenuExTemplateItemPopup : MenuExTemplateItem
     {
         MenuExTemplateItemCollection _subMenuItems = new MenuExTemplateItemCollection();
 
@@ -42,13 +43,18 @@ namespace Vestris.ResourceLib
         /// <returns>End of the menu item structure.</returns>
         internal override IntPtr Read(IntPtr lpRes)
         {
-            _header = (User32.MENUEXITEMTEMPLATE)Marshal.PtrToStructure(
-                lpRes, typeof(User32.MENUEXITEMTEMPLATE));
-
-            lpRes = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
             lpRes = base.Read(lpRes);
-
             return _subMenuItems.Read(lpRes);
+        }
+
+        /// <summary>
+        /// Write the menu item to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal override void Write(BinaryWriter w)
+        {
+            base.Write(w);
+            _subMenuItems.Write(w);
         }
 
         /// <summary>

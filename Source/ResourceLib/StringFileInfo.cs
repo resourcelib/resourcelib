@@ -11,7 +11,7 @@ namespace Vestris.ResourceLib
     /// It contains version information that can be displayed for a particular language and code page.
     /// http://msdn.microsoft.com/en-us/library/aa908808.aspx
     /// </summary>
-    public class StringFileInfo : ResourceTable
+    public class StringFileInfo : ResourceTableHeader
     {
         Dictionary<string, StringTable> _strings = new Dictionary<string, StringTable>();
 

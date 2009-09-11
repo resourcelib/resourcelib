@@ -11,7 +11,7 @@ namespace Vestris.ResourceLib
     /// It contains version information not dependent on a particular language and code page combination.
     /// http://msdn.microsoft.com/en-us/library/aa909193.aspx
     /// </summary>
-    public class VarFileInfo : ResourceTable
+    public class VarFileInfo : ResourceTableHeader
     {
         Dictionary<string, VarTable> _variables = new Dictionary<string, VarTable>();
 

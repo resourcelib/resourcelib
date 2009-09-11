@@ -41,7 +41,7 @@ namespace Vestris.ResourceLibUnitTests
                     errors++;
                 }
             }
-
+            Assert.AreEqual(expectedBytes.Length, testedBytes.Length, "Invalid byte count.");
             Assert.IsTrue(errors == 0, "Errors in binary comparisons.");
         }
     }

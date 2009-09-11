@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.IO;
 
 namespace Vestris.ResourceLib
 {
     /// <summary>
     /// A collection of menu items.
     /// </summary>
-    public class MenuExTemplateItemCollection : List<MenuExTemplateItemBase>
+    public class MenuExTemplateItemCollection : List<MenuExTemplateItem>
     {
+        private UInt32 _dwContextHelpID = 0;
+
         /// <summary>
         /// A collection of extended menu items.
         /// </summary>
@@ -25,7 +28,7 @@ namespace Vestris.ResourceLib
         /// <returns>End of the menu item structure.</returns>
         internal IntPtr Read(IntPtr lpRes)
         {
-            UInt32 dwContextHelpID = (UInt32)Marshal.ReadInt32(lpRes);
+            _dwContextHelpID = (UInt32) Marshal.ReadInt32(lpRes);
             lpRes = new IntPtr(lpRes.ToInt32() + 4);
 
             while (true)
@@ -33,7 +36,7 @@ namespace Vestris.ResourceLib
                 User32.MENUEXITEMTEMPLATE childItem = (User32.MENUEXITEMTEMPLATE)Marshal.PtrToStructure(
                     lpRes, typeof(User32.MENUEXITEMTEMPLATE));
 
-                MenuExTemplateItemBase childMenu = null;
+                MenuExTemplateItem childMenu = null;
                 if (childItem.dwOptions == (uint) User32.MenuResourceType.Sub)
                     childMenu = new MenuExTemplateItemPopup();
                 else
@@ -47,6 +50,20 @@ namespace Vestris.ResourceLib
             }
 
             return lpRes;
+        }
+
+        /// <summary>
+        /// Write the menu collection to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal void Write(BinaryWriter w)
+        {
+            w.Write(_dwContextHelpID);
+
+            foreach (MenuExTemplateItem menuItem in this)
+            {
+                menuItem.Write(w);
+            }
         }
 
         /// <summary>
@@ -69,7 +86,7 @@ namespace Vestris.ResourceLib
             if (Count > 0)
             {
                 sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent)));
-                foreach (MenuExTemplateItemBase child in this)
+                foreach (MenuExTemplateItem child in this)
                 {
                     sb.Append(child.ToString(indent + 1));
                 }

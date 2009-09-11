@@ -28,6 +28,20 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// A structured menu resource.
+        /// </summary>
+        public MenuResource()
+            : base(IntPtr.Zero, 
+                IntPtr.Zero, 
+                new ResourceId(Kernel32.ResourceTypes.RT_MENU), 
+                null, 
+                ResourceUtil.NEUTRALLANGID, 
+                0)
+        {
+
+        }
+
+        /// <summary>
         /// A structured menu resource embedded in an executable module.
         /// </summary>
         /// <param name="hModule">Module handle.</param>
@@ -73,7 +87,7 @@ namespace Vestris.ResourceLib
         /// <param name="w">Binary stream.</param>
         internal override void Write(BinaryWriter w)
         {
-            
+            _menu.Write(w);   
         }
 
         /// <summary>

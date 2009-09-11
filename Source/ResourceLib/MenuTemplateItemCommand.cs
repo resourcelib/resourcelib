@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// A command menu item.
     /// </summary>
-    public class MenuTemplateItemCommand : MenuTemplateItemBase
+    public class MenuTemplateItemCommand : MenuTemplateItem
     {
         private UInt16 _menuId = 0;
 
@@ -53,6 +54,17 @@ namespace Vestris.ResourceLib
             lpRes = base.Read(lpRes);
 
             return lpRes;
+        }
+
+        /// <summary>
+        /// Write menu item to a binary stream.
+        /// </summary>
+        /// <param name="w">Binary stream.</param>
+        internal override void Write(BinaryWriter w)
+        {
+            w.Write(_header.mtOption);
+            w.Write(_menuId);
+            base.Write(w);
         }
 
         /// <summary>

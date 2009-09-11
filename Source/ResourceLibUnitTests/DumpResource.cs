@@ -68,7 +68,7 @@ namespace Vestris.ResourceLibUnitTests
             Console.WriteLine("File version: {0}", rc.FileVersion);
             Console.WriteLine("Product version: {0}", rc.ProductVersion);
             Console.WriteLine("Language: {0}", rc.Language);
-            Dictionary<string, ResourceTable>.Enumerator resourceEnumerator = rc.Resources.GetEnumerator();
+            Dictionary<string, ResourceTableHeader>.Enumerator resourceEnumerator = rc.Resources.GetEnumerator();
             while (resourceEnumerator.MoveNext())
             {
                 Dump(resourceEnumerator.Current.Value);
@@ -105,7 +105,7 @@ namespace Vestris.ResourceLibUnitTests
                 rc.Header.nID, rc.ToString(), rc.ImageSize);
         }
 
-        public static void Dump(ResourceTable rc)
+        public static void Dump(ResourceTableHeader rc)
         {
             if (rc is StringFileInfo)
                 Dump(rc as StringFileInfo);

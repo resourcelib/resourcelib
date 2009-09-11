@@ -11,7 +11,7 @@ namespace Vestris.ResourceLib
     /// list of language and code page identifier pairs that the version of the application or DLL supports.
     /// http://msdn.microsoft.com/en-us/library/bb202818.aspx
     /// </summary>
-    public class VarTable : ResourceTable
+    public class VarTable : ResourceTableHeader
     {
         private Dictionary<UInt16, UInt16> _languages = new Dictionary<UInt16, UInt16>();
 

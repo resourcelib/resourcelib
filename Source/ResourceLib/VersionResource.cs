@@ -15,14 +15,14 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class VersionResource : Resource
     {
-        ResourceTable _header = new ResourceTable("VS_VERSION_INFO");
+        ResourceTableHeader _header = new ResourceTableHeader("VS_VERSION_INFO");
         Kernel32.VS_FIXEDFILEINFO _fixedfileinfo = Kernel32.VS_FIXEDFILEINFO.GetWindowsDefault();
-        private Dictionary<string, ResourceTable> _resources = new Dictionary<string, ResourceTable>();
+        private Dictionary<string, ResourceTableHeader> _resources = new Dictionary<string, ResourceTableHeader>();
 
         /// <summary>
         /// The resource header.
         /// </summary>
-        public ResourceTable Header
+        public ResourceTableHeader Header
         {
             get
             {
@@ -33,7 +33,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// A dictionary of resource tables.
         /// </summary>
-        public Dictionary<string, ResourceTable> Resources
+        public Dictionary<string, ResourceTableHeader> Resources
         {
             get
             {
@@ -89,7 +89,7 @@ namespace Vestris.ResourceLib
 
             while (pChild.ToInt32() < (lpRes.ToInt32() + _header.Header.wLength))
             {
-                ResourceTable rc = new ResourceTable(pChild);
+                ResourceTableHeader rc = new ResourceTableHeader(pChild);
                 switch (rc.Key)
                 {
                     case "StringFileInfo":
@@ -172,7 +172,7 @@ namespace Vestris.ResourceLib
             w.Write(ResourceUtil.GetBytes<Kernel32.VS_FIXEDFILEINFO>(_fixedfileinfo));
             ResourceUtil.PadToDWORD(w);
 
-            Dictionary<string, ResourceTable>.Enumerator resourceEnum = _resources.GetEnumerator();
+            Dictionary<string, ResourceTableHeader>.Enumerator resourceEnum = _resources.GetEnumerator();
             while (resourceEnum.MoveNext())
             {
                 resourceEnum.Current.Value.Write(w);
@@ -186,7 +186,7 @@ namespace Vestris.ResourceLib
         /// </summary>
         /// <param name="key">Entry key.</param>
         /// <returns>A resource table.</returns>
-        public ResourceTable this[string key]
+        public ResourceTableHeader this[string key]
         {
             get
             {
