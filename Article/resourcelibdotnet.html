@@ -309,15 +309,31 @@ public override void Write(BinaryWriter w)
   <code>VersionResourceTests.TestDeepCopyBytes</code>.</p>
  <h2>Version</h2>
  <p>
-  Version resources are amongst the most complex resource structures. The top of the version resource
-  is a <code>VS_VERSION_INFO</code> resource table header followed by a <code>VS_FIXEDFILEINFO</code>
-  structure that depicts the static portion of the version resource which contains binary file
-  version information that you see in file properties in Windows Explorer. This is followed by
-  two resource tables, <code>StringFileInfo</code> and <code>VarFileInfo</code>. These contain the 
-  version information that can be displayed for a particular language and code page and information 
-  not dependent on a particular language and code page combination respectively. This is also what 
-  you see in the file properties in Windows Explorer, but the information may be different depending 
-  on the language and region of the operating system and the user logged-in.</p>
+  Version resources are amongst the most complex resource structures. 
+  Their evolution is well <a href="http://blogs.msdn.com/oldnewthing/archive/2006/12/21/1340571.aspx">described 
+  in Raymond Chen's "The Old New Thing"</a>. The top of the version resource is a <code>VS_VERSION_INFO</code> 
+  resource table header followed by a <code>VS_FIXEDFILEINFO</code> structure that depicts the static portion 
+  of the version resource which contains binary file version information that you see in file properties in 
+  Windows Explorer. The default Windows fixed file information for a dynamic link library looks like this.
+ </p>
+ <pre lang="cs">
+public static VS_FIXEDFILEINFO GetWindowsDefault()
+{
+    VS_FIXEDFILEINFO fixedFileInfo = new VS_FIXEDFILEINFO();
+    fixedFileInfo.dwSignature = Winver.VS_FFI_SIGNATURE;
+    fixedFileInfo.dwStrucVersion = Winver.VS_FFI_STRUCVERSION;
+    fixedFileInfo.dwFileFlagsMask = Winver.VS_FFI_FILEFLAGSMASK;
+    fixedFileInfo.dwFileOS = (uint) Winver.FileOs.VOS__WINDOWS32;
+    fixedFileInfo.dwFileSubtype = (uint) Winver.FileSubType.VFT2_UNKNOWN;
+    fixedFileInfo.dwFileType = (uint) Winver.FileType.VFT_DLL;
+    return fixedFileInfo;
+}</pre>
+ <p>  
+  This is followed by two resource tables, <code>StringFileInfo</code> and <code>VarFileInfo</code>. 
+  These contain the version information that can be displayed for a particular language and code page 
+  and information not dependent on a particular language and code page combination respectively. This 
+  is also what you see in the file properties in Windows Explorer, but the information may be different 
+  depending on the language and region of the operating system and the user logged-in.</p>
  <h2>Icons</h2>
  <p>
   With above infrastructure in-place and with support for the most complicated of all resources, 

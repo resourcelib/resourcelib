@@ -60,28 +60,6 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// String representation of the dialog or control style.
-        /// </summary>
-        /// <param name="style">Dialog or control style.</param>
-        /// <returns>String in the "s1 | s2 | ... | s3" format.</returns>
-        internal static List<string> StyleToStringList<T>(UInt32 style)
-        {
-            List<string> styles = new List<string>();
-
-            foreach (T s in Enum.GetValues(typeof(T)))
-            {
-                UInt32 s_ui = Convert.ToUInt32(s);
-                // style enum may be a flag or equal (including zero)
-                if ((style & s_ui) > 0 || style == s_ui)
-                {
-                    styles.Add(s.ToString());
-                }
-            }
-
-            return styles;
-        }
-
-        /// <summary>
         /// String representation of the dialog or control style of two types.
         /// </summary>
         /// <param name="style">Dialog or control style.</param>
@@ -89,8 +67,8 @@ namespace Vestris.ResourceLib
         internal static string StyleToString<W, D>(UInt32 style)
         {
             List<string> styles = new List<string>();
-            styles.AddRange(StyleToStringList<W>(style));
-            styles.AddRange(StyleToStringList<D>(style));
+            styles.AddRange(ResourceUtil.FlagsToList<W>(style));
+            styles.AddRange(ResourceUtil.FlagsToList<D>(style));
             return String.Join(" | ", styles.ToArray());
         }
 
@@ -103,8 +81,8 @@ namespace Vestris.ResourceLib
         internal static string StyleToString<W, D>(UInt32 style, UInt32 exstyle)
         {
             List<string> styles = new List<string>();
-            styles.AddRange(StyleToStringList<W>(style));
-            styles.AddRange(StyleToStringList<D>(exstyle));
+            styles.AddRange(ResourceUtil.FlagsToList<W>(style));
+            styles.AddRange(ResourceUtil.FlagsToList<D>(exstyle));
             return String.Join(" | ", styles.ToArray());
         }
 
@@ -116,7 +94,7 @@ namespace Vestris.ResourceLib
         internal static string StyleToString<W>(UInt32 style)
         {
             List<string> styles = new List<string>();
-            styles.AddRange(StyleToStringList<W>(style));
+            styles.AddRange(ResourceUtil.FlagsToList<W>(style));
             return String.Join(" | ", styles.ToArray());
         }
     }

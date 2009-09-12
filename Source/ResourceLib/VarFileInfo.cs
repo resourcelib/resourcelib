@@ -13,7 +13,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class VarFileInfo : ResourceTableHeader
     {
-        Dictionary<string, VarTable> _variables = new Dictionary<string, VarTable>();
+        Dictionary<string, VarTable> _vars = new Dictionary<string, VarTable>();
 
         /// <summary>
         /// A hardware independent dictionary of language and code page identifier tables.
@@ -22,7 +22,7 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return _variables;
+                return _vars;
             }
         }
 
@@ -51,13 +51,13 @@ namespace Vestris.ResourceLib
         /// <returns>Pointer to the end of data.</returns>
         internal override IntPtr Read(IntPtr lpRes)
         {
-            _variables.Clear();
+            _vars.Clear();
             IntPtr pChild = base.Read(lpRes);
 
             while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))
             {
                 VarTable res = new VarTable(pChild);
-                _variables.Add(res.Key, res);
+                _vars.Add(res.Key, res);
                 pChild = ResourceUtil.Align(pChild.ToInt32() + res.Header.wLength);
             }
 
@@ -73,10 +73,10 @@ namespace Vestris.ResourceLib
             long headerPos = w.BaseStream.Position;
             base.Write(w);
 
-            Dictionary<string, VarTable>.Enumerator variablesEnum = _variables.GetEnumerator();
-            while (variablesEnum.MoveNext())
+            Dictionary<string, VarTable>.Enumerator varsEnum = _vars.GetEnumerator();
+            while (varsEnum.MoveNext())
             {
-                variablesEnum.Current.Value.Write(w);
+                varsEnum.Current.Value.Write(w);
             }
 
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
@@ -89,8 +89,8 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                Dictionary<string, VarTable>.Enumerator variablesEnum = _variables.GetEnumerator();
-                if (variablesEnum.MoveNext()) return variablesEnum.Current.Value;
+                Dictionary<string, VarTable>.Enumerator varsEnum = _vars.GetEnumerator();
+                if (varsEnum.MoveNext()) return varsEnum.Current.Value;
                 return null;
             }
         }
@@ -110,6 +110,23 @@ namespace Vestris.ResourceLib
             {
                 Default[language] = value;
             }
+        }
+
+        /// <summary>
+        /// String representation of VarFileInfo.
+        /// </summary>
+        /// <param name="indent">Indent.</param>
+        /// <returns>String in the VarFileInfo format.</returns>
+        public override string ToString(int indent)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent)));
+            foreach(VarTable var in _vars.Values)
+            {
+                sb.Append(var.ToString(indent + 1));
+            }
+            sb.AppendLine(string.Format("{0}END", new String(' ', indent)));
+            return sb.ToString();
         }
     }
 }

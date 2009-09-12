@@ -116,10 +116,10 @@ namespace Vestris.ResourceLib
             get
             {
                 return string.Format("{0}.{1}.{2}.{3}",
-                    (_fixedfileinfo.dwFileVersionMS & 0xffff0000) >> 16,
-                    _fixedfileinfo.dwFileVersionMS & 0x0000ffff,
-                    (_fixedfileinfo.dwFileVersionLS & 0xffff0000) >> 16,
-                    _fixedfileinfo.dwFileVersionLS & 0x0000ffff);
+                    ResourceUtil.HiWord(_fixedfileinfo.dwFileVersionMS),
+                    ResourceUtil.LoWord(_fixedfileinfo.dwFileVersionMS),
+                    ResourceUtil.HiWord(_fixedfileinfo.dwFileVersionLS),
+                    ResourceUtil.LoWord(_fixedfileinfo.dwFileVersionLS));
             }
             set
             {
@@ -142,10 +142,10 @@ namespace Vestris.ResourceLib
             get
             {
                 return string.Format("{0}.{1}.{2}.{3}",
-                    (_fixedfileinfo.dwProductVersionMS & 0xffff0000) >> 16,
-                    _fixedfileinfo.dwProductVersionMS & 0x0000ffff,
-                    (_fixedfileinfo.dwProductVersionLS & 0xffff0000) >> 16,
-                    _fixedfileinfo.dwProductVersionLS & 0x0000ffff);
+                    ResourceUtil.HiWord(_fixedfileinfo.dwProductVersionMS),
+                    ResourceUtil.LoWord(_fixedfileinfo.dwProductVersionMS),
+                    ResourceUtil.HiWord(_fixedfileinfo.dwProductVersionLS),
+                    ResourceUtil.LoWord(_fixedfileinfo.dwProductVersionLS));
             }
             set
             {
@@ -196,6 +196,51 @@ namespace Vestris.ResourceLib
             {
                 Resources[key] = value;
             }
+        }
+
+        /// <summary>
+        /// Return string representation of the version resource.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("FILEVERSION {0},{1},{2},{3}",
+                ResourceUtil.HiWord(_fixedfileinfo.dwFileVersionMS),
+                ResourceUtil.LoWord(_fixedfileinfo.dwFileVersionMS),
+                ResourceUtil.HiWord(_fixedfileinfo.dwFileVersionLS),
+                ResourceUtil.LoWord(_fixedfileinfo.dwFileVersionLS)));
+            sb.AppendLine(string.Format("PRODUCTVERSION {0},{1},{2},{3}",
+                ResourceUtil.HiWord(_fixedfileinfo.dwProductVersionMS),
+                ResourceUtil.LoWord(_fixedfileinfo.dwProductVersionMS),
+                ResourceUtil.HiWord(_fixedfileinfo.dwProductVersionLS),
+                ResourceUtil.LoWord(_fixedfileinfo.dwProductVersionLS)));
+            if (_fixedfileinfo.dwFileFlagsMask == Winver.VS_FFI_FILEFLAGSMASK)
+            {
+                sb.AppendLine("FILEFLAGSMASK VS_FFI_FILEFLAGSMASK");
+            }
+            else
+            {
+                sb.AppendLine(string.Format("FILEFLAGSMASK 0x{0:x}",
+                    _fixedfileinfo.dwFileFlagsMask.ToString()));
+            }
+            sb.AppendLine(string.Format("FILEFLAGS {0}", 
+                _fixedfileinfo.dwFileFlags == 0 ? "0" : ResourceUtil.FlagsToString<Winver.FileFlags>(
+                    _fixedfileinfo.dwFileFlags)));
+            sb.AppendLine(string.Format("FILEOS {0}",
+                ResourceUtil.FlagsToString<Winver.FileOs>(_fixedfileinfo.dwFileFlags)));
+            sb.AppendLine(string.Format("FILETYPE {0}",
+                ResourceUtil.FlagsToString<Winver.FileType>(_fixedfileinfo.dwFileType)));
+            sb.AppendLine(string.Format("FILESUBTYPE {0}",
+                ResourceUtil.FlagsToString<Winver.FileSubType>(_fixedfileinfo.dwFileSubtype)));
+            sb.AppendLine("BEGIN");
+            Dictionary<string, ResourceTableHeader>.Enumerator resourceEnum = _resources.GetEnumerator();
+            while (resourceEnum.MoveNext())
+            {
+                sb.Append(resourceEnum.Current.Value.ToString(1));
+            }
+            sb.AppendLine("END");
+            return sb.ToString();
         }
     }
 }

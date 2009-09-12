@@ -107,6 +107,7 @@
     <Compile Include="VarFileInfo.cs" />
     <Compile Include="VarTable.cs" />
     <Compile Include="VersionResource.cs" />
+    <Compile Include="Winver.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.txt" />

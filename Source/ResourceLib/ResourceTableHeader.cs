@@ -108,5 +108,24 @@ namespace Vestris.ResourceLib
             // pad fixed info
             ResourceUtil.PadToDWORD(w);
         }
+
+        /// <summary>
+        /// String representation.
+        /// </summary>
+        /// <returns>String representation.</returns>
+        public override string ToString()
+        {
+            return ToString(0);
+        }
+
+        /// <summary>
+        /// String representation.
+        /// </summary>
+        /// <param name="indent">Indent.</param>
+        /// <returns>String representation.</returns>
+        public virtual string ToString(int indent)
+        {
+            return base.ToString();
+        }
     }
 }

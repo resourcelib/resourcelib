@@ -142,12 +142,12 @@ namespace Vestris.ResourceLib
             public static VS_FIXEDFILEINFO GetWindowsDefault()
             {
                 VS_FIXEDFILEINFO fixedFileInfo = new VS_FIXEDFILEINFO();
-                fixedFileInfo.dwSignature = 0xfeef04bd;
-                fixedFileInfo.dwStrucVersion = 0x10000;
-                fixedFileInfo.dwFileFlagsMask = 0x3f;
-                fixedFileInfo.dwFileOS = 4;
-                fixedFileInfo.dwFileSubtype = 0;
-                fixedFileInfo.dwFileType = 2;
+                fixedFileInfo.dwSignature = Winver.VS_FFI_SIGNATURE;
+                fixedFileInfo.dwStrucVersion = Winver.VS_FFI_STRUCVERSION;
+                fixedFileInfo.dwFileFlagsMask = Winver.VS_FFI_FILEFLAGSMASK;
+                fixedFileInfo.dwFileOS = (uint) Winver.FileOs.VOS__WINDOWS32;
+                fixedFileInfo.dwFileSubtype = (uint) Winver.FileSubType.VFT2_UNKNOWN;
+                fixedFileInfo.dwFileType = (uint) Winver.FileType.VFT_DLL;
                 return fixedFileInfo;
             }
         }

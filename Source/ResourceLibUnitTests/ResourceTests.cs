@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 namespace Vestris.ResourceLibUnitTests
 {
     [TestFixture]
-    public class VersionInfoTests
+    public class ResourceTests
     {      
         [Test]
         public void TestCustom()

@@ -153,5 +153,27 @@ namespace Vestris.ResourceLib
                 sr.Value = value;
             }
         }
+
+        /// <summary>
+        /// String representation of the string table.
+        /// </summary>
+        /// <param name="indent">Indent.</param>
+        /// <returns>String representation of the strings table.</returns>
+        public override string ToString(int indent)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent)));
+            sb.AppendLine(string.Format("{0}BLOCK \"{1}\"", new String(' ', indent + 1), _key));
+            sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent + 1)));
+            foreach (StringResource stringResource in _strings.Values)
+            {
+                sb.AppendLine(string.Format("{0}VALUE \"{1}\", \"{2}\"",
+                    new String(' ', indent + 2),
+                    stringResource.Key, stringResource.StringValue));
+            }
+            sb.AppendLine(string.Format("{0}END", new String(' ', indent + 1)));
+            sb.AppendLine(string.Format("{0}END", new String(' ', indent)));
+            return sb.ToString();
+        }
     }
 }

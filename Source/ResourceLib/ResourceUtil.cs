@@ -70,6 +70,26 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// Returns the high WORD from a DWORD value.
+        /// </summary>
+        /// <param name="value">WORD value.</param>
+        /// <returns>High WORD.</returns>
+        internal static UInt16 HiWord(UInt32 value)
+        {
+            return (UInt16) ((value & 0xFFFF0000) >> 16);
+        }
+
+        /// <summary>
+        /// Returns the high WORD from a DWORD value.
+        /// </summary>
+        /// <param name="value">WORD value.</param>
+        /// <returns>High WORD.</returns>
+        internal static UInt16 LoWord(UInt32 value)
+        {
+            return (UInt16) (value & 0x0000FFFF);
+        }
+
+        /// <summary>
         /// Write a value at a given position.
         /// Used to write a size of data in an earlier located header.
         /// </summary>
@@ -165,6 +185,41 @@ namespace Vestris.ResourceLib
             Marshal.Copy(buffer, rawdatas, 0, rawsize);
             Marshal.FreeHGlobal(buffer);
             return rawdatas;
+        }
+
+        /// <summary>
+        /// Get a collection of flags from a flag value.
+        /// </summary>
+        /// <typeparam name="T">Flag collection type.</typeparam>
+        /// <param name="flagValue">Flag value.</param>
+        /// <returns>Collection of flags.</returns>
+        internal static List<string> FlagsToList<T>(UInt32 flagValue)
+        {
+            List<string> flags = new List<string>();
+
+            foreach (T f in Enum.GetValues(typeof(T)))
+            {
+                UInt32 f_ui = Convert.ToUInt32(f);
+                if ((flagValue & f_ui) > 0 || flagValue == f_ui)
+                {
+                    flags.Add(f.ToString());
+                }
+            }
+
+            return flags;
+        }
+
+        /// <summary>
+        /// Get a string representation of flags.
+        /// </summary>
+        /// <typeparam name="T">Flag collection type.</typeparam>
+        /// <param name="flagValue">Flag vlaue</param>
+        /// <returns>String representation of flags in the f1 | ... | fn format.</returns>
+        internal static string FlagsToString<T>(UInt32 flagValue)
+        {
+            List<string> flags = new List<string>();
+            flags.AddRange(FlagsToList<T>(flagValue));
+            return String.Join(" | ", flags.ToArray());
         }
     }
 }

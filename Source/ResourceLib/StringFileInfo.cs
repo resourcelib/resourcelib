@@ -111,5 +111,23 @@ namespace Vestris.ResourceLib
                 Default[key] = value;
             }
         }
+
+        /// <summary>
+        /// String representation of StringFileInfo.
+        /// </summary>
+        /// <param name="indent">Indent.</param>
+        /// <returns>String in the StringFileInfo format.</returns>
+        public override string ToString(int indent)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent)));
+            sb.AppendLine(string.Format("{0}BLOCK \"{1}\"", new String(' ', indent + 1), _key));
+            foreach(StringTable stringTable in _strings.Values)
+            {
+                sb.Append(stringTable.ToString(indent + 1));
+            }
+            sb.AppendLine(string.Format("{0}END", new String(' ', indent)));
+            return sb.ToString();
+        }
     }
 }

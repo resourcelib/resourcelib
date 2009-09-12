@@ -114,5 +114,24 @@ namespace Vestris.ResourceLib
                 _languages[key] = value;
             }
         }
+
+        /// <summary>
+        /// String representation of the var table.
+        /// </summary>
+        /// <param name="indent">Indent.</param>
+        /// <returns>String representation of the var table.</returns>
+        public override string ToString(int indent)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent)));
+            Dictionary<UInt16, UInt16>.Enumerator languagesEnumerator = _languages.GetEnumerator();
+            while (languagesEnumerator.MoveNext())
+            {
+                sb.AppendLine(string.Format("{0}VALUE \"Translation\", 0x{1:x}, 0x{2:x}", 
+                    new String(' ', indent + 1), languagesEnumerator.Current.Key, languagesEnumerator.Current.Value));
+            }
+            sb.AppendLine(string.Format("{0}END", new String(' ', indent)));
+            return sb.ToString();
+        }
     }
 }
