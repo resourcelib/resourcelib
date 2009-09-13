@@ -38,13 +38,15 @@
     <p>
         <b>Misc</b></p>
     <ul>
-        <li>Added support for version resources with an omitted VS_FIXEDFILEINFO.</li>
+        <li>Added support for version resources with an omitted <code>VS_FIXEDFILEINFO</code>.</li>
         <li>Added <code>Resource.TypeName</code> that provides a string representation of the
             resource type.</li>
         <li>Added <code>StringTable.CodePage</code> and <code>StringTable.LanguageID</code>
             properties.</li>
         <li>Added <code>GenericResource.Data</code> read-only data bytes for unsupported resource
             types.</li>
+        <li>Interface change: renamed <code>StringResource</code> to <code>StringTableEntry</code>
+            to accommodate for actual string resource support.</li>
         <li>Interface change: added <code>ResourceId</code> that represents well-known and custom
             resources alike and provides comparison and hashing that works for all resource
             Id types. Both <code>Resource.Name</code> and <code>Resource.Type</code> now return

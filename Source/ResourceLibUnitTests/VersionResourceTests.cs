@@ -71,7 +71,7 @@ namespace Vestris.ResourceLibUnitTests
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
 
             StringFileInfo testedStringFileInfo = (StringFileInfo)newVersionResource["StringFileInfo"];
-            foreach (KeyValuePair<string, StringResource> stringResource in testedStringFileInfo.Default.Strings)
+            foreach (KeyValuePair<string, StringTableEntry> stringResource in testedStringFileInfo.Default.Strings)
             {
                 Console.WriteLine("{0} = {1}", stringResource.Value.Key, stringResource.Value.StringValue);
                 Assert.AreEqual(stringResource.Value.Value, stringFileInfo[stringResource.Key]);
@@ -144,10 +144,10 @@ namespace Vestris.ResourceLibUnitTests
                 {
                     StringTable stringTable = new StringTable(enumerator.Current.Key);
                     stringFileInfo.Strings.Add(enumerator.Current.Key, stringTable);
-                    Dictionary<string, StringResource>.Enumerator resourceEnumerator = enumerator.Current.Value.Strings.GetEnumerator();
+                    Dictionary<string, StringTableEntry>.Enumerator resourceEnumerator = enumerator.Current.Value.Strings.GetEnumerator();
                     while (resourceEnumerator.MoveNext())
                     {
-                        StringResource stringResource = new StringResource(resourceEnumerator.Current.Key);
+                        StringTableEntry stringResource = new StringTableEntry(resourceEnumerator.Current.Key);
                         stringResource.Value = resourceEnumerator.Current.Value.Value;
                         stringTable.Strings.Add(resourceEnumerator.Current.Key, stringResource);
                     }
@@ -204,10 +204,10 @@ namespace Vestris.ResourceLibUnitTests
                 {
                     StringTable stringTable = new StringTable(enumerator.Current.Key);
                     stringFileInfo.Strings.Add(enumerator.Current.Key, stringTable);
-                    Dictionary<string, StringResource>.Enumerator resourceEnumerator = enumerator.Current.Value.Strings.GetEnumerator();
+                    Dictionary<string, StringTableEntry>.Enumerator resourceEnumerator = enumerator.Current.Value.Strings.GetEnumerator();
                     while (resourceEnumerator.MoveNext())
                     {
-                        StringResource stringResource = new StringResource(resourceEnumerator.Current.Key);
+                        StringTableEntry stringResource = new StringTableEntry(resourceEnumerator.Current.Key);
                         stringResource.Value = resourceEnumerator.Current.Value.Value;
                         stringTable.Strings.Add(resourceEnumerator.Current.Key, stringResource);
                     }
@@ -242,7 +242,7 @@ namespace Vestris.ResourceLibUnitTests
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
 
             StringFileInfo testedStringFileInfo = (StringFileInfo)newVersionResource["StringFileInfo"];
-            foreach (KeyValuePair<string, StringResource> stringResource in testedStringFileInfo.Default.Strings)
+            foreach (KeyValuePair<string, StringTableEntry> stringResource in testedStringFileInfo.Default.Strings)
             {
                 Assert.AreEqual(stringResource.Value.Value, stringFileInfo[stringResource.Key]);
             }
@@ -337,7 +337,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestDoubleNullTerminator()
         {
-            StringResource sr = new StringResource("dummy");
+            StringTableEntry sr = new StringTableEntry("dummy");
             string guid = Guid.NewGuid().ToString();
             sr.Value = guid;
             Assert.AreEqual(guid + '\0', sr.Value);

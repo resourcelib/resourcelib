@@ -12,7 +12,7 @@ namespace Vestris.ResourceLib
     /// or its trademarks.
     /// http://msdn.microsoft.com/en-us/library/aa909025.aspx
     /// </summary>
-    public class StringResource
+    public class StringTableEntry
     {
         private Kernel32.RESOURCE_HEADER _header;
         private string _key;
@@ -90,7 +90,7 @@ namespace Vestris.ResourceLib
         /// A new string resource.
         /// </summary>
         /// <param name="key">Key.</param>
-        public StringResource(string key)
+        public StringTableEntry(string key)
         {
             _key = key;
             _header.wType = 1;
@@ -102,7 +102,7 @@ namespace Vestris.ResourceLib
         /// An existing string resource.
         /// </summary>
         /// <param name="lpRes">Pointer to the beginning of a string resource.</param>
-        internal StringResource(IntPtr lpRes)
+        internal StringTableEntry(IntPtr lpRes)
         {
             Read(lpRes);
         }

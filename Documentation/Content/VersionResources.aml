@@ -49,9 +49,9 @@ VersionResource versionResource = new VersionResource();
 versionResource.LoadFrom(filename);
 Console.WriteLine("File version: {0}", versionResource.FileVersion);
 StringFileInfo stringFileInfo = (StringFileInfo) versionResource["StringFileInfo"];
-foreach (KeyValuePair<string, StringResource> stringResource in stringFileInfo.Default.Strings)
+foreach (KeyValuePair<string, StringTableEntry> stringTableEntry in stringFileInfo.Default.Strings)
 {
- Console.WriteLine("{0} = {1}", stringResource.Value.Key, stringResource.Value.StringValue);
+ Console.WriteLine("{0} = {1}", stringTableEntry.Value.Key, stringTableEntry.Value.StringValue);
 }
 ]]>
           </code>

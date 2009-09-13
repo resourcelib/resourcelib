@@ -103,7 +103,7 @@
     <Compile Include="ResourceTableHeader.cs" />
     <Compile Include="ResourceUtil.cs" />
     <Compile Include="StringFileInfo.cs" />
-    <Compile Include="StringResource.cs" />
+    <Compile Include="StringTableEntry.cs" />
     <Compile Include="StringTable.cs" />
     <Compile Include="GenericResource.cs" />
     <Compile Include="User32.cs" />

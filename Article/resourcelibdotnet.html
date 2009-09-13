@@ -100,9 +100,9 @@ VersionResource versionResource = new VersionResource();
 versionResource.LoadFrom(filename);
 Console.WriteLine(&quot;File version: {0}&quot;, versionResource.FileVersion);
 StringFileInfo stringFileInfo = (StringFileInfo) versionResource[&quot;StringFileInfo&quot;];
-foreach (KeyValuePair&lt;ResourceId, StringResource&gt; stringResource in stringFileInfo.Default.Strings)
+foreach (KeyValuePair&lt;ResourceId, StringTableEntry&gt; versionStringTableEntry in stringFileInfo.Default.Strings)
 {
- Console.WriteLine(&quot;{0} = {1}&quot;, stringResource.Value.Key, stringResource.Value.StringValue);
+ Console.WriteLine(&quot;{0} = {1}&quot;, versionStringTableEntry.Value.Key, versionStringTableEntry.Value.StringValue);
 }</pre>
  <h3>
   Writing Version Information</h3>
@@ -254,14 +254,14 @@ public override IntPtr Read(IntPtr lpRes)
  IntPtr pChild = base.Read(lpRes);
  while (pChild.ToInt32() &lt; (lpRes.ToInt32() + _header.wLength)) 
  {
-  StringResource res = new StringResource(pChild); 
+  StringTableEntry res = new StringTableEntry(pChild); 
   _strings.Add(res.Key, res); 
   pChild = ResourceUtil.Align(pChild.ToInt32() + res.Header.wLength); 
  } 
  return new IntPtr(lpRes.ToInt32() + _header.wLength); 
 }</pre>
  <p>
-  Each <code>StringResource</code> is the endpoint structure without any children.</p>
+  Each <code>StringTableEntry</code> is the endpoint structure without any children.</p>
  <pre lang="cs">
 public void Read(IntPtr lpRes) 
 { 

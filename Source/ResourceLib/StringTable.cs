@@ -13,12 +13,12 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class StringTable : ResourceTableHeader
     {
-        Dictionary<string, StringResource> _strings = new Dictionary<string,StringResource>();
+        Dictionary<string, StringTableEntry> _strings = new Dictionary<string,StringTableEntry>();
 
         /// <summary>
         /// Resource strings.
         /// </summary>
-        public Dictionary<string, StringResource> Strings
+        public Dictionary<string, StringTableEntry> Strings
         {
             get
             {
@@ -65,7 +65,7 @@ namespace Vestris.ResourceLib
 
             while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))
             {
-                StringResource res = new StringResource(pChild);
+                StringTableEntry res = new StringTableEntry(pChild);
                 _strings.Add(res.Key, res);
                 pChild = ResourceUtil.Align(pChild.ToInt32() + res.Header.wLength);
             }
@@ -84,7 +84,7 @@ namespace Vestris.ResourceLib
             base.Write(w);
 
             int total = _strings.Count;
-            Dictionary<string, StringResource>.Enumerator stringsEnum = _strings.GetEnumerator();
+            Dictionary<string, StringTableEntry>.Enumerator stringsEnum = _strings.GetEnumerator();
             while (stringsEnum.MoveNext())
             {
                 stringsEnum.Current.Value.Write(w);
@@ -145,10 +145,10 @@ namespace Vestris.ResourceLib
             }
             set
             {
-                StringResource sr = null;
+                StringTableEntry sr = null;
                 if (!_strings.TryGetValue(key, out sr))
                 {
-                    sr = new StringResource(key);
+                    sr = new StringTableEntry(key);
                     _strings.Add(key, sr);
                 }
 
@@ -167,7 +167,7 @@ namespace Vestris.ResourceLib
             sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent)));
             sb.AppendLine(string.Format("{0}BLOCK \"{1}\"", new String(' ', indent + 1), _key));
             sb.AppendLine(string.Format("{0}BEGIN", new String(' ', indent + 1)));
-            foreach (StringResource stringResource in _strings.Values)
+            foreach (StringTableEntry stringResource in _strings.Values)
             {
                 sb.AppendLine(string.Format("{0}VALUE \"{1}\", \"{2}\"",
                     new String(' ', indent + 2),
