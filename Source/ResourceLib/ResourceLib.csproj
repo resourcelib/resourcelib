@@ -70,6 +70,7 @@
     <Compile Include="DialogExTemplateControl.cs" />
     <Compile Include="DialogExTemplate.cs" />
     <Compile Include="DialogTemplateUtil.cs" />
+    <Compile Include="FixedFileInfo.cs" />
     <Compile Include="Gdi32.cs" />
     <Compile Include="CursorDirectoryResource.cs" />
     <Compile Include="IconDirectoryResource.cs" />

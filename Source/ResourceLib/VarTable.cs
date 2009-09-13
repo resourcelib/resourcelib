@@ -79,7 +79,7 @@ namespace Vestris.ResourceLib
         /// </summary>
         /// <param name="w">Binary stream.</param>
         /// <returns>Last unpadded position.</returns>
-        internal override long Write(BinaryWriter w)
+        internal override void Write(BinaryWriter w)
         {
             long headerPos = w.BaseStream.Position;
             base.Write(w);
@@ -94,11 +94,9 @@ namespace Vestris.ResourceLib
                 w.Write((UInt16) languagesEnum.Current.Value);
             }
 
-            long unpaddedPosition = w.BaseStream.Position;
             ResourceUtil.WriteAt(w, w.BaseStream.Position - valuePos, headerPos + 2);
             ResourceUtil.PadToDWORD(w);
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
-            return unpaddedPosition;
         }
 
         /// <summary>

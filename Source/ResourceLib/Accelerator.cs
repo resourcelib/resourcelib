@@ -72,7 +72,7 @@ namespace Vestris.ResourceLib
         {
             return string.Format("{0}, {1}, {2}",
                 Key, Command, ResourceUtil.FlagsToString<User32.AcceleratorVirtualKey>(
-                    _accel.fVirt).Replace('|', ','));
+                    _accel.fVirt).Replace(" |", ","));
         }
     }
 }

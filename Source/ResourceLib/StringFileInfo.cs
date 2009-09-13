@@ -67,22 +67,20 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Write the string file-version resource to a binary stream.
         /// </summary>
-        /// <returns>Last unpadded position.</returns>
         /// <param name="w">Binary stream.</param>
-        internal override long Write(BinaryWriter w)
+        internal override void Write(BinaryWriter w)
         {
             long headerPos = w.BaseStream.Position;
             base.Write(w);
 
-            long unpaddedPosition = w.BaseStream.Position;
             Dictionary<string, StringTable>.Enumerator stringsEnum = _strings.GetEnumerator();
             while (stringsEnum.MoveNext())
             {
-                unpaddedPosition = stringsEnum.Current.Value.Write(w);
+                stringsEnum.Current.Value.Write(w);
             }
 
-            ResourceUtil.WriteAt(w, unpaddedPosition - headerPos, headerPos);
-            return unpaddedPosition;
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
+            ResourceUtil.PadToDWORD(w);
         }
 
         /// <summary>

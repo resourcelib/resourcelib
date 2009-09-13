@@ -21,7 +21,7 @@
           The following example loads all accelerator resources from a file.
           <code language="cs">
             <![CDATA[
-string filename = Path.Combine(Environment.SystemDirectory, "...");
+string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
 using (ResourceInfo ri = new ResourceInfo())
 {
     ri.Load(filename);
@@ -34,6 +34,26 @@ using (ResourceInfo ri = new ResourceInfo())
 ]]>
           </code>
         </para>
+        <para>
+          Explorer.exe contains the following accelerator table.
+          <code language="cmd">
+Resource: 251 of type RT_ACCELERATOR, 88 byte(s) [en-US]
+251 ACCELERATORS
+BEGIN
+ VK_F4, 305, ALT
+ VK_TAB, 41008, VIRTKEY , NOINVERT
+ VK_TAB, 41008, VIRTKEY , NOINVERT , SHIFT
+ VK_TAB, 41008, VIRTKEY , NOINVERT , CONTROL
+ VK_TAB, 41008, VIRTKEY , NOINVERT , SHIFT , CONTROL
+ VK_F5, 41061, VIRTKEY , NOINVERT
+ VK_F6, 41008, VIRTKEY , NOINVERT
+ VK_RETURN, 413, VIRTKEY , NOINVERT , ALT
+ Z, 416, VIRTKEY , NOINVERT , CONTROL
+ VK_F3, 41093, VIRTKEY , NOINVERT
+ M, 419, VIRTKEY , NOINVERT , ALT
+END
+          </code>          
+        </para>
       </content>
     </section>
     <section address="accelerators_readingaccelerator">
@@ -43,14 +63,26 @@ using (ResourceInfo ri = new ResourceInfo())
           The following example loads a single accelerator resource directly, without enumerating all resources.
           <code language="cs">
             <![CDATA[
-string filename = Path.Combine(Environment.SystemDirectory, "...");
+string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
 AcceleratorResource rc = new AcceleratorResource();
-rc.Name = new ResourceId(125);
+rc.Name = new ResourceId(251);
 rc.LoadFrom(filename);
 Console.WriteLine("AcceleratorResource: {0}, {1}", rc.Name, rc.TypeName);
 Console.WriteLine(rc);
 ]]>
           </code>
+        </para>
+      </content>
+    </section>
+    <section address="menus_writingaccelerators">
+      <title>Writing an Accelerator Table</title>
+      <content>
+        <para>
+          In order to add an accelerator into an executable (.exe or .dll) create a new instance of
+          <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.AcceleratorResource</codeEntityReference>
+          or load an existing one and add instances of <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.Accelerator</codeEntityReference>
+          to its <codeEntityReference qualifyHint="false">P:Vestris.ResourceLib.Accelerator.Accelerators</codeEntityReference>
+          collection.
         </para>
       </content>
     </section>

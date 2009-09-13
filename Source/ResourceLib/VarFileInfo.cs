@@ -68,20 +68,18 @@ namespace Vestris.ResourceLib
         /// Write the hardware independent dictionary of language and code page identifier tables to a binary stream.
         /// </summary>
         /// <param name="w">Binary stream.</param>
-        internal override long Write(BinaryWriter w)
+        internal override void Write(BinaryWriter w)
         {
             long headerPos = w.BaseStream.Position;
             base.Write(w);
 
             Dictionary<string, VarTable>.Enumerator varsEnum = _vars.GetEnumerator();
-            long unpaddedPosition = 0;
             while (varsEnum.MoveNext())
             {
-                unpaddedPosition = varsEnum.Current.Value.Write(w);
+                varsEnum.Current.Value.Write(w);
             }
 
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
-            return unpaddedPosition;
         }
 
         /// <summary>

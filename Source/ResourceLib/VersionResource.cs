@@ -16,7 +16,7 @@ namespace Vestris.ResourceLib
     public class VersionResource : Resource
     {
         ResourceTableHeader _header = new ResourceTableHeader("VS_VERSION_INFO");
-        Kernel32.VS_FIXEDFILEINFO _fixedfileinfo = Kernel32.VS_FIXEDFILEINFO.GetWindowsDefault();
+        FixedFileInfo _fixedfileinfo = new FixedFileInfo();
         private Dictionary<string, ResourceTableHeader> _resources = new Dictionary<string, ResourceTableHeader>();
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Vestris.ResourceLib
                 ResourceUtil.USENGLISHLANGID, 
                 0)
         {
-            _header.Header = new Kernel32.RESOURCE_HEADER((UInt16) Marshal.SizeOf(_fixedfileinfo));
+            _header.Header = new Kernel32.RESOURCE_HEADER(_fixedfileinfo.Size);
         }
 
         /// <summary>
@@ -82,8 +82,11 @@ namespace Vestris.ResourceLib
 
             IntPtr pFixedFileInfo = _header.Read(lpRes);
 
-            _fixedfileinfo = (Kernel32.VS_FIXEDFILEINFO)Marshal.PtrToStructure(
-                pFixedFileInfo, typeof(Kernel32.VS_FIXEDFILEINFO));
+            if (_header.Header.wValueLength != 0)
+            {
+                _fixedfileinfo = new FixedFileInfo();
+                _fixedfileinfo.Read(pFixedFileInfo);
+            }
 
             IntPtr pChild = ResourceUtil.Align(pFixedFileInfo.ToInt32() + _header.Header.wValueLength);
 
@@ -115,22 +118,11 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return string.Format("{0}.{1}.{2}.{3}",
-                    ResourceUtil.HiWord(_fixedfileinfo.dwFileVersionMS),
-                    ResourceUtil.LoWord(_fixedfileinfo.dwFileVersionMS),
-                    ResourceUtil.HiWord(_fixedfileinfo.dwFileVersionLS),
-                    ResourceUtil.LoWord(_fixedfileinfo.dwFileVersionLS));
+                return _fixedfileinfo.FileVersion;
             }
             set
             {
-                UInt32 major = 0, minor = 0, build = 0, release = 0;
-                string[] version_s = value.Split(".".ToCharArray(), 4);
-                if (version_s.Length >= 1) major = UInt32.Parse(version_s[0]);
-                if (version_s.Length >= 2) minor = UInt32.Parse(version_s[1]);
-                if (version_s.Length >= 3) build = UInt32.Parse(version_s[2]);
-                if (version_s.Length >= 4) release = UInt32.Parse(version_s[3]);
-                _fixedfileinfo.dwFileVersionMS = (major << 16) + minor;
-                _fixedfileinfo.dwFileVersionLS = (build << 16) + release;
+                _fixedfileinfo.FileVersion = value;
             }
         }
 
@@ -141,22 +133,11 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return string.Format("{0}.{1}.{2}.{3}",
-                    ResourceUtil.HiWord(_fixedfileinfo.dwProductVersionMS),
-                    ResourceUtil.LoWord(_fixedfileinfo.dwProductVersionMS),
-                    ResourceUtil.HiWord(_fixedfileinfo.dwProductVersionLS),
-                    ResourceUtil.LoWord(_fixedfileinfo.dwProductVersionLS));
+                return _fixedfileinfo.ProductVersion;
             }
             set
             {
-                UInt32 major = 0, minor = 0, build = 0, release = 0;
-                string[] version_s = value.Split(".".ToCharArray(), 4);
-                if (version_s.Length >= 1) major = UInt32.Parse(version_s[0]);
-                if (version_s.Length >= 2) minor = UInt32.Parse(version_s[1]);
-                if (version_s.Length >= 3) build = UInt32.Parse(version_s[2]);
-                if (version_s.Length >= 4) release = UInt32.Parse(version_s[3]);
-                _fixedfileinfo.dwProductVersionMS = (major << 16) + minor;
-                _fixedfileinfo.dwProductVersionLS = (build << 16) + release;
+                _fixedfileinfo.ProductVersion = value;
             }
         }
 
@@ -169,17 +150,18 @@ namespace Vestris.ResourceLib
             long headerPos = w.BaseStream.Position;
             _header.Write(w);
             
-            w.Write(ResourceUtil.GetBytes<Kernel32.VS_FIXEDFILEINFO>(_fixedfileinfo));
-            ResourceUtil.PadToDWORD(w);
+            if (_fixedfileinfo != null)
+            {
+                _fixedfileinfo.Write(w);
+            }
 
-            long unpaddedPosition = w.BaseStream.Position;
             Dictionary<string, ResourceTableHeader>.Enumerator resourceEnum = _resources.GetEnumerator();
             while (resourceEnum.MoveNext())
             {
-                unpaddedPosition = resourceEnum.Current.Value.Write(w);
+                resourceEnum.Current.Value.Write(w);
             }
 
-            ResourceUtil.WriteAt(w, unpaddedPosition - headerPos, headerPos);
+            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
 
         /// <summary>
@@ -206,34 +188,10 @@ namespace Vestris.ResourceLib
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(string.Format("FILEVERSION {0},{1},{2},{3}",
-                ResourceUtil.HiWord(_fixedfileinfo.dwFileVersionMS),
-                ResourceUtil.LoWord(_fixedfileinfo.dwFileVersionMS),
-                ResourceUtil.HiWord(_fixedfileinfo.dwFileVersionLS),
-                ResourceUtil.LoWord(_fixedfileinfo.dwFileVersionLS)));
-            sb.AppendLine(string.Format("PRODUCTVERSION {0},{1},{2},{3}",
-                ResourceUtil.HiWord(_fixedfileinfo.dwProductVersionMS),
-                ResourceUtil.LoWord(_fixedfileinfo.dwProductVersionMS),
-                ResourceUtil.HiWord(_fixedfileinfo.dwProductVersionLS),
-                ResourceUtil.LoWord(_fixedfileinfo.dwProductVersionLS)));
-            if (_fixedfileinfo.dwFileFlagsMask == Winver.VS_FFI_FILEFLAGSMASK)
+            if (_fixedfileinfo != null)
             {
-                sb.AppendLine("FILEFLAGSMASK VS_FFI_FILEFLAGSMASK");
+                sb.Append(_fixedfileinfo.ToString());
             }
-            else
-            {
-                sb.AppendLine(string.Format("FILEFLAGSMASK 0x{0:x}",
-                    _fixedfileinfo.dwFileFlagsMask.ToString()));
-            }
-            sb.AppendLine(string.Format("FILEFLAGS {0}", 
-                _fixedfileinfo.dwFileFlags == 0 ? "0" : ResourceUtil.FlagsToString<Winver.FileFlags>(
-                    _fixedfileinfo.dwFileFlags)));
-            sb.AppendLine(string.Format("FILEOS {0}",
-                ResourceUtil.FlagsToString<Winver.FileOs>(_fixedfileinfo.dwFileFlags)));
-            sb.AppendLine(string.Format("FILETYPE {0}",
-                ResourceUtil.FlagsToString<Winver.FileType>(_fixedfileinfo.dwFileType)));
-            sb.AppendLine(string.Format("FILESUBTYPE {0}",
-                ResourceUtil.FlagsToString<Winver.FileSubType>(_fixedfileinfo.dwFileSubtype)));
             sb.AppendLine("BEGIN");
             Dictionary<string, ResourceTableHeader>.Enumerator resourceEnum = _resources.GetEnumerator();
             while (resourceEnum.MoveNext())

@@ -78,23 +78,20 @@ namespace Vestris.ResourceLib
         /// </summary>
         /// <param name="w">Binary stream.</param>
         /// <returns>Last unpadded position.</returns>
-        internal override long Write(BinaryWriter w)
+        internal override void Write(BinaryWriter w)
         {
             long headerPos = w.BaseStream.Position;
             base.Write(w);
 
-            long result = w.BaseStream.Position;
+            int total = _strings.Count;
             Dictionary<string, StringResource>.Enumerator stringsEnum = _strings.GetEnumerator();
             while (stringsEnum.MoveNext())
             {
                 stringsEnum.Current.Value.Write(w);
-                // write size so-far, then pad (last size doesn't include last padding)
                 ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
-                result = w.BaseStream.Position;
-                ResourceUtil.PadToDWORD(w);
+                // total parent structure size must not include padding
+                if (-- total != 0) ResourceUtil.PadToDWORD(w);
             }
-
-            return result;
         }
         
         /// <summary>

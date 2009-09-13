@@ -12,6 +12,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class ManifestResource : Resource
     {
+        private byte[] _data = null;
         private XmlDocument _manifest = null;
 
         /// <summary>
@@ -21,11 +22,18 @@ namespace Vestris.ResourceLib
         {
             get
             {
+                if (_manifest == null && _data != null)
+                {
+                    _manifest = new XmlDocument();
+                    _manifest.LoadXml(Encoding.UTF8.GetString(_data));
+                }
+
                 return _manifest;
             }
             set
             {
                 _manifest = value;
+                _data = null;
                 _size = Encoding.UTF8.GetBytes(_manifest.OuterXml).Length;
             }
         }
@@ -98,13 +106,9 @@ namespace Vestris.ResourceLib
         {
             if (_size > 0)
             {
-                byte[] data = new byte[_size];
-                Marshal.Copy(lpRes, data, 0, data.Length);
-                _manifest = new XmlDocument();
-                _manifest.PreserveWhitespace = true;
-                _manifest.LoadXml(Encoding.UTF8.GetString(data));
-                // todo: figure out how to preserve format in a way that size doesn't change
-                _size = Encoding.UTF8.GetBytes(_manifest.OuterXml).Length;
+                _manifest = null;
+                _data = new byte[_size];
+                Marshal.Copy(lpRes, _data, 0, _data.Length);
             }
 
             return new IntPtr(lpRes.ToInt32() + _size);
@@ -116,7 +120,14 @@ namespace Vestris.ResourceLib
         /// <param name="w">Binary stream.</param>
         internal override void Write(BinaryWriter w)
         {
-            w.Write(Encoding.UTF8.GetBytes(_manifest.OuterXml));
+            if (_manifest != null)
+            {
+                w.Write(Encoding.UTF8.GetBytes(_manifest.OuterXml));
+            }
+            else if (_data != null)
+            {
+                w.Write(_data);
+            }
         }
 
         /// <summary>

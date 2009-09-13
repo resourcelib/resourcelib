@@ -56,8 +56,9 @@
   file version (<code>VS_VERSIONINFO</code>), string (company, copyright and product information), 
   bitmap (<code>RT_BITMAP</code>), icon (<code>RT_GROUP_ICON</code>, <code>RT_ICON</code>), dialog 
   (<code>RT_DIALOG</code>), menu (<code>RT_MENU</code>), cursor (<code>RT_GROUP_CURSOR</code>, 
-  <code>RT_CURSOR</code>) and SxS manifest (<code>RT_MANIFEST</code>) resources. Overtime this library 
-  was extended through these resource types and can be easily extended for all the other missing ones.
+  <code>RT_CURSOR</code>), accelerator (<code>RT_ACCELERATOR</code>) and SxS manifest (<code>RT_MANIFEST</code>) 
+  resources. Overtime this library was extended through these resource types and can be easily completed for all 
+  the remaining ones.
  </p>
  <h2>
   Background</h2>
@@ -273,42 +274,37 @@ public void Read(IntPtr lpRes)
  <h3>
   Writing</h3>
  <p>
-  Writing is the reverse operation of reading, but the header must be updated to the
-  correct length. It's easier to align the structure and to calculate the difference
-  between the end of the structure and the beginning of it after it's written, but do 
-     not an additional difficulty that structure size does not include padding.</p>
+  Writing is the reverse operation of reading, but the header must be updated to the correct length. It is easier 
+  to align  the structure and to calculate the difference between the end of the structure and the beginning of it after 
+  it's written. The sizes don't include any padding.
+ </p>
  <pre lang="cs">
 public override void Write(BinaryWriter w) 
 { 
  long headerPos = w.BaseStream.Position; 
  base.Write(w);
- long unpaddedPosition = w.BaseStream.Position;
  Dictionary&lt;string, StringTable&gt;.Enumerator stringsEnum = _strings.GetEnumerator(); 
  while (stringsEnum.MoveNext()) 
  { 
-  unpaddedPosition = stringsEnum.Current.Value.Write(w); 
+  stringsEnum.Current.Value.Write(w); 
  } 
- ResourceUtil.WriteAt(w, unpaddedPosition - headerPos, headerPos); 
+ ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos); 
  ResourceUtil.PadToDWORD(w);
 }</pre>
  <h3>
   Binary Compatibility</h3>
  <p>
-  It is very important to ensure that the library is capable of generating correct
-  binary resources with proper sizes and correctly aligned structures. Each top-level
-  resource is capable of reading from raw data and writing back the raw data. All
-  lengths and sizes are recalculated at write time. The exception to the rule is the 
-  side-by-side manifest resources: rewriting an identical manifest does not necessarily 
-  preserve the size of the <code>RT_MANIFEST</code> resource because new lines in attribute values 
-  are normalized per 
-  <a href="http://www.w3.org/TR/REC-xml/#AVNormalize" target="_blank">W3C spec section 3.3.3</a>.
+  It is very important to ensure that the library is capable of generating correct binary resources with proper sizes 
+  and correctly aligned structures. Each top-level resource is capable of reading from raw data and writing back the 
+  raw data. All lengths and sizes are recalculated at write time or preserved between loading and saving. An interesting
+  complication exists in side-by-side manifest resources: rewriting an identical manifest does not necessarily 
+  have to preserve the size of the <code>RT_MANIFEST</code> resource because new lines in attribute values are 
+  normalized per <a href="http://www.w3.org/TR/REC-xml/#AVNormalize" target="_blank">W3C spec section 3.3.3</a>.
  </p>
  <p>
-  A series of unit tests ensure that data read is identical to the data written. This
-  is accomplished by loading resources from an existing file, performing a deep copy
-  of the data without any structural fields (lengths, number of elements, etc.), writing
-  the copy to a vector of bytes and comparing the two. This is generically implemented in 
-  <code>ResourceTests.TestReadWriteResourceBytes</code> for all test binaries.
+  A series of unit tests ensure that data read is identical to the data written. 
+  The easy start is the <code>ResourceTests.TestReadWriteResourceBytes</code> unit test which ensures that data
+  read is identical to data written.
  </p>
  <pre>
 [Test]
@@ -334,6 +330,12 @@ public void TestReadWriteResourceBytes()
     }
 }
  </pre>
+ <p>
+  A more extensive test is needed to ensure that data is correct even if resource
+  contents change: this is accomplished by loading resources from an existing file, performing a deep copy of the 
+  data without any structural fields (lengths, number of elements, etc.), writing the copy to a vector of bytes and 
+  comparing the two. A good example of such unit test is <code>VersionResourceTests.TestDeepCopyBytes</code>. 
+ </p>
  <h2>Version</h2>
  <p>
   Version resources are amongst the most complex resource structures. 
@@ -538,8 +540,34 @@ FONT 8, "MS Shell Dlg"
  <h2>Accelerators</h2>
  <p>
   An accelerator is a keystroke defined by the application to give the user a quick way to perform a task.
-  (TODO)
+  Accelerators' storage is a straightforward list of <code>ACCEL</code> structures aligned on <code>WORD</code> boundaries.
+  The number of items in an <code>RT_ACCELERATOR</code> resource is the size of the resource divided by the size of each 
+  structure. <code>ACCEL</code> contains a combination of flags that make any combination of Control, Alt and/or Shift 
+  keys and either an ASCII character or a special key.
  </p>
+ <p>
+  The list of special keys is one that tells some interesting stories of Microsoft partnerships and Windows evolution 
+  as it includes such keys as the <em>Fujitsu/OASYS keyboard 'Left OYAYUBI' key</em> (<code>VK_OEM_FJ_TOUROKU</code>) or 
+  <em>NEC PC-9800 keyboard '=' key</em> (<code>VK_OEM_NEC_EQUAL</code>).
+ </p>
+ <p>
+  Here's an example of the accelerator table with id 251 from Windows Vista explorer.exe.
+ </p>
+ <pre>
+251 ACCELERATORS
+BEGIN
+ VK_F4, 305, ALT
+ VK_TAB, 41008, VIRTKEY, NOINVERT
+ VK_TAB, 41008, VIRTKEY, NOINVERT, SHIFT
+ VK_TAB, 41008, VIRTKEY, NOINVERT, CONTROL
+ VK_TAB, 41008, VIRTKEY, NOINVERT, SHIFT, CONTROL
+ VK_F5, 41061, VIRTKEY, NOINVERT
+ VK_F6, 41008, VIRTKEY, NOINVERT
+ VK_RETURN, 413, VIRTKEY, NOINVERT, ALT
+ Z, 416, VIRTKEY, NOINVERT, CONTROL
+ VK_F3, 41093, VIRTKEY, NOINVERT
+ M, 419, VIRTKEY, NOINVERT, ALT
+END</pre>
  <h2>Menus</h2>
  <p>
   There're two kinds of menu resources: classic 16 bit menus and 32-bit extended menus. The latter was

@@ -93,8 +93,7 @@ namespace Vestris.ResourceLib
         /// Write the resource table.
         /// </summary>
         /// <param name="w">Binary stream.</param>
-        /// <returns>Last position before padding.</returns>
-        internal virtual long Write(BinaryWriter w)
+        internal virtual void Write(BinaryWriter w)
         {
             // wLength
             w.Write((UInt16) _header.wLength);
@@ -107,9 +106,7 @@ namespace Vestris.ResourceLib
             // null-terminator
             w.Write((UInt16) 0);
             // pad fixed info
-            long unpaddedPosition = w.BaseStream.Position;
             ResourceUtil.PadToDWORD(w);
-            return unpaddedPosition;
         }
 
         /// <summary>
