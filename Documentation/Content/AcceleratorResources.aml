@@ -74,7 +74,7 @@ Console.WriteLine(rc);
         </para>
       </content>
     </section>
-    <section address="menus_writingaccelerators">
+    <section address="accelerators_writingaccelerators">
       <title>Writing an Accelerator Table</title>
       <content>
         <para>

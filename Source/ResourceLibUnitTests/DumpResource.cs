@@ -53,6 +53,8 @@ namespace Vestris.ResourceLibUnitTests
                 Dump(rc as BitmapResource);
             else if (rc is DialogResource)
                 Dump(rc as DialogResource);
+            else if (rc is StringResource)
+                Dump(rc as StringResource);
             else if (rc is MenuResource)
                 Dump(rc as MenuResource);
             if (rc is AcceleratorResource)
@@ -128,6 +130,11 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         public static void Dump(AcceleratorResource rc)
+        {
+            Console.WriteLine(rc.ToString());
+        }
+
+        public static void Dump(StringResource rc)
         {
             Console.WriteLine(rc.ToString());
         }

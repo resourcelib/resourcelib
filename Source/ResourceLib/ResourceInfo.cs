@@ -169,6 +169,9 @@ namespace Vestris.ResourceLib
                     case Kernel32.ResourceTypes.RT_DIALOG:
                         rc = new DialogResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
+                    case Kernel32.ResourceTypes.RT_STRING:
+                        rc = new StringResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                        break;
                     case Kernel32.ResourceTypes.RT_ACCELERATOR:
                         rc = new AcceleratorResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;

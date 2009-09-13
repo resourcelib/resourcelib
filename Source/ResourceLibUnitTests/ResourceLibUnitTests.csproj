@@ -60,6 +60,7 @@
     <Compile Include="ResourceInfoTests.cs" />
     <Compile Include="ResourceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringResourceTests.cs" />
     <Compile Include="VersionResourceTests.cs" />
   </ItemGroup>
   <ItemGroup>

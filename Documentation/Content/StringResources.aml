@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e71d030b-c011-4f2a-8b7f-3a684a1e95a4" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        Unlike the other resource formats, where the resource identifier is the same as the value listed in the *.rc file,
+        string resources are packaged in <newTerm>blocks</newTerm>. Each string resource block has sixteen strings.
+      </para>
+      <para>
+        When <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.ResourceInfo</codeEntityReference>
+        encouters a resource of type <literal>9</literal> (<literal>RT_STRING</literal>), it creates an object
+        of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.StringResource</codeEntityReference>
+        which contains a table of strings.
+      </para>
+    </introduction>
+    <section address="strings_readingstrings">
+      <title>Reading String Resources</title>
+      <content>
+        <para>
+          The following example loads all string resources from a file.
+          <code language="cs">
+            <![CDATA[
+string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
+using (ResourceInfo ri = new ResourceInfo())
+{
+    ri.Load(filename);
+    foreach(StringResource rc in ri[Kernel32.ResourceTypes.RT_STRING])
+    {
+        Console.WriteLine("StringResource: {0}, {1}", rc.Name, rc.TypeName);
+        Console.WriteLine(rc);
+    }
+}
+]]>
+          </code>
+        </para>
+        <para>
+          Explorer.exe contains several string tables, including this one.
+          <code language="cmd">
+            <![CDATA[
+StringResource: 19, RT_STRING
+STRINGTABLE
+BEGIN
+ 300 Store letters, reports, notes, and other kinds of documents.
+ 301 Displays recently opened documents and folders.
+ 302 Store and play music and other audio files.
+ 303 Store pictures and other graphics files.
+END]]>
+          </code>
+        </para>
+      </content>
+    </section>
+    <section address="strings_readingstring">
+      <title>Reading Specific String Resources</title>
+      <content>
+        <para>
+          In order to locate a string you must first calculate the string table block that contains it using
+          <codeEntityReference qualifyHint="false">M:Vestris.ResourceLib.StringResource.GetBlockId</codeEntityReference>
+          and use the result to load the resource.
+          <code language="cs">
+            <![CDATA[
+public static UInt16 GetBlockId(int stringId)
+{
+    return (UInt16)((stringId / 16) + 1);
+}]]>            
+          </code>
+        </para>
+        <para>
+          The following example retrieves string Id 8243 from <localUri>explorer.exe</localUri>.
+          <code language="cs">
+            <![CDATA[
+string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
+StringResource sr = new StringResource();
+sr.Name = new ResourceId(StringResource.GetBlockId(8243));
+sr.LoadFrom(filename);
+Console.WriteLine(sr[8243]);]]>
+          </code>
+        </para>
+      </content>
+    </section>
+    <section address="strings_writingstrings">
+      <title>Writing a String Table</title>
+      <content>
+        <para>
+          Special care of preserving Ids must be taken when writing string tables. To add a string of Id 8243
+          create an instance of <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.StringResource</codeEntityReference>,
+          assign it a block Id resulting from <codeEntityReference qualifyHint="false">M:Vestris.ResourceLib.StringResource.GetBlockId</codeEntityReference>
+          and add the string to its strings collection.
+          <code language="cs">
+            <![CDATA[
+StringResource sr = new StringResource();
+sr.Name = new ResourceId(StringResource.GetBlockId(1256));
+sr[1256] = "string of id 1256";
+sr.SaveTo(targetFilename);
+            ]]>
+          </code>
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>
