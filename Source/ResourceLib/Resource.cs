@@ -150,55 +150,6 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Load resource bytes from an executable file.
-        /// </summary>
-        /// <param name="filename">Executable (.exe or .dll) file.</param>
-        /// <param name="name">Resource name.</param>
-        /// <param name="type">Resource type.</param>
-        /// <param name="lang">Resource language.</param>
-        /// <returns>Resource data.</returns>
-        public static byte[] LoadBytesFrom(string filename, ResourceId type, ResourceId name, UInt16 lang)
-        {
-            IntPtr hModule = IntPtr.Zero;
-
-            try
-            {
-                hModule = Kernel32.LoadLibraryEx(filename, IntPtr.Zero,
-                    Kernel32.DONT_RESOLVE_DLL_REFERENCES | Kernel32.LOAD_LIBRARY_AS_DATAFILE);
-
-                if (IntPtr.Zero == hModule)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                IntPtr hRes = Kernel32.FindResourceEx(hModule, type.Id, name.Id, lang);
-                if (IntPtr.Zero == hRes)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                IntPtr hGlobal = Kernel32.LoadResource(hModule, hRes);
-                if (IntPtr.Zero == hGlobal)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                IntPtr lpRes = Kernel32.LockResource(hGlobal);
-
-                if (lpRes == IntPtr.Zero)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                int size = Kernel32.SizeofResource(hModule, hRes);
-                if (size <= 0)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                byte[] bytes = new byte[size];
-                Marshal.Copy(lpRes, bytes, 0, size);
-
-                return bytes;
-            }
-            finally
-            {
-                if (hModule != IntPtr.Zero)
-                    Kernel32.FreeLibrary(hModule);
-            }
-        }
-
-        /// <summary>
         /// Load a resource from an executable (.exe or .dll) file.
         /// </summary>
         /// <param name="filename">An executable (.exe or .dll) file.</param>

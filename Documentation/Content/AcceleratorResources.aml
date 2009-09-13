@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="31cd96ce-d1be-47f6-9e76-d6f6e202b18b" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        An accelerator is a keystroke defined by the application to give the user a quick way to perform a task.
+        This section demonstrates how to use this library for manipulating accelerator resources.
+      </para>
+      <para>
+        When <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.ResourceInfo</codeEntityReference>
+        encouters a resource of type <literal>9</literal> (<literal>RT_ACCELERATOR</literal>), it creates an object
+        of type <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.AcceleratorResource</codeEntityReference>
+        which contains a collection of instances of 
+        <codeEntityReference qualifyHint="false">T:Vestris.ResourceLib.Accelerator</codeEntityReference>.
+      </para>
+    </introduction>
+    <section address="accelerators_readingaccelerators">
+      <title>Reading Accelerator Resources</title>
+      <content>
+        <para>
+          The following example loads all accelerator resources from a file.
+          <code language="cs">
+            <![CDATA[
+string filename = Path.Combine(Environment.SystemDirectory, "...");
+using (ResourceInfo ri = new ResourceInfo())
+{
+    ri.Load(filename);
+    foreach(AcceleratorResource rc in ri[Kernel32.ResourceTypes.RT_ACCELERATOR])
+    {
+        Console.WriteLine("AcceleratorResource: {0}, {1}", rc.Name, rc.TypeName);
+        Console.WriteLine(rc);
+    }
+}
+]]>
+          </code>
+        </para>
+      </content>
+    </section>
+    <section address="accelerators_readingaccelerator">
+      <title>Reading Specific Accelerator Resources</title>
+      <content>
+        <para>
+          The following example loads a single accelerator resource directly, without enumerating all resources.
+          <code language="cs">
+            <![CDATA[
+string filename = Path.Combine(Environment.SystemDirectory, "...");
+AcceleratorResource rc = new AcceleratorResource();
+rc.Name = new ResourceId(125);
+rc.LoadFrom(filename);
+Console.WriteLine("AcceleratorResource: {0}, {1}", rc.Name, rc.TypeName);
+Console.WriteLine(rc);
+]]>
+          </code>
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -9,7 +10,7 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// Resource info manager.
     /// </summary>
-    public class ResourceInfo : IDisposable
+    public class ResourceInfo : IEnumerable<Resource>, IDisposable
     {
         private IntPtr _hModule = IntPtr.Zero;
         private Dictionary<ResourceId, List<Resource>> _resources;
@@ -168,6 +169,9 @@ namespace Vestris.ResourceLib
                     case Kernel32.ResourceTypes.RT_DIALOG:
                         rc = new DialogResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
+                    case Kernel32.ResourceTypes.RT_ACCELERATOR:
+                        rc = new AcceleratorResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                        break;
                     default:
                         rc = new GenericResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                         break;
@@ -232,5 +236,39 @@ namespace Vestris.ResourceLib
                 _resources[new ResourceId(type)] = value;
             }
         }
+
+        #region IEnumerable<Resource> Members
+
+        /// <summary>
+        /// Enumerates all resources within this resource info collection.
+        /// </summary>
+        /// <returns>Resources enumerator.</returns>
+        public IEnumerator<Resource> GetEnumerator()
+        {
+            Dictionary<ResourceId, List<Resource>>.Enumerator resourceTypesEnumerator = _resources.GetEnumerator();
+            while(resourceTypesEnumerator.MoveNext())
+            {
+                List<Resource>.Enumerator resourceEnumerator = resourceTypesEnumerator.Current.Value.GetEnumerator();
+                while (resourceEnumerator.MoveNext())
+                {
+                    yield return resourceEnumerator.Current;
+                }                
+            }
+        }
+
+        #endregion
+
+        #region IEnumerable Members
+
+        /// <summary>
+        /// Enumerates all resources within this resource info collection.
+        /// </summary>
+        /// <returns>Resources enumerator.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        #endregion
     }
 }

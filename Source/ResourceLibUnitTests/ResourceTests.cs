@@ -12,7 +12,30 @@ namespace Vestris.ResourceLibUnitTests
 {
     [TestFixture]
     public class ResourceTests
-    {      
+    {
+        [Test]
+        public void TestReadWriteResourceBytes()
+        {
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
+            foreach (string filename in Directory.GetFiles(Path.Combine(uriPath, "Binaries")))
+            {
+                Console.WriteLine(filename);
+                using (ResourceInfo ri = new ResourceInfo())
+                {
+                    ri.Load(filename);
+                    foreach (Resource rc in ri)
+                    {
+                        Console.WriteLine("Resource: {0} - {1}", rc.TypeName, rc.Name);
+                        GenericResource genericResource = new GenericResource(rc.Type, rc.Name, rc.Language);
+                        genericResource.LoadFrom(filename);
+                        byte[] data = rc.WriteAndGetBytes();
+                        ByteUtils.CompareBytes(genericResource.Data, data);
+                    }
+                }
+            }
+        }
+
         [Test]
         public void TestCustom()
         {

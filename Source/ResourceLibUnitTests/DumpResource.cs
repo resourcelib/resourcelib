@@ -55,6 +55,8 @@ namespace Vestris.ResourceLibUnitTests
                 Dump(rc as DialogResource);
             else if (rc is MenuResource)
                 Dump(rc as MenuResource);
+            if (rc is AcceleratorResource)
+                Dump(rc as AcceleratorResource);
         }
 
         public static void Dump(VersionResource rc)
@@ -121,6 +123,11 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         public static void Dump(MenuResource rc)
+        {
+            Console.WriteLine(rc.ToString());
+        }
+
+        public static void Dump(AcceleratorResource rc)
         {
             Console.WriteLine(rc.ToString());
         }

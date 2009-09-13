@@ -34,24 +34,6 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [Test]
-        public void TestReadWriteMenuResourceBytes()
-        {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
-            string filename = Path.Combine(uriPath, @"Binaries\custom.exe");
-            MenuResource sourceMenu = new MenuResource();
-            GenericResource genericResource = new GenericResource(
-                new ResourceId(Kernel32.ResourceTypes.RT_MENU),
-                new ResourceId(101),
-                ResourceUtil.USENGLISHLANGID);
-            genericResource.LoadFrom(filename);
-            sourceMenu.Name = new ResourceId(101);
-            sourceMenu.LoadFrom(filename);
-            byte[] data = sourceMenu.WriteAndGetBytes();
-            ByteUtils.CompareBytes(genericResource.Data, data);
-        }
-
-        [Test]
         public void TestReadWriteMenuMixedResourceBytes()
         {
             string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");

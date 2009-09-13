@@ -275,19 +275,21 @@ public void Read(IntPtr lpRes)
  <p>
   Writing is the reverse operation of reading, but the header must be updated to the
   correct length. It's easier to align the structure and to calculate the difference
-  between the end of the structure and the beginning of it after it's written.</p>
+  between the end of the structure and the beginning of it after it's written, but do 
+     not an additional difficulty that structure size does not include padding.</p>
  <pre lang="cs">
 public override void Write(BinaryWriter w) 
 { 
  long headerPos = w.BaseStream.Position; 
- base.Write(w); 
+ base.Write(w);
+ long unpaddedPosition = w.BaseStream.Position;
  Dictionary&lt;string, StringTable&gt;.Enumerator stringsEnum = _strings.GetEnumerator(); 
  while (stringsEnum.MoveNext()) 
  { 
-  stringsEnum.Current.Value.Write(w); 
+  unpaddedPosition = stringsEnum.Current.Value.Write(w); 
  } 
- ResourceUtil.PadToDWORD(w); 
- ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos); 
+ ResourceUtil.WriteAt(w, unpaddedPosition - headerPos, headerPos); 
+ ResourceUtil.PadToDWORD(w);
 }</pre>
  <h3>
   Binary Compatibility</h3>
@@ -300,13 +302,38 @@ public override void Write(BinaryWriter w)
   preserve the size of the <code>RT_MANIFEST</code> resource because new lines in attribute values 
   are normalized per 
   <a href="http://www.w3.org/TR/REC-xml/#AVNormalize" target="_blank">W3C spec section 3.3.3</a>.
-</p>
+ </p>
  <p>
   A series of unit tests ensure that data read is identical to the data written. This
   is accomplished by loading resources from an existing file, performing a deep copy
   of the data without any structural fields (lengths, number of elements, etc.), writing
-  the copy to a vector of bytes and comparing the two. An example of such a test is
-  <code>VersionResourceTests.TestDeepCopyBytes</code>.</p>
+  the copy to a vector of bytes and comparing the two. This is generically implemented in 
+  <code>ResourceTests.TestReadWriteResourceBytes</code> for all test binaries.
+ </p>
+ <pre>
+[Test]
+public void TestReadWriteResourceBytes()
+{
+    Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+    string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
+    foreach (string filename in Directory.GetFiles(Path.Combine(uriPath, "Binaries")))
+    {
+        Console.WriteLine(filename);
+        using (ResourceInfo ri = new ResourceInfo())
+        {
+            ri.Load(filename);
+            foreach (Resource rc in ri)
+            {
+                Console.WriteLine("Resource: {0} - {1}", rc.TypeName, rc.Name);
+                GenericResource genericResource = new GenericResource(rc.Type, rc.Name, rc.Language);
+                genericResource.LoadFrom(filename);
+                byte[] data = rc.WriteAndGetBytes();
+                ByteUtils.CompareBytes(genericResource.Data, data);
+            }
+        }
+    }
+}
+ </pre>
  <h2>Version</h2>
  <p>
   Version resources are amongst the most complex resource structures. 
@@ -508,6 +535,11 @@ FONT 8, "MS Shell Dlg"
  Button "OK" 1, 63, 55, 40, 14, WS_TABSTOP | WS_VISIBLE | WS_CHILD | DS_ABSALIGN| BS_DEFPUSHBUTTON
  Button "Cancel" 2, 108, 55, 40, 14, WS_TABSTOP | WS_VISIBLE | WS_CHILD| BS_TEXT
 } </pre>  
+ <h2>Accelerators</h2>
+ <p>
+  An accelerator is a keystroke defined by the application to give the user a quick way to perform a task.
+  (TODO)
+ </p>
  <h2>Menus</h2>
  <p>
   There're two kinds of menu resources: classic 16 bit menus and 32-bit extended menus. The latter was

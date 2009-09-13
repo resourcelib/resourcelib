@@ -46,6 +46,7 @@
     <Compile Include="..\Common\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AcceleratorResourceTests.cs" />
     <Compile Include="BitmapResourceTests.cs" />
     <Compile Include="ByteUtils.cs" />
     <Compile Include="CursorResourceTests.cs" />

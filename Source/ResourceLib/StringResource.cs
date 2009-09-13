@@ -151,8 +151,9 @@ namespace Vestris.ResourceLib
                 // value (always double-null-terminated)
                 w.Write(Encoding.Unicode.GetBytes(_value));
             }
-            ResourceUtil.WriteAt(w, (w.BaseStream.Position - valuePos) / 2, headerPos + 2);
-            ResourceUtil.PadToDWORD(w);
+            // wValueLength
+            ResourceUtil.WriteAt(w, (w.BaseStream.Position - valuePos) / Marshal.SystemDefaultCharSize, headerPos + 2);
+            // wLength
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
     }

@@ -59,6 +59,8 @@
     <Compile Include="..\Common\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Accelerator.cs" />
+    <Compile Include="AcceleratorResource.cs" />
     <Compile Include="BitmapFile.cs" />
     <Compile Include="BitmapResource.cs" />
     <Compile Include="CursorResource.cs" />

@@ -137,25 +137,6 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [Test]
-        public void TestCompareDialogResourceBytes()
-        {
-            foreach (TestLoadDialogResourceTestDataEntry test in testdata)
-            {
-                Console.WriteLine(test.Filename);
-                DialogResource sourceDialog = new DialogResource();
-                GenericResource genericResource = new GenericResource(
-                    new ResourceId(Kernel32.ResourceTypes.RT_DIALOG),
-                    test.ResourceId,
-                    ResourceUtil.USENGLISHLANGID);
-                genericResource.LoadFrom(test.Filename);
-                sourceDialog.Name = test.ResourceId;
-                sourceDialog.LoadFrom(test.Filename);
-                byte[] data = sourceDialog.WriteAndGetBytes();
-                ByteUtils.CompareBytes(genericResource.Data, data);
-            }
-        }
-
-        [Test]
         public void TestAddDialogResource()
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);

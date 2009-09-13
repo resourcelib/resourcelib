@@ -33,6 +33,7 @@
         <li>Added support for <code>RT_BITMAP</code>, bitmap resources.</li>
         <li>Added support for <code>RT_DIALOG</code>, dialog resources.</li>
         <li>Added support for <code>RT_MENU</code>, menu resources.</li>
+        <li>Added support for <code>RT_ACCELERATOR</code>, accelerator resources.</li>
     </ul>
     <p>
         <b>Misc</b></p>
@@ -65,6 +66,8 @@
             Resource.Name</code> and <code>Resource.Type</code>.</li>
         <li>Bug: <code>StringResource</code> length in its header is incorrect after the value
             is updated.</li>
+        <li>Bug: <code>VersionResource.Write</code> erroneously included padding in the structure
+            size.</li>
     </ul>
     <h3>
         1.1 (2009-02-19)</h3>

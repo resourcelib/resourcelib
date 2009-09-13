@@ -8,6 +8,7 @@
       <Topic id="8162f211-25a7-4c74-870b-8beba385902a" visible="True" title="Icon (RT_ICON)" />
       <Topic id="3970a095-1052-48f3-91c1-baac3545a684" visible="True" tocTitle="Menu (RT_MENU)" />
       <Topic id="58ee16d9-36ea-45cc-ac30-b68aa2388895" visible="True" title="Dialog (RT_DIALOG)" />
+      <Topic id="31cd96ce-d1be-47f6-9e76-d6f6e202b18b" visible="True" title="Accelerator (RT_ACCELERATOR)" />
       <Topic id="473bb06e-99af-4e35-bc79-832501bdd403" visible="True" title="Version (RT_VERSION)" />
       <Topic id="065f0818-f488-451b-ac63-1c5e24299041" visible="True" title="Manifest (RT_MANIFEST)" />
     </Topic>

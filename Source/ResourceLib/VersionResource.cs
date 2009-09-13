@@ -172,13 +172,14 @@ namespace Vestris.ResourceLib
             w.Write(ResourceUtil.GetBytes<Kernel32.VS_FIXEDFILEINFO>(_fixedfileinfo));
             ResourceUtil.PadToDWORD(w);
 
+            long unpaddedPosition = w.BaseStream.Position;
             Dictionary<string, ResourceTableHeader>.Enumerator resourceEnum = _resources.GetEnumerator();
             while (resourceEnum.MoveNext())
             {
-                resourceEnum.Current.Value.Write(w);
+                unpaddedPosition = resourceEnum.Current.Value.Write(w);
             }
 
-            ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
+            ResourceUtil.WriteAt(w, unpaddedPosition - headerPos, headerPos);
         }
 
         /// <summary>

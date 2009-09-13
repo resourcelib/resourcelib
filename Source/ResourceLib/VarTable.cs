@@ -78,7 +78,8 @@ namespace Vestris.ResourceLib
         /// Write the table of language and code page identifier pairs to a binary stream.
         /// </summary>
         /// <param name="w">Binary stream.</param>
-        internal override void Write(BinaryWriter w)
+        /// <returns>Last unpadded position.</returns>
+        internal override long Write(BinaryWriter w)
         {
             long headerPos = w.BaseStream.Position;
             base.Write(w);
@@ -93,9 +94,11 @@ namespace Vestris.ResourceLib
                 w.Write((UInt16) languagesEnum.Current.Value);
             }
 
+            long unpaddedPosition = w.BaseStream.Position;
             ResourceUtil.WriteAt(w, w.BaseStream.Position - valuePos, headerPos + 2);
             ResourceUtil.PadToDWORD(w);
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
+            return unpaddedPosition;
         }
 
         /// <summary>

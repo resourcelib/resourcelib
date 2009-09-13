@@ -303,27 +303,6 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [Test]
-        public void TestVersionResourceBytes()
-        {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
-            Assert.IsTrue(File.Exists(filename));
-
-            VersionResource versionResource = new VersionResource();
-            versionResource.Language = ResourceUtil.USENGLISHLANGID;
-            versionResource.LoadFrom(filename);
-            Console.WriteLine("File version: {0}", versionResource.FileVersion);
-
-            byte[] expectedBytes = Resource.LoadBytesFrom(filename,
-                new ResourceId(Kernel32.ResourceTypes.RT_VERSION),
-                new ResourceId(1), ResourceUtil.USENGLISHLANGID);
-
-            byte[] testedBytes = versionResource.WriteAndGetBytes();
-
-            ByteUtils.CompareBytes(expectedBytes, testedBytes);
-        }
-
-        [Test]
         public void TestLoadNeutralDeleteEnglishResource()
         {
             // the 6to4svc.dll has an English version info strings resource that is loaded via netural            
