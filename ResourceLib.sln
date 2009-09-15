@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C
 		Documentation\Content\BitmapResources.aml = Documentation\Content\BitmapResources.aml
 		Documentation\Content\CursorResources.aml = Documentation\Content\CursorResources.aml
 		Documentation\Content\DialogResources.aml = Documentation\Content\DialogResources.aml
+		Documentation\Content\FontResources.aml = Documentation\Content\FontResources.aml
 		Documentation\Content\GettingStarted.aml = Documentation\Content\GettingStarted.aml
 		Documentation\Content\IconResources.aml = Documentation\Content\IconResources.aml
 		Documentation\Content\License.aml = Documentation\Content\License.aml

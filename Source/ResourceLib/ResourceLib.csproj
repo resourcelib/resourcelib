@@ -71,6 +71,9 @@
     <Compile Include="DialogExTemplate.cs" />
     <Compile Include="DialogTemplateUtil.cs" />
     <Compile Include="FixedFileInfo.cs" />
+    <Compile Include="FontDirectoryEntry.cs" />
+    <Compile Include="FontDirectoryResource.cs" />
+    <Compile Include="FontResource.cs" />
     <Compile Include="Gdi32.cs" />
     <Compile Include="CursorDirectoryResource.cs" />
     <Compile Include="IconDirectoryResource.cs" />

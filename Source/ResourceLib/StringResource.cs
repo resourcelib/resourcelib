@@ -7,7 +7,7 @@ namespace Vestris.ResourceLib
 {
     /// <summary>
     /// A string, RT_STRING resource.
-    /// Each string resource block has sixteen strings, each represented as an ordered pair 
+    /// Each string resource block has 16 strings, each represented as an ordered pair 
     /// (length, text). Length is a WORD that specifies the size, in terms of the number of characters, 
     /// in the text that follows. Text follows length and contains the string in Unicode without the 
     /// NULL terminating character. There may be no characters in text, in which case length is zero.

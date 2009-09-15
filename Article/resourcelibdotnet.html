@@ -45,12 +45,12 @@
  <h2>
   Introduction</h2>
  <p>
-  There are several good articles about reading and writing resources from and back 
-     to a Windows executable or DLL. Most focus on retrieving module version information and modifying version
-  information, mostly in C++. Some detail the same operations for cursors, icons or
-  dialog resources. Some have limitations and can only edit structures in-place. There's, however, no single managed .NET library to retrieve and save
-  any type of resources, no library to edit or generate version resources and no 
-     library that has a consistent programming model for all resource types.</p>
+  There are several good articles about reading and writing resources from and back to a Windows PE executable or DLL.
+  Most publications focus on retrieving module version information and modifying version information, mostly in C++. 
+  Some detail the same operations for cursors, icons or dialog resources. Others have limitations and can only edit 
+  structures in-place. There's, however, no single managed .NET library to retrieve and save any type of resources, 
+  no library to edit or generate version resources and no  library that has a consistent programming model for all 
+  resource types.</p>
  <p>
   This implementation is a framework that enumerates resources and implements both reading and writing of the 
   file version (<code>VS_VERSIONINFO</code>), string (company, copyright and product information), 
@@ -71,25 +71,32 @@
  <h3>
   Enumerating Resources</h3>
  <p>
-  The following example demonstrates enumerating resources by type. From the sample
-  <em>atl.dll</em> in the Windows <em>system</em> directory, you will typically get
-  the following resources: <code>MUI</code>, <code>REGISTRY</code>, <code>TYPELIB</code> 
-     and <code>RT_VERSION</code>.</p>
+  The following example demonstrates enumerating resources by type.
+ </p>
  <pre lang="cs">
 string filename = Path.Combine(Environment.SystemDirectory, &quot;atl.dll&quot;);
 using (ResourceInfo vi = new ResourceInfo()) 
 {
  vi.Load(filename);
- foreach (string type in vi.ResourceTypes)
+ foreach (ResourceId type in vi.ResourceTypes)
  {
-  Console.WriteLine(type);
   foreach (Resource resource in vi.Resources[type])
   {
-   Console.WriteLine(&quot;{0} ({1}) - {2} byte(s)&quot;, 
-    resource.Name, resource.Language, resource.Size);
+    Console.WriteLine("{0} - {1} ({2}) - {3} byte(s)",
+        resource.TypeName, resource.Name, resource.Language, resource.Size);
   }
  }
 }</pre>
+ <p>
+  From the Windows Vista <em>atl.dll</em>, you will typically get the following resources.
+ </p>
+ <pre>
+MUI - 1 (1033) - 232 byte(s)
+REGISTRY - 101 (1033) - 335 byte(s)
+TYPELIB - 1 (1033) - 7132 byte(s)
+RT_STRING - 1 (1033) - 72 byte(s)
+RT_STRING - 7 (1033) - 38 byte(s)
+RT_VERSION - 1 (1033) - 828 byte(s)</pre>
  <h3>
   Reading Version Information</h3>
  <p>
@@ -154,7 +161,7 @@ versionResource.SaveTo(targetFilename);</pre>
  <p>
   A unit test, called <code>VersionResourceTests.TestDeleteAndSaveVersionResource</code>
   implements this behavior and can be found in the ResourceLibUnitTests project. It
-  makes a copy of atl.dll from the Windows system directory into the temporary folder,
+  makes a copy of <em>atl.dll</em> from the Windows system directory into the temporary folder,
   deletes its version resource, generates a new one without copying any data and updates
   the copy.</p>
  <h3>
@@ -215,7 +222,7 @@ public struct RESOURCE_HEADER
  </h3>
  <p>
   Most resource structures have evolved from 16-bit Windows and are <a href="http://msdn.microsoft.com/en-us/library/aa290049.aspx">aligned</a>
-  to 16-bit <code>WORD</code> boundaries. Newer structures in 32-bit Windows are algigned to 32-bit 
+  to 16-bit <code>WORD</code> boundaries. Newer structures in 32-bit Windows are aligned to 32-bit 
   <code>DWORD</code> boundaries. For example, all version resource structures are aligned to <code>DWORD</code>, 
   while icon resources are aligned to <code>WORD</code>. Other resource types may have specific alignment 
   requirements for various fields. The resource library uses both math to align pointers (
@@ -336,6 +343,51 @@ public void TestReadWriteResourceBytes()
   data without any structural fields (lengths, number of elements, etc.), writing the copy to a vector of bytes and 
   comparing the two. A good example of such unit test is <code>VersionResourceTests.TestDeepCopyBytes</code>. 
  </p>
+ <h2>Extending to Other Types</h2>
+ <p>
+  Extending the library to other types means implementing a new class that derives from <code>Resource</code> and 
+  implements both <code>Read</code> and <code>Write</code> functions. For example, for <code>RT_VERSION</code> we'll 
+  start with the following skeleton.
+ </p>
+ <pre lang="cs">
+public class VersionResource : Resource
+{
+    public VersionResource()
+        : base(IntPtr.Zero,
+            IntPtr.Zero,
+            new ResourceId(Kernel32.ResourceTypes.RC_VERSION),
+            null,
+            ResourceUtil.NEUTRALLANGID,
+            0)
+    {
+
+    }
+
+    public VersionResource(IntPtr hModule, IntPtr hResource, ResourceId type, ResourceId name, UInt16 language, int size)
+        : base(hModule, hResource, type, name, language, size)
+    {
+
+    }
+
+    internal override IntPtr Read(IntPtr hModule, IntPtr lpRes)
+    {
+        return lpRes;
+    }
+
+    internal override void Write(System.IO.BinaryWriter w)
+    {
+    }
+}</pre>
+ <p>
+  The new resource type must also be added to <code>ResourceInfo.CreateResource</code> in order to create a specialized 
+  instance when such a resource is encountered.
+ </p>
+ <pre lang="cs">
+switch (type.ResourceType)
+{
+    case Kernel32.ResourceTypes.RT_VERSION:
+        return new VersionResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);    
+}</pre>
  <h2>Version</h2>
  <p>
   Version resources are amongst the most complex resource structures. 
@@ -646,7 +698,8 @@ END</pre>
  <p>
   A <code>MenuExTemplate</code> is more complicated. The <code>MENUEXTEMPLATE</code> header has a strange
   offset construct: the first item starts at an offset from the offset header value itself.
-     Therefore the implementation of reading and writing the menu may seem odd.</p>
+  Therefore the implementation of reading and writing the menu may seem odd.
+ </p>
  <pre lang="cs">
 internal override IntPtr Read(IntPtr lpRes)
 {
@@ -686,12 +739,25 @@ internal override void Write(System.IO.BinaryWriter w)
   or type field contains the <code>MFT_SEPARATOR</code> option or both the type and the menu string are zero and 
   <code>NULL</code> respectively.
  </p>
- <h2>
-  Side-by-Side Manifests</h2>
+ <h2>Fonts</h2>
+ <p>
+  The library implements limited support for fonts.
+ </p>
+ <p>
+  Font resources are different from the other types of resources in that they are not usually added to the resources 
+  of a specific application program. Font resources are added to .exe files that are renamed to be .fon files. 
+  These files are libraries as opposed to applications.
+ </p>
+ <p>
+  A <code>FontDirectoryResource</code> is composed of one or more <code>FontDirectoryEntry</code> instances. Each 
+  instance contains a <code>FONTDIRENTRY</code> structure that describes the font. Note that this is the only
+  structure that is not aligned on an even boundary.
+ </p>
+ <h2>Side-by-Side Manifests</h2>
  <p>
   Since Windows XP, Windows reserves a new type of resource <code>RT_MANIFEST</code>, <code>24</code> 
-   for Side-by-Side manifests. The manifest name can be one of the following values, best described
-   in <a href="http://blogs.msdn.com/junfeng/archive/2007/06/26/rt-manifest-resource-and-isolation-aware-enabled.aspx">this MSDN post</a>.
+  for Side-by-Side manifests. The manifest name can be one of the following values, best described
+  in <a href="http://blogs.msdn.com/junfeng/archive/2007/06/26/rt-manifest-resource-and-isolation-aware-enabled.aspx">this MSDN post</a>.
  </p>
  <ul>
   <li><code>CREATEPROCESS_MANIFEST_RESOURCE_ID</code></li>
@@ -761,7 +827,8 @@ internal override void Write(System.IO.BinaryWriter w)
   <li>2008-06-30: Initial version.</li>
   <li>2008-09-28: Added support for icons.</li>
   <li>2009-02-19: Moved to CodePlex, released 1.1.</li>
-  <li>2009-09-05: Added support for cursors, bitmaps, dialogs and SxS manifests.</li>
+  <li>2009-09-15: Added support for cursors, bitmaps, dialogs, string tables, 
+      accelerators, menus and SxS manifests.</li>
  </ul>
 </body>
 </html>

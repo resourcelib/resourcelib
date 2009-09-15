@@ -59,6 +59,10 @@ namespace Vestris.ResourceLibUnitTests
                 Dump(rc as MenuResource);
             if (rc is AcceleratorResource)
                 Dump(rc as AcceleratorResource);
+            else if (rc is FontResource)
+                Dump(rc as FontResource);
+            else if (rc is FontDirectoryResource)
+                Dump(rc as FontDirectoryResource);
         }
 
         public static void Dump(VersionResource rc)
@@ -137,6 +141,17 @@ namespace Vestris.ResourceLibUnitTests
         public static void Dump(StringResource rc)
         {
             Console.WriteLine(rc.ToString());
+        }
+
+        public static void Dump(FontResource rc)
+        {
+            Console.WriteLine(rc.ToString());
+        }
+
+        public static void Dump(FontDirectoryResource rc)
+        {
+            Console.WriteLine("FondDirectoryResource: {0}, {1} font(s)", 
+                rc.Name, rc.Fonts.Count);
         }
     }
 }

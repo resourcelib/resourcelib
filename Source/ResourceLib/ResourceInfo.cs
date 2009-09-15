@@ -120,6 +120,56 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// Create a resource of a given type.
+        /// </summary>
+        /// <param name="hModule">Module handle.</param>
+        /// <param name="hResourceGlobal">Pointer to the resource in memory.</param>
+        /// <param name="type">Resource type.</param>
+        /// <param name="name">Resource name.</param>
+        /// <param name="wIDLanguage">Language ID.</param>
+        /// <param name="size">Size of resource.</param>
+        /// <returns>A specialized or a generic resource.</returns>
+        protected Resource CreateResource(
+            IntPtr hModule, 
+            IntPtr hResourceGlobal, 
+            ResourceId type, 
+            ResourceId name, 
+            UInt16 wIDLanguage, 
+            int size)
+        {
+            if (type.IsIntResource())
+            {
+                switch (type.ResourceType)
+                {
+                    case Kernel32.ResourceTypes.RT_VERSION:
+                        return new VersionResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_GROUP_CURSOR:
+                        return new CursorDirectoryResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_GROUP_ICON:
+                        return new IconDirectoryResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_MANIFEST:
+                        return new ManifestResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_BITMAP:
+                        return new BitmapResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_MENU:
+                        return new MenuResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_DIALOG:
+                        return new DialogResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_STRING:
+                        return new StringResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_FONTDIR:
+                        return new FontDirectoryResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_FONT:
+                        return new FontResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                    case Kernel32.ResourceTypes.RT_ACCELERATOR:
+                        return new AcceleratorResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+                }
+            }
+
+            return new GenericResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
+        }
+
+        /// <summary>
         /// Enumerate resource languages within a resource by name
         /// </summary>
         /// <param name="hModule">Module handle.</param>
@@ -142,50 +192,7 @@ namespace Vestris.ResourceLib
             IntPtr hResource = Kernel32.FindResourceEx(hModule, lpszType, lpszName, wIDLanguage);
             IntPtr hResourceGlobal = Kernel32.LoadResource(hModule, hResource);
             int size = Kernel32.SizeofResource(hModule, hResource);
-
-            Resource rc = null;
-            if (type.IsIntResource())
-            {
-                switch (type.ResourceType)
-                {
-                    case Kernel32.ResourceTypes.RT_VERSION:
-                        rc = new VersionResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                    case Kernel32.ResourceTypes.RT_GROUP_CURSOR:
-                        rc = new CursorDirectoryResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;                       
-                    case Kernel32.ResourceTypes.RT_GROUP_ICON:
-                        rc = new IconDirectoryResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                    case Kernel32.ResourceTypes.RT_MANIFEST:
-                        rc = new ManifestResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                    case Kernel32.ResourceTypes.RT_BITMAP:
-                        rc = new BitmapResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                    case Kernel32.ResourceTypes.RT_MENU:
-                        rc = new MenuResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                    case Kernel32.ResourceTypes.RT_DIALOG:
-                        rc = new DialogResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                    case Kernel32.ResourceTypes.RT_STRING:
-                        rc = new StringResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                    case Kernel32.ResourceTypes.RT_ACCELERATOR:
-                        rc = new AcceleratorResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                    default:
-                        rc = new GenericResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                        break;
-                }
-            }
-            else
-            {
-                rc = new GenericResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-            }
-
-            resources.Add(rc);
+            resources.Add(CreateResource(hModule, hResourceGlobal, type, name, wIDLanguage, size));
             return true;
         }
 
