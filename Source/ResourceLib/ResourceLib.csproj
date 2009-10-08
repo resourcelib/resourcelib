@@ -86,6 +86,7 @@
     <Compile Include="DialogTemplateBase.cs" />
     <Compile Include="DialogTemplateControlBase.cs" />
     <Compile Include="Kernel32.cs" />
+    <Compile Include="LoadException.cs" />
     <Compile Include="ManifestResource.cs" />
     <Compile Include="MenuExTemplateItemCommand.cs" />
     <Compile Include="MenuExTemplateItemPopup.cs" />

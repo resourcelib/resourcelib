@@ -81,9 +81,7 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return _type.IsIntResource()
-                    ? _type.ResourceType.ToString()
-                    : _type.Name;
+                return _type.TypeName;
             }
         }
 

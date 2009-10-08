@@ -18,7 +18,7 @@
   <Copyright>Copyright (c) Vestris Inc.</Copyright>
   <Trademark>All Rights Reserved</Trademark>
   <MajorVersion>1</MajorVersion>
-  <MinorVersion>2</MinorVersion>
+  <MinorVersion>3</MinorVersion>
  </PropertyGroup>
  <Target Name="all" DependsOnTargets="configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
   <CallTarget Targets="clean" />

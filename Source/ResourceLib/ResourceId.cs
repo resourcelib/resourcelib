@@ -70,6 +70,17 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// String representation of a resource type name.
+        /// </summary>
+        public string TypeName
+        {
+            get
+            {
+                return IsIntResource() ? ResourceType.ToString() : Name;
+            }
+        }
+
+        /// <summary>
         /// An enumerated resource type for built-in resource types only.
         /// </summary>
         public Kernel32.ResourceTypes ResourceType

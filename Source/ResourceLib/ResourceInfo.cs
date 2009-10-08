@@ -12,6 +12,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class ResourceInfo : IEnumerable<Resource>, IDisposable
     {
+        private Exception _innerException = null;
         private IntPtr _hModule = IntPtr.Zero;
         private Dictionary<ResourceId, List<Resource>> _resources;
         private List<ResourceId> _resourceTypes = null;
@@ -56,6 +57,8 @@ namespace Vestris.ResourceLib
                 Kernel32.FreeLibrary(_hModule);
                 _hModule = IntPtr.Zero;
             }
+
+            _innerException = null;
         }
 
         /// <summary>
@@ -76,12 +79,20 @@ namespace Vestris.ResourceLib
             if (IntPtr.Zero == _hModule)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            // enumerate resource types
-            // for each type, enumerate resource names
-            // for each name, enumerate resource languages
-            // for each resource language, enumerate actual resources
-            if (!Kernel32.EnumResourceTypes(_hModule, EnumResourceTypesImpl, IntPtr.Zero))
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+            try
+            {
+                // enumerate resource types
+                // for each type, enumerate resource names
+                // for each name, enumerate resource languages
+                // for each resource language, enumerate actual resources
+                if (!Kernel32.EnumResourceTypes(_hModule, EnumResourceTypesImpl, IntPtr.Zero))
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+            catch (Exception ex)
+            {
+                throw new LoadException(string.Format("Error loading '{0}'.", filename),
+                    _innerException, ex);
+            }
         }
 
         /// <summary>
@@ -192,7 +203,18 @@ namespace Vestris.ResourceLib
             IntPtr hResource = Kernel32.FindResourceEx(hModule, lpszType, lpszName, wIDLanguage);
             IntPtr hResourceGlobal = Kernel32.LoadResource(hModule, hResource);
             int size = Kernel32.SizeofResource(hModule, hResource);
-            resources.Add(CreateResource(hModule, hResourceGlobal, type, name, wIDLanguage, size));
+
+            try
+            {
+                resources.Add(CreateResource(hModule, hResourceGlobal, type, name, wIDLanguage, size));
+            }
+            catch (Exception ex)
+            {
+                _innerException = new Exception(string.Format("Error loading resource '{0}' {1} ({2}).",
+                    name, type.TypeName, wIDLanguage), ex);
+                throw ex;
+            }
+            
             return true;
         }
 
