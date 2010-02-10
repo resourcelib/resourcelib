@@ -1,53 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="a6f46303-b703-4ff3-9572-55d8131eb883" revisionNumber="1">
- <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <introduction>
-   <para>This section explains how to get started with the ResourceLib library.</para>
-  </introduction>
-  <section address="usingthelibrary">
-   <title>Using the Library</title>
-   <content>
-    <para>
-     In your project add a reference to <literal>Vestris.ResourceLib.dll</literal> and a namespace reference.
-     <code language="cs">
-      using Vestris.ResourceLib;
-     </code>
-    </para>
-   </content>
-   <sections>
-    <section address="enumeratingresources">
-     <title>Enumerating Resources</title>
-     <content>
-      <para>
-       The following example demonstrates enumerating resources by type. From the sample atl.dll in the Windows system directory,
-       you will typically get the following resources: <literal>MUI</literal>, <literal>REGISTRY</literal>, <literal>TYPELIB</literal>,
-       and <literal>RT_VERSION</literal> resource.
-      </para>
-      <code language="cs">
-       <![CDATA[
-using System;
-using System.IO;
-using Vestris.ResourceLib;
-
-string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
-using (ResourceInfo vi = new ResourceInfo())
-{
- vi.Load(filename);
- foreach (string type in vi.ResourceTypes)
- {
-  Console.WriteLine(type);
-  foreach (Resource resource in vi.Resources[type])
-  {
-   Console.WriteLine("{0} ({1}) - {2} byte(s)", 
-    resource.Name, resource.Language, resource.Size);
-  }
- }
-}
-        ]]>
-      </code>
-     </content>
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>This section explains how to get started with the ResourceLib library.</para>
+    </introduction>
+    <section address="usingthelibrary">
+      <title>Using the Library</title>
+      <content>
+        <para>
+          In your project add a reference to <literal>Vestris.ResourceLib.dll</literal> and a namespace reference.
+          <code language="cs">
+            using Vestris.ResourceLib;
+          </code>
+        </para>
+      </content>
+      <sections>
+        <section address="enumeratingresources">
+          <title>Enumerating Resources</title>
+          <content>
+            <para>
+              The following example demonstrates enumerating resources by resource type. From the sample atl.dll 
+              in the Windows system directory, you will typically get the following resources: <literal>MUI</literal>, 
+              <literal>REGISTRY</literal>, <literal>TYPELIB</literal>, and <literal>RT_VERSION</literal> resource.
+            </para>
+            <code language="cs" source="..\Source\ResourceLibUnitTests\ResourceTests.cs" region="Example: Using Headers" />
+            <code language="cs" source="..\Source\ResourceLibUnitTests\ResourceTests.cs" region="Example: Enumerating Resources" />
+          </content>
+        </section>
+      </sections>
     </section>
-   </sections>
-  </section>
- </developerConceptualDocument>
+  </developerConceptualDocument>
 </topic>

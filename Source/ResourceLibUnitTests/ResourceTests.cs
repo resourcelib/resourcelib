@@ -1,18 +1,40 @@
+#region Example: Using Headers
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using NUnit.Framework;
 using Vestris.ResourceLib;
+#endregion
+
+using System.Collections.Generic;
+using NUnit.Framework;
 using System.Reflection;
 using System.Web;
-using System.Runtime.InteropServices;
 
 namespace Vestris.ResourceLibUnitTests
 {
     [TestFixture]
     public class ResourceTests
     {
+        [Test]
+        public void SampleEnumerateResources()
+        {
+            #region Example: Enumerating Resources
+            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            using (ResourceInfo vi = new ResourceInfo())
+            {
+                vi.Load(filename);
+                foreach (ResourceId id in vi.ResourceTypes)
+                {
+                    Console.WriteLine(id);
+                    foreach (Resource resource in vi.Resources[id])
+                    {
+                        Console.WriteLine("{0} ({1}) - {2} byte(s)",
+                            resource.Name, resource.Language, resource.Size);
+                    }
+                }
+            }
+            #endregion
+        }
+
         [Test]
         public void TestReadWriteResourceBytes()
         {
