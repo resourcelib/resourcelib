@@ -138,8 +138,8 @@ namespace Vestris.ResourceLib
         public void LoadFrom(string filename, Kernel32.ManifestType manifestType)
         {
             base.LoadFrom(filename, 
-                new ResourceId((uint) manifestType),
                 new ResourceId(Kernel32.ResourceTypes.RT_MANIFEST),
+                new ResourceId((uint)manifestType),
                 Kernel32.LANG_NEUTRAL);
         }
     }

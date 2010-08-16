@@ -24,7 +24,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [Test]
-        public void TestLoadAndSaveManifestResource()
+        public void TestLoadAndSaveCreateProcessManifestResource()
         {
             string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
             Assert.IsTrue(File.Exists(filename));
@@ -36,6 +36,23 @@ namespace Vestris.ResourceLibUnitTests
             Console.WriteLine("Written manifest:");
             ManifestResource newManifestResource = new ManifestResource();
             newManifestResource.LoadFrom(targetFilename);
+            DumpResource.Dump(newManifestResource);
+            File.Delete(targetFilename);
+        }
+
+        [Test]
+        public void TestLoadAndSaveIsolationAwareManifestResource()
+        {
+            string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
+            Assert.IsTrue(File.Exists(filename));
+            string targetFilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".exe");
+            File.Copy(filename, targetFilename, true);
+            Console.WriteLine(targetFilename);
+            ManifestResource manifestResource = new ManifestResource(Kernel32.ManifestType.IsolationAware);
+            manifestResource.SaveTo(targetFilename);
+            Console.WriteLine("Written manifest:");
+            ManifestResource newManifestResource = new ManifestResource();
+            newManifestResource.LoadFrom(targetFilename, Kernel32.ManifestType.IsolationAware);
             DumpResource.Dump(newManifestResource);
             File.Delete(targetFilename);
         }
