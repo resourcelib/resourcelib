@@ -56,5 +56,17 @@ namespace Vestris.ResourceLibUnitTests
             DumpResource.Dump(newManifestResource);
             File.Delete(targetFilename);
         }
+
+        [Test]
+        public void TestLoadUnicodeManifestResourceWithBOM()
+        {
+            // the 6840.dll has a manifest with a BOM marker (the actual file)
+            ManifestResource mr = new ManifestResource();
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\6840.dll");
+            mr.LoadFrom(dll, Kernel32.ManifestType.IsolationAware);
+            Assert.IsNotNull(mr.Manifest);
+            Console.WriteLine(mr.Manifest.OuterXml);
+        }
     }
 }

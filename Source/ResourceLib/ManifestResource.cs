@@ -12,6 +12,8 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class ManifestResource : Resource
     {
+        private static byte[] utf8_bom = { 0xef, 0xbb, 0xbf };
+
         private byte[] _data = null;
         private XmlDocument _manifest = null;
 
@@ -24,8 +26,18 @@ namespace Vestris.ResourceLib
             {
                 if (_manifest == null && _data != null)
                 {
+                    bool unicodeBOM = (_data.Length >= 3 
+                        && _data[0] == utf8_bom[0] 
+                        && _data[1] == utf8_bom[1] 
+                        && _data[2] == utf8_bom[2]);
+
+                    string manifestXml = Encoding.UTF8.GetString(
+                        _data, 
+                        unicodeBOM ? 3 : 0, 
+                        unicodeBOM ? _data.Length - 3 : _data.Length);
+
                     _manifest = new XmlDocument();
-                    _manifest.LoadXml(Encoding.UTF8.GetString(_data));
+                    _manifest.LoadXml(manifestXml);
                 }
 
                 return _manifest;

@@ -72,6 +72,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Binaries\6840.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Binaries\6to4svc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

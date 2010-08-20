@@ -88,6 +88,7 @@ namespace Vestris.ResourceLibUnitTests
             string filename = Path.Combine(uriPath, @"Binaries\gutils.dll");
             using (ResourceInfo ri = new ResourceInfo())
             {
+                Console.WriteLine("Loading: {0}", filename);
                 ri.Load(filename);
                 foreach (DialogResource rc in ri[Kernel32.ResourceTypes.RT_DIALOG])
                 {
@@ -125,7 +126,7 @@ namespace Vestris.ResourceLibUnitTests
         {
             foreach (TestLoadDialogResourceTestDataEntry test in testdata)
             {
-                Console.WriteLine("{0}: {1}", test.Filename, test.ResourceId);
+                Console.WriteLine("Loading {0}: {1}", test.Filename, test.ResourceId);
                 DialogResource rc = new DialogResource();
                 rc.Name = test.ResourceId;
                 rc.LoadFrom(test.Filename);
