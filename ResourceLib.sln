@@ -14,8 +14,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D703E923
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1DA8F5AA-2EE1-4204-A72F-0373BF541395} = {1DA8F5AA-2EE1-4204-A72F-0373BF541395}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLibUnitTests", "Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1DA8F5AA-2EE1-4204-A72F-0373BF541395} = {1DA8F5AA-2EE1-4204-A72F-0373BF541395}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{AD64D826-875E-44FB-8DC4-95E2D37CC0BE}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,6 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C
 		Documentation\Content\AcceleratorResources.aml = Documentation\Content\AcceleratorResources.aml
 		Documentation\Content\BitmapResources.aml = Documentation\Content\BitmapResources.aml
 		Documentation\Content\CursorResources.aml = Documentation\Content\CursorResources.aml
+		Documentation\Content\DevContribute.aml = Documentation\Content\DevContribute.aml
 		Documentation\Content\DialogResources.aml = Documentation\Content\DialogResources.aml
 		Documentation\Content\FontResources.aml = Documentation\Content\FontResources.aml
 		Documentation\Content\GettingStarted.aml = Documentation\Content\GettingStarted.aml
@@ -40,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C
 		Documentation\Content\StringResources.aml = Documentation\Content\StringResources.aml
 		Documentation\Content\VersionResources.aml = Documentation\Content\VersionResources.aml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Version", "Source\Version\Version.csproj", "{1DA8F5AA-2EE1-4204-A72F-0373BF541395}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +64,10 @@ Global
 		{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

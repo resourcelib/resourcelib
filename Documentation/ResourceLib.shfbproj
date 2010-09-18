@@ -52,6 +52,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Content\DevContribute.aml" />
     <None Include="Content\FontResources.aml" />
     <None Include="Content\StringResources.aml" />
     <None Include="Content\AcceleratorResources.aml" />

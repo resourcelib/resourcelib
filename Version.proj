@@ -34,7 +34,7 @@
     <CreateItem Include="ComputerName" AdditionalMetadata="ReplacementValue=$(ComputerName)"><Output TaskParameter="Include" ItemName="AssemblyInfoTokens"/></CreateItem>
     <CreateItem Include="Date" AdditionalMetadata="ReplacementValue=$(Month)/$(Day)/$(Year)"><Output TaskParameter="Include" ItemName="AssemblyInfoTokens"/></CreateItem>
     <Message Text="Version: $(Major).$(Minor).$(Build).$(Revision)"/>
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Source\Common\GlobalAssemblyInfo.cs"
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Source\Version\Properties\GlobalAssemblyInfo.cs"
        AssemblyCompany="$(CompanyName)" AssemblyProduct="$(ProductName)"
        AssemblyCopyright="$(Copyright)" AssemblyTrademark="$(Trademark)"
        CLSCompliant="false" AssemblyDelaySign="false" AssemblyKeyName="" AssemblyCulture=""

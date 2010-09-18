@@ -14,6 +14,7 @@
       <Topic id="473bb06e-99af-4e35-bc79-832501bdd403" visible="True" title="Version (RT_VERSION)" />
       <Topic id="065f0818-f488-451b-ac63-1c5e24299041" visible="True" title="Manifest (RT_MANIFEST)" />
     </Topic>
+    <Topic id="dd0ef5b3-546f-4906-b31f-59b4e4217049" visible="True" title="Contributing" />
     <Topic id="bfd78578-6e10-47e5-8b41-44426e0a1ac1" visible="True" title="License" />
   </Topic>
 </Topics>

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="dd0ef5b3-546f-4906-b31f-59b4e4217049" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+        You're encouraged to contribute to the ResourceLib project. The latest information about this project and source code
+        can be found at <externalLink>
+          <linkUri>http://resourcelib.codeplex.com</linkUri>
+          <linkText>http://resourcelib.codeplex.com</linkText>
+        </externalLink>.
+      </para>
+    </introduction>
+    <section address="SourceCode">
+      <title>Source Code</title>
+      <content>
+        <para>
+          Source code is located in
+          <externalLink>
+            <linkUri>https://resourcelib.svn.codeplex.com/svn/trunk</linkUri>
+            <linkText>
+              https://resourcelib.svn.codeplex.com/svn/trunk
+            </linkText>
+          </externalLink>.
+        </para>
+      </content>
+    </section>
+    <section address="DevEnvironment">
+      <title>Setting Up a Development Environment</title>
+      <content>
+        <para>
+          A development environment requires the following software.
+          <list class="bullet">
+            <listItem>Microsoft Visual Studio 2008</listItem>
+            <listItem>
+              <externalLink>
+                <linkUri>http://www.nunit.org/index.php?p=download</linkUri>
+                <linkText>NUnit</linkText>
+              </externalLink>
+            </listItem>
+            <listItem>
+              <externalLink>
+                <linkUri>http://www.collab.net/downloads/subversion/</linkUri>
+                <linkText>Command-line Subversion Client</linkText>
+              </externalLink>
+            </listItem>
+            <listItem>
+              <externalLink>
+                <linkUri>http://dl.dropbox.com/u/4321494/MSBuild%20Community%20Tasks/MSBuild.Community.Tasks.1.3.0.msi</linkUri>
+                <linkText>MSBuild Community Tasks 1.3.0</linkText>
+              </externalLink>
+            </listItem>
+            <listItem>
+              <externalLink>
+                <linkUri>http://www.codeplex.com/Sandcastle</linkUri>
+                <linkText>SandCastle 2.4 (May 2008)</linkText>
+              </externalLink>
+              + SandCastle Styles Project 2.4 patch
+            </listItem>
+            <listItem>
+              <externalLink>
+                <linkUri>http://www.codeplex.com/SHFB</linkUri>
+                <linkText>Sandcastle Help File Builder 1.8 (Alpha)</linkText>
+              </externalLink>
+            </listItem>
+          </list>
+        </para>
+      </content>
+    </section>
+    <section address="Building">
+      <title>Building the Project</title>
+      <content>
+        <para>
+          You can build all C# source code in Visual Studio. To build the entire project,
+          including this documentation use MSBuild from command line and type <literal>build all</literal>.
+          This builds both Debug and Release .NET binaries as well as a final .zip package with all artifacts.
+          <code language="cmd">
+            <![CDATA[c:\source\ResourceLib\trunk> build all]]>
+          </code>
+          A <literal>Vestris.ResourceLib.zip</literal> package is created in the current directory.
+        </para>
+      </content>
+    </section>
+    <section address="Patches">
+      <title>Patches and Code Reviews</title>
+      <content>
+        <para>
+          All changes must be code reviewed. Submit patches under issues at
+          <externalLink>
+            <linkUri>http://resourcelib.codeplex.com/WorkItem/List.aspx</linkUri>
+            <linkText>http://resourcelib.codeplex.com/WorkItem/List.aspx</linkText>
+          </externalLink>.
+        </para>
+      </content>
+    </section>
+    <section address="Documentation">
+      <title>Writing Documentation</title>
+      <content>
+        <para>
+          Documentation is written in MAML, using SandCastle Documentation Framework. You cannot build documentation from within
+          Visual Studio, but you can build the documentation by typing <literal>build doc</literal>.
+          <list class="bullet">
+            <listItem>
+              <externalLink>
+                <linkUri>http://www.codeplex.com/SHFB</linkUri>
+                <linkText>SandCastle Help File Builder</linkText>
+              </externalLink>
+              provides an extensive
+              <externalLink>
+                <linkUri>http://www.ewoodruff.us/shfbdocs/Index.aspx?topic=html/b772e00e-1705-4062-adb6-774826ce6700.htm</linkUri>
+                <linkText>Getting Started</linkText>
+              </externalLink>
+              guide.
+            </listItem>
+            <listItem>
+              <externalLink>
+                <linkUri>file:////nycapt35k.com/public/applications/Microsoft/Sandcastle/SandcastleMAMLGuide.chm</linkUri>
+                <linkText>SandClastle MAML Guide</linkText>
+              </externalLink>
+              is an excellent quick reference for MAML.
+            </listItem>
+          </list>
+        </para>
+      </content>
+    </section>
+  </developerConceptualDocument>
+</topic>
