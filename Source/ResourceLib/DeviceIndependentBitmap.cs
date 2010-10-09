@@ -340,7 +340,6 @@ namespace Vestris.ResourceLib
                         // Image
                         Gdi32.BITMAPINFO bitmapInfo = new Gdi32.BITMAPINFO();
                         bitmapInfo.bmiHeader = _header;
-                        bitmapInfo.bmiHeader.biHeight /= 2;
                         // bitmapInfo.bmiColors = Tools.StandarizePalette(mEncoder.Colors);
                         hDCScreenOUTBmp = Gdi32.CreateCompatibleDC(hDCScreen);
                         hBitmapOUTBmp = Gdi32.CreateDIBSection(hDCScreenOUTBmp, ref bitmapInfo, 0, out bits, IntPtr.Zero, 0);
