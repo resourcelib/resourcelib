@@ -5,7 +5,7 @@
   <Configuration>Debug;Release</Configuration>
  </PropertyGroup>
  <PropertyGroup>
-  <ReleaseDir>Vestris.ResourceLib</ReleaseDir>
+  <ReleaseDir>target\ResourceLib</ReleaseDir>
  </PropertyGroup>
  <Target Name="configurations">
   <CreateItem Include="$(Configuration)">
@@ -27,13 +27,16 @@
   <CallTarget Targets="test" />
   <CallTarget Targets="doc" />
   <CallTarget Targets="zip" />
+  <CallTarget Targets="built" />
  </Target>
  <Target Name="clean" DependsOnTargets="configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
   <Message Importance="high" Text="Cleaning project, %(Configuration.Identity) ..." />
   <MSBuild Projects="ResourceLib.sln" Targets="Clean" Properties="Configuration=%(Configuration.Identity)" />
-  <RemoveDir Directories="$(ReleaseDir)" />
-  <Delete Files="Source\Common\GlobalAssemblyInfo.cs" />
-  <Delete Files="Vestris.ResourceLib.$(Major).$(Minor).zip" />
+  <RemoveDir Directories="target" />
+  <RemoveDir Directories="Documentation\Release" />
+  <DeleteTree Directories="Source\**\bin;Source\**\obj" Recursive="true" />
+  <Delete Files="Source\Version\Properties\GlobalAssemblyInfo.cs" />
+  <Delete Files="TestResult.xml" />
  </Target>
  <Target Name="build" DependsOnTargets="version;configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
   <Message Importance="high" Text="Compiling and linking project, %(Configuration.Identity) ..." />
@@ -66,17 +69,21 @@
   <Error Condition="Exists('Documentation\%(Configuration.Identity)\LastBuild.log')" Text="Documentation build failed, check Documentation\%(Configuration.Identity)\LastBuild.log" />
  </Target>
  <Target Name="zip" DependsOnTargets="version;configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
-  <Copy SourceFiles="@(SourceCodeFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Source\%(RecursiveDir)" />
-  <Copy SourceFiles="@(ArticleFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Article\%(RecursiveDir)" />
-  <Copy SourceFiles="Documentation\%(Configuration.Identity)\ResourceLib.chm" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)" Condition="'%(Configuration.Identity)'=='Release'" />
-  <TemplateFile Template="Documentation\WhatsNew.html" OutputFilename="..\$(ReleaseDir)\$(Major).$(Minor)\WhatsNew.html" Tokens="@(AssemblyInfoTokens)" Condition="'%(Configuration.Identity)'=='Release'" />
+  <Copy SourceFiles="@(SourceCodeFiles)" DestinationFolder="$(ReleaseDir)\Source\%(RecursiveDir)" />
+  <Copy SourceFiles="@(ArticleFiles)" DestinationFolder="$(ReleaseDir)\Article\%(RecursiveDir)" />
+  <Copy SourceFiles="Documentation\%(Configuration.Identity)\ResourceLib.chm" DestinationFolder="$(ReleaseDir)" Condition="'%(Configuration.Identity)'=='Release'" />
+  <TemplateFile Template="Documentation\WhatsNew.html" OutputFilename="..\$(ReleaseDir)\WhatsNew.html" Tokens="@(AssemblyInfoTokens)" Condition="'%(Configuration.Identity)'=='Release'" />
   <CreateItem Include="Source\**\%(Configuration.Identity)/Vestris.*.dll" Exclude="Source\**\%(Configuration.Identity)/Vestris.*UnitTests.dll">
    <Output TaskParameter="Include" ItemName="BinaryFiles" />
   </CreateItem>
-  <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(ReleaseDir)\$(Major).$(Minor)\Bin\%(Configuration.Identity)" />
+  <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(ReleaseDir)\Bin\%(Configuration.Identity)" />
   <CreateItem Include="$(ReleaseDir)\**\*" Condition="'%(Configuration.Identity)'=='Release'">
    <Output TaskParameter="Include" ItemName="PackageFiles" />
   </CreateItem>
-  <Zip ZipFileName="Vestris.ResourceLib.$(Major).$(Minor).zip" Condition="'%(Configuration.Identity)'=='Release'" Files="@(PackageFiles)" />
+  <Zip ZipFileName="target\Vestris.ResourceLib.$(Major).$(Minor).zip" WorkingDirectory="target"
+       Condition="'%(Configuration.Identity)'=='Release'" Files="@(PackageFiles)" />
+ </Target>
+ <Target Name="built" DependsOnTargets="version">
+  <Message Text="Built version: $(Major).$(Minor).$(Build).$(Revision)"/>
  </Target>
 </Project>
