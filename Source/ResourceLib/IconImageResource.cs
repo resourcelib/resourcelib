@@ -222,9 +222,9 @@ namespace Vestris.ResourceLib
                         return PixelFormat.Format8bppIndexed;
                     case 16:
                         return PixelFormat.Format16bppRgb565;
-                    case 24:
+                    case 24: // not actually supported in icons
                         return PixelFormat.Format24bppRgb;
-                    case 32:
+                    case 32: // 0RGB 32bpp bitmap or ARGB (alpha-blended)
                         return PixelFormat.Format32bppArgb;
                     default:
                         return PixelFormat.Undefined;

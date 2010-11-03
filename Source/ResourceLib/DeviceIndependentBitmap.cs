@@ -9,7 +9,10 @@ using System.IO;
 namespace Vestris.ResourceLib
 {
     /// <summary>
-    /// A device-independent image.
+    /// A device-independent image consists of a BITMAPINFOHEADER where
+    /// bmWidth is the width of the image andbmHeight is double the height 
+    /// of the image, followed by the bitmap color table, followed by the image
+    /// pixels, followed by the mask pixels.
     /// </summary>
     public class DeviceIndependentBitmap
     {

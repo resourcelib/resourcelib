@@ -181,15 +181,17 @@ namespace Vestris.ResourceLib
         public struct GRPICONDIRENTRY
         {
             /// <summary>
-            /// Width.
+            /// Width of the image. Starting with Windows 95 a value of 0 represents width of 256.
             /// </summary>
             public Byte bWidth;
             /// <summary>
-            /// Height.
+            /// Height of the image. Starting with Windows 95 a value of 0 represents height of 256.
             /// </summary>
             public Byte bHeight;
             /// <summary>
-            /// Colors; 0 means 256 or more.
+            /// Number of colors in the image. 
+            /// bColors = 1 << (wBitsPerPixel * wPlanes)
+            /// If wBitsPerPixel* wPlanes is greater orequal to 8, then bColors = 0.
             /// </summary>
             public Byte bColors;
             /// <summary>
@@ -198,10 +200,12 @@ namespace Vestris.ResourceLib
             public Byte bReserved;
             /// <summary>
             /// Number of bitmap planes.
+            /// 1: monochrome bitmap
             /// </summary>
             public UInt16 wPlanes;
             /// <summary>
             /// Bits per pixel.
+            /// 1: monochrome bitmap
             /// </summary>
             public UInt16 wBitsPerPixel;
             /// <summary>
