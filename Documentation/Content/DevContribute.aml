@@ -51,15 +51,21 @@
             </listItem>
             <listItem>
               <externalLink>
-                <linkUri>http://www.codeplex.com/Sandcastle</linkUri>
-                <linkText>SandCastle 2.4 (May 2008)</linkText>
-              </externalLink>
-              + SandCastle Styles Project 2.4 patch
-            </listItem>
-            <listItem>
+                <linkText>HTML Help Workshop</linkText>
+                <linkUri>http://msdn.microsoft.com/en-us/library/ms669985.aspx</linkUri>
+              </externalLink>,
               <externalLink>
-                <linkUri>http://www.codeplex.com/SHFB</linkUri>
-                <linkText>Sandcastle Help File Builder 1.8 (Alpha)</linkText>
+                <linkText>Sandcastle 2.6 (June 2010)</linkText>
+                <linkUri>http://sandcastle.codeplex.com/</linkUri>
+              </externalLink>,
+              <externalLink>
+                <linkText>Sandcastle Styles 2.6 Patch 1</linkText>
+                <linkUri>http://sandcastlestyles.codeplex.com/</linkUri>
+              </externalLink>
+              and
+              <externalLink>
+                <linkText>Sandcastle Help File Builder 1.9.1.0</linkText>
+                <linkUri>http://shfb.codeplex.com/</linkUri>
               </externalLink>
             </listItem>
           </list>
