@@ -68,16 +68,6 @@ namespace Vestris.ResourceLibUnitTests
                     Path.Combine(uriPath, @"Binaries\gutils.dll"),
                     new ResourceId("STRINGINPUT"),
                     4));
-            testdata.Add(
-                new TestLoadDialogResourceTestDataEntry(
-                    Path.Combine(uriPath, "Binaries\\acppage.dll"),
-                    new ResourceId(101),
-                    12));
-            testdata.Add(
-                new TestLoadDialogResourceTestDataEntry(
-                    Path.Combine(uriPath, "Binaries\\acppage.dll"),
-                    new ResourceId(5011),
-                    13));
         }
 
         [Test]

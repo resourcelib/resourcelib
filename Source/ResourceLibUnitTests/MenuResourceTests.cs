@@ -22,7 +22,7 @@ namespace Vestris.ResourceLibUnitTests
             using (ResourceInfo ri = new ResourceInfo())
             {
                 ri.Load(filename);
-                Assert.AreEqual(2, ri[Kernel32.ResourceTypes.RT_MENU].Count);
+                Assert.AreEqual(6, ri[Kernel32.ResourceTypes.RT_MENU].Count);
                 foreach (MenuResource rc in ri[Kernel32.ResourceTypes.RT_MENU])
                 {
                     Console.WriteLine("MenuResource: {0}, {1}", rc.Name, rc.TypeName);
@@ -36,12 +36,15 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestReadWriteMenuMixedResourceBytes()
         {
-            string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
+            string filename = Path.Combine(uriPath, @"Binaries\custom.exe");
             using (ResourceInfo ri = new ResourceInfo())
             {
                 ri.Load(filename);
                 foreach (MenuResource rc in ri[Kernel32.ResourceTypes.RT_MENU])
                 {
+                    Console.WriteLine(rc.Name);
                     GenericResource genericResource = new GenericResource(
                         rc.Type,
                         rc.Name,
@@ -56,7 +59,9 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadMenuResourcesEx()
         {
-            string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
+            string filename = Path.Combine(uriPath, @"Binaries\custom.exe");
             using (ResourceInfo ri = new ResourceInfo())
             {
                 ri.Load(filename);

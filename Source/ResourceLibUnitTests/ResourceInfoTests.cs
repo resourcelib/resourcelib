@@ -20,8 +20,8 @@ namespace Vestris.ResourceLibUnitTests
 
             string[] files = 
             {
-                Path.Combine(Environment.SystemDirectory, "regedt32.exe"),
-                Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe"),
+                // Path.Combine(Environment.SystemDirectory, "regedt32.exe"),
+                // Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe"),
                 Path.Combine(uriPath, "Binaries\\gutils.dll"),
                 Path.Combine(uriPath, "Binaries\\6to4svc.dll"),
                 Path.Combine(uriPath, "Binaries\\custom.exe"),

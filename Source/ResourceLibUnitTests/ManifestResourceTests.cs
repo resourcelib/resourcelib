@@ -15,10 +15,10 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadManifestResources()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
-            Assert.IsTrue(File.Exists(filename));
             ManifestResource manifestResource = new ManifestResource();
-            manifestResource.LoadFrom(filename);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\write.exe");
+            manifestResource.LoadFrom(dll, Kernel32.ManifestType.CreateProcess);
             DumpResource.Dump(manifestResource);
             Assert.AreEqual(Kernel32.ManifestType.CreateProcess, manifestResource.ManifestType);
         }
@@ -26,8 +26,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadAndSaveCreateProcessManifestResource()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
-            Assert.IsTrue(File.Exists(filename));
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\write.exe");
             string targetFilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".exe");
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
@@ -43,7 +43,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadAndSaveIsolationAwareManifestResource()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\write.exe");
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".exe");
             File.Copy(filename, targetFilename, true);
