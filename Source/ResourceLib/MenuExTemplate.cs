@@ -37,10 +37,9 @@ namespace Vestris.ResourceLib
             _header = (User32.MENUEXTEMPLATE) Marshal.PtrToStructure(
                 lpRes, typeof(User32.MENUEXTEMPLATE));
 
-            IntPtr lpMenuItem = new IntPtr(lpRes.ToInt32() 
-                + _header.wOffset // offset from offset field
-                + 4 // offset of the offset field
-                );
+            IntPtr lpMenuItem = ResourceUtil.Align(lpRes.ToInt32() 
+                + Marshal.SizeOf(_header) 
+                + _header.wOffset);
 
             return _menuItems.Read(lpMenuItem);
         }
@@ -55,7 +54,7 @@ namespace Vestris.ResourceLib
             // write header
             w.Write(_header.wVersion);
             w.Write(_header.wOffset);
-            w.Write(_header.dwHelpId);
+            // w.Write(_header.dwHelpId);
             // pad to match the offset value
             ResourceUtil.Pad(w, (UInt16) (_header.wOffset - 4));
             // seek to the beginning of the menu item per offset value
@@ -72,7 +71,7 @@ namespace Vestris.ResourceLib
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(string.Format("MENUEX {0}", _header.dwHelpId));
+            sb.AppendLine("MENUEX");
             sb.Append(_menuItems.ToString());
             return sb.ToString();
         }

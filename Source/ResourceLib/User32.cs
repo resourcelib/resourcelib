@@ -1111,6 +1111,7 @@ namespace Vestris.ResourceLib
         {
             /// <summary>
             /// Specifies one or more of the following predefined menu options that control the appearance of the menu item.
+            ///  TODO
             /// </summary>
             public UInt16 mtOption;
         }
@@ -1118,7 +1119,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Defines the header for an extended menu template.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct MENUEXTEMPLATE
         {
             /// <summary>
@@ -1131,16 +1132,12 @@ namespace Vestris.ResourceLib
             /// dwHelpId member, this member should be 4. 
             /// </summary>
             public UInt16 wOffset;
-            /// <summary>
-            /// Help identifier of menu bar.
-            /// </summary>
-            public UInt32 dwHelpId;
         }
 
         /// <summary>
         /// Drop-down menu or submenu item.
         /// </summary>
-        [StructLayout(LayoutKind.Sequential, Pack = 2)]
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct MENUEXITEMTEMPLATE
         {
             /// <summary>
@@ -1161,7 +1158,7 @@ namespace Vestris.ResourceLib
             /// Value specifying whether the menu item is the last item in the menu bar, drop-down menu, 
             /// submenu, or shortcut menu and whether it is an item that opens a drop-down menu or submenu.
             /// </summary>
-            public UInt16 dwOptions;
+            public UInt16 bResInfo;
         }
 
         /// <summary>

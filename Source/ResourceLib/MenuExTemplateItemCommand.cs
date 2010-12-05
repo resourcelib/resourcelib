@@ -27,7 +27,7 @@ namespace Vestris.ResourceLib
             get
             {
                 return _header.dwType == (uint)User32.MenuFlags.MFT_SEPARATOR
-                    || ((_header.dwOptions == 0xFFFF || _header.dwOptions == 0) 
+                    || ((_header.bResInfo == 0xFFFF || _header.bResInfo == 0) 
                         && _header.dwMenuId == 0 && _menuString == null);
             }
         }

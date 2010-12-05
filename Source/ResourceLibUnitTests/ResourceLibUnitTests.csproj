@@ -93,7 +93,6 @@
     <Content Include="Binaries\write.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="write.exe" />
     <Content Include="Bitmaps\Bitmap1.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -11,8 +11,6 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class MenuExTemplateItemCollection : List<MenuExTemplateItem>
     {
-        private UInt32 _dwContextHelpID = 0;
-
         /// <summary>
         /// A collection of extended menu items.
         /// </summary>
@@ -28,16 +26,15 @@ namespace Vestris.ResourceLib
         /// <returns>End of the menu item structure.</returns>
         internal IntPtr Read(IntPtr lpRes)
         {
-            _dwContextHelpID = (UInt32) Marshal.ReadInt32(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + 4);
-
-            while (true)
+            while(true)
             {
+                lpRes = ResourceUtil.Align(lpRes.ToInt32());
+
                 User32.MENUEXITEMTEMPLATE childItem = (User32.MENUEXITEMTEMPLATE)Marshal.PtrToStructure(
                     lpRes, typeof(User32.MENUEXITEMTEMPLATE));
 
                 MenuExTemplateItem childMenu = null;
-                if (childItem.dwOptions == (uint) User32.MenuResourceType.Sub)
+                if ((childItem.bResInfo & (uint) User32.MenuResourceType.Sub) > 0)
                     childMenu = new MenuExTemplateItemPopup();
                 else
                     childMenu = new MenuExTemplateItemCommand();
@@ -45,7 +42,7 @@ namespace Vestris.ResourceLib
                 lpRes = childMenu.Read(lpRes);
                 Add(childMenu);
 
-                if (childItem.dwOptions == (uint) User32.MenuResourceType.Last)
+                if ((childItem.bResInfo & (uint) User32.MenuResourceType.Last) > 0)
                     break;
             }
 
@@ -58,10 +55,9 @@ namespace Vestris.ResourceLib
         /// <param name="w">Binary stream.</param>
         internal void Write(BinaryWriter w)
         {
-            w.Write(_dwContextHelpID);
-
             foreach (MenuExTemplateItem menuItem in this)
             {
+                ResourceUtil.PadToDWORD(w);
                 menuItem.Write(w);
             }
         }

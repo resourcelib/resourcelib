@@ -22,7 +22,7 @@ namespace Vestris.ResourceLibUnitTests
             using (ResourceInfo ri = new ResourceInfo())
             {
                 ri.Load(filename);
-                Assert.AreEqual(6, ri[Kernel32.ResourceTypes.RT_MENU].Count);
+                Assert.AreEqual(7, ri[Kernel32.ResourceTypes.RT_MENU].Count);
                 foreach (MenuResource rc in ri[Kernel32.ResourceTypes.RT_MENU])
                 {
                     Console.WriteLine("MenuResource: {0}, {1}", rc.Name, rc.TypeName);

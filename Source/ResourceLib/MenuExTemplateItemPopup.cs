@@ -11,6 +11,7 @@ namespace Vestris.ResourceLib
     /// </summary>
     public class MenuExTemplateItemPopup : MenuExTemplateItem
     {
+        private UInt32 _dwHelpId = 0;
         MenuExTemplateItemCollection _subMenuItems = new MenuExTemplateItemCollection();
 
         /// <summary>
@@ -44,6 +45,11 @@ namespace Vestris.ResourceLib
         internal override IntPtr Read(IntPtr lpRes)
         {
             lpRes = base.Read(lpRes);
+            
+            lpRes = ResourceUtil.Align(lpRes);
+            _dwHelpId = (UInt32) Marshal.ReadInt32(lpRes);
+            lpRes = new IntPtr(lpRes.ToInt32() + 4);
+
             return _subMenuItems.Read(lpRes);
         }
 
@@ -54,6 +60,8 @@ namespace Vestris.ResourceLib
         internal override void Write(BinaryWriter w)
         {
             base.Write(w);
+            ResourceUtil.PadToDWORD(w);
+            w.Write(_dwHelpId);
             _subMenuItems.Write(w);
         }
 

@@ -42,19 +42,19 @@ namespace Vestris.ResourceLib
         /// <returns>End of the menu item structure.</returns>
         internal virtual IntPtr Read(IntPtr lpRes)
         {
-            _header = (User32.MENUEXITEMTEMPLATE)Marshal.PtrToStructure(
+            _header = (User32.MENUEXITEMTEMPLATE) Marshal.PtrToStructure(
                 lpRes, typeof(User32.MENUEXITEMTEMPLATE));
 
-            lpRes = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            lpRes = new IntPtr(lpRes.ToInt32() 
+                + Marshal.SizeOf(_header));
 
             switch ((UInt32) Marshal.ReadInt32(lpRes))
             {
                 case 0:
-                    lpRes = ResourceUtil.Align(lpRes.ToInt32() + 2);
                     break;
                 default:
                     _menuString = Marshal.PtrToStringUni(lpRes);
-                    lpRes = ResourceUtil.Align(lpRes.ToInt32() +
+                    lpRes = new IntPtr(lpRes.ToInt32() +
                         (_menuString.Length + 1) * Marshal.SystemDefaultCharSize);
                     break;
             }
@@ -72,13 +72,9 @@ namespace Vestris.ResourceLib
             w.Write(_header.dwType);
             w.Write(_header.dwState);
             w.Write(_header.dwMenuId);
-            w.Write(_header.dwOptions);
+            w.Write(_header.bResInfo);
             // menu string
-            if (_menuString == null)
-            {
-                w.Write((UInt16)0);
-            }
-            else
+            if (_menuString != null)
             {
                 w.Write(Encoding.Unicode.GetBytes(_menuString));
                 w.Write((UInt16) 0);
