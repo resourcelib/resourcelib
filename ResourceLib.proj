@@ -2,10 +2,10 @@
  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
  <Import Project="Version.proj"/>
  <PropertyGroup Condition="'$(Configuration)'==''">
-  <Configuration>Debug;Release</Configuration>
+  <Configuration>Release</Configuration>
  </PropertyGroup>
  <PropertyGroup>
-  <ReleaseDir>target\ResourceLib</ReleaseDir>
+  <ReleaseDir>target\$(Configuration)\ResourceLib</ReleaseDir>
  </PropertyGroup>
  <Target Name="configurations">
   <CreateItem Include="$(Configuration)">
@@ -20,7 +20,7 @@
   <MajorVersion>1</MajorVersion>
   <MinorVersion>3</MinorVersion>
  </PropertyGroup>
- <Target Name="all" DependsOnTargets="configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
+ <Target Name="all" DependsOnTargets="configurations">
   <CallTarget Targets="clean" />
   <CallTarget Targets="version" />
   <CallTarget Targets="build" />
@@ -29,22 +29,22 @@
   <CallTarget Targets="zip" />
   <CallTarget Targets="built" />
  </Target>
- <Target Name="clean" DependsOnTargets="configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
-  <Message Importance="high" Text="Cleaning project, %(Configuration.Identity) ..." />
-  <MSBuild Projects="ResourceLib.sln" Targets="Clean" Properties="Configuration=%(Configuration.Identity)" />
+ <Target Name="clean" DependsOnTargets="configurations">
+  <Message Importance="high" Text="Cleaning project, $(Configuration) ..." />
+  <MSBuild Projects="ResourceLib.sln" Targets="Clean" Properties="Configuration=$(Configuration)" />
   <RemoveDir Directories="target" />
   <RemoveDir Directories="Documentation\Release" />
   <DeleteTree Directories="Source\**\bin;Source\**\obj" Recursive="true" />
   <Delete Files="Source\Version\Properties\GlobalAssemblyInfo.cs" />
   <Delete Files="TestResult.xml" />
  </Target>
- <Target Name="build" DependsOnTargets="version;configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
-  <Message Importance="high" Text="Compiling and linking project, %(Configuration.Identity) ..." />
-  <MSBuild Projects="ResourceLib.sln" Targets="Build" Properties="Configuration=%(Configuration.Identity)" />
+ <Target Name="build" DependsOnTargets="version;configurations">
+  <Message Importance="high" Text="Compiling and linking project, $(Configuration) ..." />
+  <MSBuild Projects="ResourceLib.sln" Targets="Build" Properties="Configuration=$(Configuration)" />
  </Target>
- <Target Name="test" DependsOnTargets="configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
-  <Message Importance="high" Text="Running tests, %(Configuration.Identity) ..." />
-  <CreateItem Include="Source\**\bin\%(Configuration.Identity)\Vestris.*UnitTests.dll">
+ <Target Name="test" DependsOnTargets="configurations">
+  <Message Importance="high" Text="Running tests, $(Configuration) ..." />
+  <CreateItem Include="Source\**\bin\$(Configuration)\Vestris.*UnitTests.dll">
    <Output TaskParameter="Include" ItemName="UnitTestAssemblies"/>
   </CreateItem>
   <Message Text="@(UnitTestAssemblies)" />
@@ -61,27 +61,27 @@
  <ItemGroup>
   <ArticleFiles Include="Article\**\*.html" />
  </ItemGroup>
- <Target Name="doc" DependsOnTargets="version;configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
+ <Target Name="doc" DependsOnTargets="version;configurations">
   <Error Condition="'$(DXROOT)'==''" Text="Missing Sandcastle, DXROOT environment variable not set, install from http://www.codeplex.com/Sandcastle" />
   <Error Condition="'$(SHFBROOT)'==''" Text="Missing Sandcastle Builder, SHFBROOT environment variable not set, install from http://www.codeplex.com/SHFB" />
-  <Delete Files="Documentation\%(Configuration.Identity)\ResourceLib.chm" Condition="'%(Configuration.Identity)'=='Release'" />
-  <MSBuild Projects="Documentation\ResourceLib.shfbproj" Properties="Configuration=%(Configuration.Identity)" Condition="'%(Configuration.Identity)'=='Release'" />
-  <Error Condition="Exists('Documentation\%(Configuration.Identity)\LastBuild.log')" Text="Documentation build failed, check Documentation\%(Configuration.Identity)\LastBuild.log" />
+  <Delete Files="Documentation\$(Configuration)\ResourceLib.chm" Condition="'$(Configuration)'=='Release'" />
+  <MSBuild Projects="Documentation\ResourceLib.shfbproj" Properties="Configuration=$(Configuration)" Condition="'$(Configuration)'=='Release'" />
+  <Error Condition="Exists('Documentation\$(Configuration)\LastBuild.log')" Text="Documentation build failed, check Documentation\$(Configuration)\LastBuild.log" />
  </Target>
- <Target Name="zip" DependsOnTargets="version;configurations" Inputs="@(Configuration)" Outputs="target\%(Configuration.FileName)">
+ <Target Name="zip" DependsOnTargets="version;configurations">
   <Copy SourceFiles="@(SourceCodeFiles)" DestinationFolder="$(ReleaseDir)\Source\%(RecursiveDir)" />
   <Copy SourceFiles="@(ArticleFiles)" DestinationFolder="$(ReleaseDir)\Article\%(RecursiveDir)" />
-  <Copy SourceFiles="Documentation\%(Configuration.Identity)\ResourceLib.chm" DestinationFolder="$(ReleaseDir)" Condition="'%(Configuration.Identity)'=='Release'" />
-  <TemplateFile Template="Documentation\WhatsNew.html" OutputFilename="..\$(ReleaseDir)\WhatsNew.html" Tokens="@(AssemblyInfoTokens)" Condition="'%(Configuration.Identity)'=='Release'" />
-  <CreateItem Include="Source\**\%(Configuration.Identity)/Vestris.*.dll" Exclude="Source\**\%(Configuration.Identity)/Vestris.*UnitTests.dll">
+  <Copy SourceFiles="Documentation\$(Configuration)\ResourceLib.chm" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
+  <TemplateFile Template="Documentation\WhatsNew.html" OutputFilename="..\$(ReleaseDir)\WhatsNew.html" Tokens="@(AssemblyInfoTokens)" Condition="'$(Configuration)'=='Release'" />
+  <CreateItem Include="Source\**\$(Configuration)/Vestris.*.dll" Exclude="Source\**\$(Configuration)/Vestris.*UnitTests.dll">
    <Output TaskParameter="Include" ItemName="BinaryFiles" />
   </CreateItem>
-  <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(ReleaseDir)\Bin\%(Configuration.Identity)" />
-  <CreateItem Include="$(ReleaseDir)\**\*" Condition="'%(Configuration.Identity)'=='Release'">
+  <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(ReleaseDir)\Bin" />
+  <CreateItem Include="$(ReleaseDir)\**\*" Condition="'$(Configuration)'=='Release'">
    <Output TaskParameter="Include" ItemName="PackageFiles" />
   </CreateItem>
-  <Zip ZipFileName="target\Vestris.ResourceLib.$(Major).$(Minor).zip" WorkingDirectory="target"
-       Condition="'%(Configuration.Identity)'=='Release'" Files="@(PackageFiles)" />
+  <Zip ZipFileName="target\$(Configuration)\Vestris.ResourceLib.$(Major).$(Minor).zip" WorkingDirectory="target\$(Configuration)"
+       Condition="'$(Configuration)'=='Release'" Files="@(PackageFiles)" />
  </Target>
  <Target Name="built" DependsOnTargets="version">
   <Message Text="Built version: $(Major).$(Minor).$(Build).$(Revision)"/>
