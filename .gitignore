@@ -1,0 +1,7 @@
+bin
+obj
+Debug
+Release
+Source/Version/Properties/GlobalAssemblyInfo.cs
+TestResult.xml
+ 
