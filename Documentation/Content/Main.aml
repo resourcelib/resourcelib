@@ -14,10 +14,10 @@
         It can be further extended to other resource types, easily.
       </para>
       <para>
-        This library is maintained on CodePlex at
+        This library is maintained on Github at
         <externalLink>
-          <linkHref>http://resourcelib.codeplex.com/</linkHref>
-          <linkText>http://resourcelib.codeplex.com/</linkText>
+          <linkHref>https://github.com/dblock/resourcelib/</linkHref>
+          <linkText>https://github.com/dblock/resourcelib/</linkText>
         </externalLink>.
       </para>
     </introduction>
