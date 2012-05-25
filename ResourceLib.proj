@@ -20,7 +20,6 @@
   <Trademark>All Rights Reserved</Trademark>
   <MajorVersion>1</MajorVersion>
   <MinorVersion>3</MinorVersion>
-  <BuildVersion>0501</BuildVersion>
   <RevisionVersion>0</RevisionVersion>
  </PropertyGroup>
  <Target Name="all" DependsOnTargets="configurations">
