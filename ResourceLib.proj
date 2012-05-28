@@ -58,7 +58,6 @@
   <SourceCodeFiles Include="*.cmd" />
   <SourceCodeFiles Include="Source\**\*.cs" />
   <SourceCodeFiles Include="Source\**\*.csproj" />
-  <SourceCodeFiles Include="Source\**\License.txt" />
  </ItemGroup>
  <ItemGroup>
   <ArticleFiles Include="Article\**\*.html" />
@@ -74,7 +73,9 @@
   <Copy SourceFiles="@(SourceCodeFiles)" DestinationFolder="$(ReleaseDir)\Source\%(RecursiveDir)" />
   <Copy SourceFiles="@(ArticleFiles)" DestinationFolder="$(ReleaseDir)\Article\%(RecursiveDir)" />
   <Copy SourceFiles="Documentation\$(Configuration)\ResourceLib.chm" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
-  <TemplateFile Template="Documentation\WhatsNew.html" OutputFilename="..\$(ReleaseDir)\WhatsNew.html" Tokens="@(AssemblyInfoTokens)" Condition="'$(Configuration)'=='Release'" />
+  <Copy SourceFiles="CHANGELOG.md" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
+  <Copy SourceFiles="README.md" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
+  <Copy SourceFiles="LICENSE" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
   <CreateItem Include="Source\**\$(Configuration)/Vestris.*.dll" Exclude="Source\**\$(Configuration)/Vestris.*UnitTests.dll">
    <Output TaskParameter="Include" ItemName="BinaryFiles" />
   </CreateItem>
