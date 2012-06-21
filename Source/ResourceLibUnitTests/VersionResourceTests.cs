@@ -49,6 +49,7 @@ namespace Vestris.ResourceLibUnitTests
 
             versionResource.FileVersion = "1.2.3.4";
             versionResource.ProductVersion = "5.6.7.8";
+            versionResource.FileFlags = 0x2 | 0x8;  // private and prerelease
 
             StringFileInfo stringFileInfo = (StringFileInfo)versionResource["StringFileInfo"];
             stringFileInfo["Comments"] = string.Format("{0}\0", Guid.NewGuid());
@@ -69,6 +70,7 @@ namespace Vestris.ResourceLibUnitTests
 
             Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
+            Assert.AreEqual(newVersionResource.FileFlags, versionResource.FileFlags);
 
             StringFileInfo testedStringFileInfo = (StringFileInfo)newVersionResource["StringFileInfo"];
             foreach (KeyValuePair<string, StringTableEntry> stringResource in testedStringFileInfo.Default.Strings)
