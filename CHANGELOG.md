@@ -1,4 +1,10 @@
-###  1.3 (2012/5/28)
+### Next Release
+
+**New Features**
+
+  * [#2](https://github.com/dblock/resourcelib/pull/2): Added `VersionResource.FileFlags` - [Andreas Ländle](https://github.com/alaendle).
+
+### 1.3 (2012/5/28)
 
 **Misc**
 
@@ -14,7 +20,7 @@
   * Bug: `DeviceIndependentBitmap.Image` cuts bitmap height in half.
   * Bug: `RT_MENU` broken for extended `MENUEX` resources.
 
-###  1.2 (2009/9/22)
+### 1.2 (9/22/2009)
 
 **New Features**
 
@@ -48,12 +54,12 @@
   * Bug: `StringResource` length in its header is incorrect after the value is updated.
   * Bug: `VersionResource.Write` erroneously included padding in the structure size.
 
-###  1.1 (2009/2/19)
+### 1.1 (2/19/2009)
 
   * First release off [CodePlex](http://resourcelib.codeplex.com).
   * Added support for `RT_GROUP_ICON` and `RT_ICON`, icon resources.
 
-###  1.0 (2008/6/30)
+### 1.0 (6/30/2008)
 
   * First release, [ CodeProject Article](http://www.codeproject.com/KB/library/ResourceLib.aspx).
   * Support for `RT_VERSION` and `VS_VERSIONINFO`, version resources.
