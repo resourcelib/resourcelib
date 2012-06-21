@@ -95,6 +95,21 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// Gets or sets a bitmask that specifies the Boolean attributes of the file.
+        /// </summary>
+        public uint FileFlags
+        {
+          get
+          {
+            return this._fixedfileinfo.dwFileFlags;
+          }
+          set
+          {
+            this._fixedfileinfo.dwFileFlags = value;
+          }
+        }
+
+        /// <summary>
         /// Write fixed file information to a binary stream.
         /// </summary>
         /// <param name="w">Binary stream.</param>

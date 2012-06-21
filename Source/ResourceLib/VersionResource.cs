@@ -127,6 +127,21 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
+        /// Gets or sets a bitmask that specifies the Boolean attributes of the file.
+        /// </summary>
+        public uint FileFlags
+        {
+          get
+          {
+            return this._fixedfileinfo.FileFlags;
+          }
+          set
+          {
+            this._fixedfileinfo.FileFlags = value;
+          }
+        }
+
+        /// <summary>
         /// String representation of the protect version.
         /// </summary>
         public string ProductVersion
