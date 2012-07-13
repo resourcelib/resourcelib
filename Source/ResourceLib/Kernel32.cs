@@ -190,7 +190,7 @@ namespace Vestris.ResourceLib
             public Byte bHeight;
             /// <summary>
             /// Number of colors in the image. 
-            /// bColors = 1 << (wBitsPerPixel * wPlanes)
+            /// bColors = 1 &lt;&lt; (wBitsPerPixel * wPlanes)
             /// If wBitsPerPixel* wPlanes is greater orequal to 8, then bColors = 0.
             /// </summary>
             public Byte bColors;
