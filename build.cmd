@@ -8,6 +8,10 @@ if "%~1"=="" (
 pushd "%~dp0"
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
+rem sync up packages
+echo Installing missing packages
+.\.nuget\nuget.exe install .\.nuget\packages.config -o .\packages\
+
 set ProgramFilesDir=%ProgramFiles%
 if NOT "%ProgramFiles(x86)%"=="" set ProgramFilesDir=%ProgramFiles(x86)%
 
