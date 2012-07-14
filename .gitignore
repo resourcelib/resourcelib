@@ -5,3 +5,5 @@ Release
 Source/Version/Properties/GlobalAssemblyInfo.cs
 TestResult.xml
  
+/Build/
+/*.suo
