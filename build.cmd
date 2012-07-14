@@ -18,13 +18,20 @@ for /D %%n in ( "%ProgramFilesDir%\NUnit*" ) do (
  set NUnitDir=%%~n
 )
 
+if EXIST ".\packages" (
+  for /D %%n in ( ".\packages\NUnit.Runners.*" ) do (
+   set NUnitDir=%%~n
+  )
+)
+
 if EXIST "%NUnitDir%\bin" set NUnitBinDir=%NUnitDir%\bin
 if EXIST "%NUnitDir%\bin\net-2.0" set NUnitBinDir=%NUnitDir%\bin\net-2.0
+if EXIST "%NUnitDir%\tools" set NUnitBinDir=%NUnitDir%\tools
 
 if NOT EXIST "%NUnitBinDir%" echo Missing NUnit, expected in %NUnitDir%
 if NOT EXIST "%NUnitBinDir%" exit /b -1
 
-set FrameworkVersion=v3.5
+set FrameworkVersion=v4.0.30319
 set FrameworkDir=%SystemRoot%\Microsoft.NET\Framework
 
 PATH=%FrameworkDir%\%FrameworkVersion%;%PATH%
@@ -42,7 +49,10 @@ echo   build [target] /p:Configuration=[Debug (default),Release]
 echo.
 echo  Target:
 echo.
-echo   all : build everything
+echo   all : clean, build code, run tests, generate docs, package into zip (requires Sandcastle and Sandcastle Builder)
+echo   code : clean, build code
+echo   code_and_test : clean, build code, run tests
+echo   run_test_only : run tests
 echo.
 echo  Examples:
 echo.

@@ -1,5 +1,8 @@
 <Project DefaultTargets="all" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
- <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+ <PropertyGroup>
+  <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\Build</MSBuildCommunityTasksPath>
+ </PropertyGroup>
+ <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
  <Import Project="Version.proj"/>
  <PropertyGroup Condition="'$(Configuration)'==''">
   <Configuration>Release</Configuration>
@@ -25,10 +28,17 @@
  <Target Name="all" DependsOnTargets="configurations">
   <CallTarget Targets="clean" />
   <CallTarget Targets="version" />
-  <CallTarget Targets="build" />
-  <CallTarget Targets="test" />
+  <CallTarget Targets="code" />
+  <CallTarget Targets="run_test_only" />
   <CallTarget Targets="doc" />
   <CallTarget Targets="zip" />
+  <CallTarget Targets="built" />
+ </Target>
+ <Target Name="code_and_test" DependsOnTargets="configurations">
+  <CallTarget Targets="clean" />
+  <CallTarget Targets="version" />
+  <CallTarget Targets="code" />
+  <CallTarget Targets="run_test_only" />
   <CallTarget Targets="built" />
  </Target>
  <Target Name="clean" DependsOnTargets="configurations">
@@ -40,17 +50,17 @@
   <Delete Files="Source\Version\Properties\GlobalAssemblyInfo.cs" />
   <Delete Files="TestResult.xml" />
  </Target>
- <Target Name="build" DependsOnTargets="version;configurations">
+ <Target Name="code" DependsOnTargets="version;configurations">
   <Message Importance="high" Text="Compiling and linking project, $(Configuration) ..." />
   <MSBuild Projects="ResourceLib.sln" Targets="Build" Properties="Configuration=$(Configuration)" />
  </Target>
- <Target Name="test" DependsOnTargets="configurations">
+ <Target Name="run_test_only" DependsOnTargets="configurations">
   <Message Importance="high" Text="Running tests, $(Configuration) ..." />
   <CreateItem Include="Source\**\bin\$(Configuration)\Vestris.*UnitTests.dll">
    <Output TaskParameter="Include" ItemName="UnitTestAssemblies"/>
   </CreateItem>
   <Message Text="@(UnitTestAssemblies)" />
-  <NUnit Assemblies="@(UnitTestAssemblies)" ToolPath="$(NUnitDir)\bin\net-2.0" />
+  <NUnit Assemblies="@(UnitTestAssemblies)" ToolPath="$(NUnitBinDir)" />
  </Target>
  <ItemGroup>
   <SourceCodeFiles Include="*.sln" />
