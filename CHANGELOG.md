@@ -2,13 +2,13 @@
 
 **New Features**
 
-  * [#2](https://github.com/dblock/resourcelib/pull/2): Added `VersionResource.FileFlags` - [Andreas L�ndle](https://github.com/alaendle).
+  * [#2](https://github.com/dblock/resourcelib/pull/2): Added `VersionResource.FileFlags` - [@alaendle](https://github.com/alaendle).
 
 **Misc**
 
-  * Updated solution to Visual Studio 2010
-  * Added nuget references for NUnit, NUnit.Runners, and MSBuildTasks
-  * Added more options to build.cmd
+  * Updated solution to Visual Studio 2010 - [@redwyre](https://github.com/redwyre).
+  * Added NUGet references for `NUnit`, `NUnit.Runners`, and `MSBuildTasks` - [@redwyre](https://github.com/redwyre).
+  * Added more options to build.cmd: `code`, `code_and_test` and `run_test_only` - [@redwyre](https://github.com/redwyre).
 
 ### 1.3 (2012/5/28)
 
