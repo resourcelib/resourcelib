@@ -29,17 +29,11 @@
           A development environment requires the following software.
           <list class="bullet">
             <listItem>A GIT Client</listItem>
-            <listItem>Microsoft Visual Studio 2008</listItem>
+            <listItem>Microsoft Visual Studio 2010</listItem>
             <listItem>
               <externalLink>
-                <linkUri>http://www.nunit.org/index.php?p=download</linkUri>
-                <linkText>NUnit</linkText>
-              </externalLink>
-            </listItem>
-            <listItem>
-              <externalLink>
-                <linkUri>http://msbuildtasks.tigris.org/MSBuild.Community.Tasks.Nightly.msi</linkUri>
-                <linkText>MSBuild Community Tasks 1.3.x</linkText>
+                <linkUri>http://nuget.codeplex.com/</linkUri>
+                <linkText>NuGet</linkText>
               </externalLink>
             </listItem>
             <listItem>
@@ -67,14 +61,11 @@
       </content>
     </section>
     <section address="Patches">
-      <title>Patches and Code Reviews</title>
+      <title>Patches</title>
       <content>
         <para>
-          All changes must be code reviewed. Submit patches under issues at
-          <externalLink>
-            <linkUri>https://github.com/dblock/resourcelib/WorkItem/List.aspx</linkUri>
-            <linkText>https://github.com/dblock/resourcelib/WorkItem/List.aspx</linkText>
-          </externalLink>.
+          Fork the project on Github, commit changes to your local repository, push changes to your fork, and make a pull request.
+          Bonus points for topic branches.
         </para>
       </content>
     </section>
