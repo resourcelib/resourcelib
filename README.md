@@ -39,7 +39,24 @@ using (ResourceInfo vi = new ResourceInfo())
 }
 ```
 
-Please refer to the CHM help file in the distribution package for more information.
+Reference
+---------
+
+* [Bitmap (RT_BITMAP)](https://github.com/dblock/resourcelib/blob/Docs/Bitmap.md)
+* [Version (RT_VERSION)](https://github.com/dblock/resourcelib/blob/Docs/Version.md)
+* [Icon (RT_ICON, RT_GROUP_ICON)](https://github.com/dblock/resourcelib/blob/Docs/Icon.md)
+* [Menu (RT_MENU)](https://github.com/dblock/resourcelib/blob/Docs/Menu.md)
+* [Dialog (RT_DIALOG)](https://github.com/dblock/resourcelib/blob/Docs/Dialog.md)
+* [String (RT_STRING)](https://github.com/dblock/resourcelib/blob/Docs/String.md)
+* [Font (RT_FONT, RT_FONTDIR)](https://github.com/dblock/resourcelib/blob/Docs/Font.md)
+* [Accelerator (RT_ACCELERATOR)](https://github.com/dblock/resourcelib/blob/Docs/Accelerator.md)
+* [Cursor (RT_CURSOR, RT_GROUP_CURSOR)](https://github.com/dblock/resourcelib/blob/Docs/Cursor.md)
+* [Manifest (RT_MANIFEST)](https://github.com/dblock/resourcelib/blob/Docs/Manifest.md)
+
+Contributing
+------------
+
+Fork the project on Github, commit changes to your local repository, push changes to your fork, and make a pull request. Bonus points for topic branches. Also see [Setting up a Development Environment](https://github.com/dblock/resourcelib/blob/Docs/Contributing.md).
 
 Copyright and License
 ---------------------

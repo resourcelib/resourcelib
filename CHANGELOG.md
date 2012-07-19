@@ -9,6 +9,7 @@
   * Updated solution to Visual Studio 2010 - [@redwyre](https://github.com/redwyre).
   * Added NUGet references for `NUnit`, `NUnit.Runners`, and `MSBuildTasks` - [@redwyre](https://github.com/redwyre).
   * Added more options to build.cmd: `code`, `code_and_test` and `run_test_only` - [@redwyre](https://github.com/redwyre).
+  * Documentation rewritten in markdown - [@dblock](https://github.com/dblock).
 
 ### 1.3 (2012/5/28)
 

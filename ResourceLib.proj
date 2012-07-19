@@ -22,7 +22,7 @@
   <Copyright>Copyright (c) Vestris Inc.</Copyright>
   <Trademark>All Rights Reserved</Trademark>
   <MajorVersion>1</MajorVersion>
-  <MinorVersion>3</MinorVersion>
+  <MinorVersion>4</MinorVersion>
   <RevisionVersion>0</RevisionVersion>
  </PropertyGroup>
  <Target Name="all" DependsOnTargets="configurations">
@@ -30,7 +30,6 @@
   <CallTarget Targets="version" />
   <CallTarget Targets="code" />
   <CallTarget Targets="run_test_only" />
-  <CallTarget Targets="doc" />
   <CallTarget Targets="zip" />
   <CallTarget Targets="built" />
  </Target>
@@ -45,7 +44,6 @@
   <Message Importance="high" Text="Cleaning project, $(Configuration) ..." />
   <MSBuild Projects="ResourceLib.sln" Targets="Clean" Properties="Configuration=$(Configuration)" />
   <RemoveDir Directories="target" />
-  <RemoveDir Directories="Documentation\Release" />
   <DeleteTree Directories="Source\**\bin;Source\**\obj" Recursive="true" />
   <Delete Files="Source\Version\Properties\GlobalAssemblyInfo.cs" />
   <Delete Files="TestResult.xml" />
@@ -72,17 +70,13 @@
  <ItemGroup>
   <ArticleFiles Include="Article\**\*.html" />
  </ItemGroup>
- <Target Name="doc" DependsOnTargets="version;configurations">
-  <Error Condition="'$(DXROOT)'==''" Text="Missing Sandcastle, DXROOT environment variable not set, install from http://www.codeplex.com/Sandcastle" />
-  <Error Condition="'$(SHFBROOT)'==''" Text="Missing Sandcastle Builder, SHFBROOT environment variable not set, install from http://www.codeplex.com/SHFB" />
-  <Delete Files="Documentation\$(Configuration)\ResourceLib.chm" Condition="'$(Configuration)'=='Release'" />
-  <Exec Command="$(MSBuild_4_0_ExeFilePath) Documentation\ResourceLib.shfbproj /p:Configuration=$(Configuration)" />  
-  <Error Condition="Exists('Documentation\$(Configuration)\LastBuild.log')" Text="Documentation build failed, check Documentation\$(Configuration)\LastBuild.log" />
- </Target>
+ <ItemGroup>
+  <DocsFiles Include="Docs\**\*.md" />
+ </ItemGroup>
  <Target Name="zip" DependsOnTargets="version;configurations">
   <Copy SourceFiles="@(SourceCodeFiles)" DestinationFolder="$(ReleaseDir)\Source\%(RecursiveDir)" />
   <Copy SourceFiles="@(ArticleFiles)" DestinationFolder="$(ReleaseDir)\Article\%(RecursiveDir)" />
-  <Copy SourceFiles="Documentation\$(Configuration)\ResourceLib.chm" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
+  <Copy SourceFiles="@(DocsFiles)" DestinationFolder="$(ReleaseDir)\Docs\%(RecursiveDir)" />
   <Copy SourceFiles="CHANGELOG.md" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
   <Copy SourceFiles="README.md" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
   <Copy SourceFiles="LICENSE" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
