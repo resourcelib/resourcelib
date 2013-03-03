@@ -8,7 +8,7 @@ This project is a framework that enumerates resources and implements both read a
 Essentials
 ----------
 
-* [Download Version 1.4](https://github.com/downloads/dblock/resourcelib/Vestris.ResourceLib.1.4.zip)
+* [Download Version 1.4](http://code.dblock.org/downloads/resourcelib/Vestris.ResourceLib.1.4.zip)
 * [Old Versions on CodePlex](http://resourcelib.codeplex.com/)
 
 Getting Started
