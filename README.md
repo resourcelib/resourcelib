@@ -8,7 +8,7 @@ This project is a framework that enumerates resources and implements both read a
 Essentials
 ----------
 
-* [Download Version 1.3](https://github.com/downloads/dblock/resourcelib/Vestris.ResourceLib.1.3.zip)
+* [Download Version 1.4](https://github.com/downloads/dblock/resourcelib/Vestris.ResourceLib.1.4.zip)
 * [Old Versions on CodePlex](http://resourcelib.codeplex.com/)
 
 Getting Started
@@ -61,6 +61,6 @@ Fork the project on Github, commit changes to your local repository, push change
 Copyright and License
 ---------------------
 
-Copyright (c) Daniel Doubrovkine, Vestris Inc., 2008-2012 
+Copyright (c) Daniel Doubrovkine, Vestris Inc., 2008-2013.
 
 This project is licensed under the MIT license.

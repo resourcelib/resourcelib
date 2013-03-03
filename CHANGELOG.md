@@ -1,4 +1,4 @@
-### Next Release
+### 1.4 (3/3/2013)
 
 **New Features**
 
@@ -11,7 +11,7 @@
   * Added more options to build.cmd: `code`, `code_and_test` and `run_test_only` - [@redwyre](https://github.com/redwyre).
   * Documentation rewritten in markdown - [@dblock](https://github.com/dblock).
 
-### 1.3 (2012/5/28)
+### 1.3 (5/28/2012
 
 **Misc**
 
