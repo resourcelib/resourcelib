@@ -1,3 +1,7 @@
+### Next Release
+
+* [#9](https://github.com/dblock/resourcelib/pull/9): Added a strong signature to the .NET assembly - [@dwmkerr](https://github.com/dwmkerr).
+
 ### 1.4 (3/3/2013)
 
 **New Features**
