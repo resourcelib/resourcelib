@@ -118,7 +118,7 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return (UInt16) Name.Id.ToInt32();
+                return (UInt16) Name.Id.ToInt64();
             }
             set
             {
@@ -140,11 +140,11 @@ namespace Vestris.ResourceLib
                 if (len != 0)
                 {
                     UInt16 id = (UInt16) ((BlockId - 1) * 16 + i);
-                    IntPtr lpString = new IntPtr(lpRes.ToInt32() + 2);
+                    IntPtr lpString = new IntPtr(lpRes.ToInt64() + 2);
                     string s = Marshal.PtrToStringUni(lpString, len);
                     _strings.Add(id, s);
                 }
-                lpRes = new IntPtr(lpRes.ToInt32() + 2 + (len * Marshal.SystemDefaultCharSize));
+                lpRes = new IntPtr(lpRes.ToInt64() + 2 + (len * Marshal.SystemDefaultCharSize));
             }
 
             return lpRes;

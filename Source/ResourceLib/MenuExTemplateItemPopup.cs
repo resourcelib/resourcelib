@@ -48,7 +48,7 @@ namespace Vestris.ResourceLib
             
             lpRes = ResourceUtil.Align(lpRes);
             _dwHelpId = (UInt32) Marshal.ReadInt32(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + 4);
+            lpRes = new IntPtr(lpRes.ToInt64() + 4);
 
             return _subMenuItems.Read(lpRes);
         }

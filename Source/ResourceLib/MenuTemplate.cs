@@ -38,7 +38,7 @@ namespace Vestris.ResourceLib
             _header = (User32.MENUTEMPLATE) Marshal.PtrToStructure(
                 lpRes, typeof(User32.MENUTEMPLATE));
             
-            IntPtr lpMenuItem = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header) + _header.wOffset);
+            IntPtr lpMenuItem = new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_header) + _header.wOffset);
             return _menuItems.Read(lpMenuItem);
         }
 

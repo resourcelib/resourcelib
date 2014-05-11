@@ -54,14 +54,14 @@ namespace Vestris.ResourceLib
             _strings.Clear();
             IntPtr pChild = base.Read(lpRes);
 
-            while (pChild.ToInt32() < (lpRes.ToInt32() + _header.wLength))
+            while (pChild.ToInt64() < (lpRes.ToInt64() + _header.wLength))
             {
                 StringTable res = new StringTable(pChild);
                 _strings.Add(res.Key, res);
-                pChild = ResourceUtil.Align(pChild.ToInt32() + res.Header.wLength);
+                pChild = ResourceUtil.Align(pChild.ToInt64() + res.Header.wLength);
             }
 
-            return new IntPtr(lpRes.ToInt32() + _header.wLength);
+            return new IntPtr(lpRes.ToInt64() + _header.wLength);
         }
 
         /// <summary>

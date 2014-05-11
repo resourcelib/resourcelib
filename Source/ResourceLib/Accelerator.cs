@@ -22,7 +22,7 @@ namespace Vestris.ResourceLib
             _accel = (User32.ACCEL) Marshal.PtrToStructure(
                 lpRes, typeof(User32.ACCEL));
 
-            return new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_accel));
+            return new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_accel));
         }
 
         /// <summary>

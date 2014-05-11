@@ -28,8 +28,8 @@ namespace Vestris.ResourceLibUnitTests
                     Console.WriteLine("AcceleratorResource: {0}, {1}", rc.Name, rc.TypeName);
                     DumpResource.Dump(rc);
                 }
-                Assert.AreEqual(109, ri[Kernel32.ResourceTypes.RT_ACCELERATOR][0].Name.Id.ToInt32());
-                Assert.AreEqual(110, ri[Kernel32.ResourceTypes.RT_ACCELERATOR][1].Name.Id.ToInt32());
+                Assert.AreEqual(109, ri[Kernel32.ResourceTypes.RT_ACCELERATOR][0].Name.Id.ToInt64());
+                Assert.AreEqual(110, ri[Kernel32.ResourceTypes.RT_ACCELERATOR][1].Name.Id.ToInt64());
             }
         }
     }

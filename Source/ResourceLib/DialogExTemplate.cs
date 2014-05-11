@@ -178,23 +178,23 @@ namespace Vestris.ResourceLib
             _header = (User32.DIALOGEXTEMPLATE)Marshal.PtrToStructure(
                 lpRes, typeof(User32.DIALOGEXTEMPLATE));
 
-            lpRes = base.Read(new IntPtr(lpRes.ToInt32() + 26)); // Marshal.SizeOf(_header)
+            lpRes = base.Read(new IntPtr(lpRes.ToInt64() + 26)); // Marshal.SizeOf(_header)
 
             if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
                 || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)
             {
                 // weight
                 Weight = (UInt16)Marshal.ReadInt16(lpRes);
-                lpRes = new IntPtr(lpRes.ToInt32() + 2);
+                lpRes = new IntPtr(lpRes.ToInt64() + 2);
                 // italic
                 Italic = (Marshal.ReadByte(lpRes) > 0);
-                lpRes = new IntPtr(lpRes.ToInt32() + 1);
+                lpRes = new IntPtr(lpRes.ToInt64() + 1);
                 // character set
                 CharacterSet = Marshal.ReadByte(lpRes);
-                lpRes = new IntPtr(lpRes.ToInt32() + 1);
+                lpRes = new IntPtr(lpRes.ToInt64() + 1);
                 // typeface
                 TypeFace = Marshal.PtrToStringUni(lpRes);
-                lpRes = new IntPtr(lpRes.ToInt32() + (TypeFace.Length + 1) * Marshal.SystemDefaultCharSize);
+                lpRes = new IntPtr(lpRes.ToInt64() + (TypeFace.Length + 1) * Marshal.SystemDefaultCharSize);
             }
 
             return ReadControls(lpRes);

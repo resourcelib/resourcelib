@@ -116,7 +116,7 @@ namespace Vestris.ResourceLib
             _header = (Kernel32.GRPICONDIR)Marshal.PtrToStructure(
                 lpRes, typeof(Kernel32.GRPICONDIR));
 
-            IntPtr pEntry = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            IntPtr pEntry = new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_header));
 
             for (UInt16 i = 0; i < _header.wImageCount; i++)
             {

@@ -107,13 +107,13 @@ namespace Vestris.ResourceLib
             switch ((UInt16)Marshal.ReadInt16(lpRes))
             {
                 case 0x0000: // no data
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
+                    lpRes = new IntPtr(lpRes.ToInt64() + 2);
                     break;
                 default:
                     UInt16 size = (UInt16)Marshal.ReadInt16(lpRes);
                     _creationData = new byte[size];
                     Marshal.Copy(lpRes, _creationData, 0, _creationData.Length);
-                    lpRes = new IntPtr(lpRes.ToInt32() + size);
+                    lpRes = new IntPtr(lpRes.ToInt64() + size);
                     break;
             }
 

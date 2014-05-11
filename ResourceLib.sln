@@ -15,27 +15,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D703E923
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{AD64D826-875E-44FB-8DC4-95E2D37CC0BE}"
 	ProjectSection(SolutionItems) = preProject
-		Documentation\ResourceLib.content = Documentation\ResourceLib.content
-		Documentation\ResourceLib.shfbproj = Documentation\ResourceLib.shfbproj
-		Documentation\WhatsNew.html = Documentation\WhatsNew.html
+		CHANGELOG.md = CHANGELOG.md
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C46FF-FC48-496B-9C03-E48B91A8EBAB}"
 	ProjectSection(SolutionItems) = preProject
-		Documentation\Content\AcceleratorResources.aml = Documentation\Content\AcceleratorResources.aml
-		Documentation\Content\BitmapResources.aml = Documentation\Content\BitmapResources.aml
-		Documentation\Content\CursorResources.aml = Documentation\Content\CursorResources.aml
-		Documentation\Content\DevContribute.aml = Documentation\Content\DevContribute.aml
-		Documentation\Content\DialogResources.aml = Documentation\Content\DialogResources.aml
-		Documentation\Content\FontResources.aml = Documentation\Content\FontResources.aml
-		Documentation\Content\GettingStarted.aml = Documentation\Content\GettingStarted.aml
-		Documentation\Content\IconResources.aml = Documentation\Content\IconResources.aml
-		Documentation\Content\License.aml = Documentation\Content\License.aml
-		Documentation\Content\Main.aml = Documentation\Content\Main.aml
-		Documentation\Content\ManifestResources.aml = Documentation\Content\ManifestResources.aml
-		Documentation\Content\MenuResources.aml = Documentation\Content\MenuResources.aml
-		Documentation\Content\StringResources.aml = Documentation\Content\StringResources.aml
-		Documentation\Content\VersionResources.aml = Documentation\Content\VersionResources.aml
+		Docs\Accelerator.md = Docs\Accelerator.md
+		Docs\Bitmap.md = Docs\Bitmap.md
+		Docs\Contributing.md = Docs\Contributing.md
+		Docs\Cursor.md = Docs\Cursor.md
+		Docs\Dialog.md = Docs\Dialog.md
+		Docs\Font.md = Docs\Font.md
+		Docs\Icon.md = Docs\Icon.md
+		Docs\Manifest.md = Docs\Manifest.md
+		Docs\Menu.md = Docs\Menu.md
+		Docs\String.md = Docs\String.md
+		Docs\Version.md = Docs\Version.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"

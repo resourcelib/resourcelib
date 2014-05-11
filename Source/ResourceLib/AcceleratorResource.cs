@@ -66,8 +66,8 @@ namespace Vestris.ResourceLib
         /// <returns>Address of the end of the accelerator table.</returns>
         internal override IntPtr Read(IntPtr hModule, IntPtr lpRes)
         {
-            int count = _size / Marshal.SizeOf(typeof(User32.ACCEL));
-            for (int i = 0; i < count; i++)
+            long count = _size / Marshal.SizeOf(typeof(User32.ACCEL));
+            for (long i = 0; i < count; i++)
             {
                 Accelerator accelerator = new Accelerator();
                 lpRes = accelerator.Read(lpRes);

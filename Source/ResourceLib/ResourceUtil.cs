@@ -16,7 +16,7 @@ namespace Vestris.ResourceLib
         /// </summary>
         /// <param name="p">Address in memory.</param>
         /// <returns>4-byte aligned pointer.</returns>
-        internal static IntPtr Align(Int32 p)
+        internal static IntPtr Align(Int64 p)
         {
             return new IntPtr((p + 3) & ~3);
         }
@@ -28,7 +28,7 @@ namespace Vestris.ResourceLib
         /// <returns>4-byte aligned pointer.</returns>
         internal static IntPtr Align(IntPtr p)
         {
-            return Align(p.ToInt32());
+            return Align(p.ToInt64());
         }
 
         /// <summary>

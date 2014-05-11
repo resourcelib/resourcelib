@@ -130,7 +130,7 @@ namespace Vestris.ResourceLib
             _header = (User32.DIALOGTEMPLATE) Marshal.PtrToStructure(
                 lpRes, typeof(User32.DIALOGTEMPLATE));
 
-            lpRes = new IntPtr(lpRes.ToInt32() + 18); // Marshal.SizeOf(_header)
+            lpRes = new IntPtr(lpRes.ToInt64() + 18); // Marshal.SizeOf(_header)
             lpRes = base.Read(lpRes);
 
             if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
@@ -138,7 +138,7 @@ namespace Vestris.ResourceLib
             {
                 // typeface
                 TypeFace = Marshal.PtrToStringUni(lpRes);
-                lpRes = new IntPtr(lpRes.ToInt32() + (TypeFace.Length + 1) * Marshal.SystemDefaultCharSize);
+                lpRes = new IntPtr(lpRes.ToInt64() + (TypeFace.Length + 1) * Marshal.SystemDefaultCharSize);
             }
 
             return ReadControls(lpRes);

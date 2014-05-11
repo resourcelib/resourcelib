@@ -69,7 +69,7 @@ namespace Vestris.ResourceLib
             IntPtr lpHead = lpRes;
 
             UInt16 count = (UInt16)Marshal.ReadInt16(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + 2);
+            lpRes = new IntPtr(lpRes.ToInt64() + 2);
 
             for (int i = 0; i < count; i++)
             {

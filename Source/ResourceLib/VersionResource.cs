@@ -88,9 +88,9 @@ namespace Vestris.ResourceLib
                 _fixedfileinfo.Read(pFixedFileInfo);
             }
 
-            IntPtr pChild = ResourceUtil.Align(pFixedFileInfo.ToInt32() + _header.Header.wValueLength);
+            IntPtr pChild = ResourceUtil.Align(pFixedFileInfo.ToInt64() + _header.Header.wValueLength);
 
-            while (pChild.ToInt32() < (lpRes.ToInt32() + _header.Header.wLength))
+            while (pChild.ToInt64() < (lpRes.ToInt64() + _header.Header.wLength))
             {
                 ResourceTableHeader rc = new ResourceTableHeader(pChild);
                 switch (rc.Key)
@@ -105,10 +105,10 @@ namespace Vestris.ResourceLib
                 }
 
                 _resources.Add(rc.Key, rc);
-                pChild = ResourceUtil.Align(pChild.ToInt32() + rc.Header.wLength);
+                pChild = ResourceUtil.Align(pChild.ToInt64() + rc.Header.wLength);
             }
 
-            return new IntPtr(lpRes.ToInt32() + _header.Header.wLength);
+            return new IntPtr(lpRes.ToInt64() + _header.Header.wLength);
         }
 
         /// <summary>
