@@ -135,7 +135,7 @@ namespace Vestris.ResourceLib
             _header = (User32.DIALOGEXITEMTEMPLATE)Marshal.PtrToStructure(
                 lpRes, typeof(User32.DIALOGEXITEMTEMPLATE));
 
-            lpRes = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            lpRes = new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_header));
             return base.Read(lpRes);
         }
 

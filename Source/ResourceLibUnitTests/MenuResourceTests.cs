@@ -28,8 +28,8 @@ namespace Vestris.ResourceLibUnitTests
                     Console.WriteLine("MenuResource: {0}, {1}", rc.Name, rc.TypeName);
                     DumpResource.Dump(rc);
                 }
-                Assert.AreEqual(101, ri[Kernel32.ResourceTypes.RT_MENU][0].Name.Id.ToInt32());
-                Assert.AreEqual(102, ri[Kernel32.ResourceTypes.RT_MENU][1].Name.Id.ToInt32());
+                Assert.AreEqual(101, ri[Kernel32.ResourceTypes.RT_MENU][0].Name.Id.ToInt64());
+                Assert.AreEqual(102, ri[Kernel32.ResourceTypes.RT_MENU][1].Name.Id.ToInt64());
             }
         }
 

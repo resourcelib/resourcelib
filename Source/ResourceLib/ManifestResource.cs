@@ -123,7 +123,7 @@ namespace Vestris.ResourceLib
                 Marshal.Copy(lpRes, _data, 0, _data.Length);
             }
 
-            return new IntPtr(lpRes.ToInt32() + _size);
+            return new IntPtr(lpRes.ToInt64() + _size);
         }
 
         /// <summary>

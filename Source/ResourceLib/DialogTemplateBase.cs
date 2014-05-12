@@ -190,14 +190,14 @@ namespace Vestris.ResourceLib
             lpRes = DialogTemplateUtil.ReadResourceId(lpRes, out _windowClassId);
             // caption
             Caption = Marshal.PtrToStringUni(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + (Caption.Length + 1) * Marshal.SystemDefaultCharSize);
+            lpRes = new IntPtr(lpRes.ToInt64() + (Caption.Length + 1) * Marshal.SystemDefaultCharSize);
 
             if ((Style & (uint)User32.DialogStyles.DS_SETFONT) > 0
                 || (Style & (uint)User32.DialogStyles.DS_SHELLFONT) > 0)
             {
                 // point size
                 PointSize = (UInt16)Marshal.ReadInt16(lpRes);
-                lpRes = new IntPtr(lpRes.ToInt32() + 2);
+                lpRes = new IntPtr(lpRes.ToInt64() + 2);
             }
 
             return lpRes;

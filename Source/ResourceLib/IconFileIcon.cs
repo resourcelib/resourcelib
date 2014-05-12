@@ -94,10 +94,10 @@ namespace Vestris.ResourceLib
             _header = (Kernel32.FILEGRPICONDIRENTRY)Marshal.PtrToStructure(
                 lpData, typeof(Kernel32.FILEGRPICONDIRENTRY));
 
-            IntPtr lpImage = new IntPtr(lpAllData.ToInt32() + _header.dwFileOffset);
+            IntPtr lpImage = new IntPtr(lpAllData.ToInt64() + _header.dwFileOffset);
             _image.Read(lpImage, _header.dwImageSize);
 
-            return new IntPtr(lpData.ToInt32() + Marshal.SizeOf(_header));
+            return new IntPtr(lpData.ToInt64() + Marshal.SizeOf(_header));
         }
 
         /// <summary>

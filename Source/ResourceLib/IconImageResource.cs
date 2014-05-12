@@ -192,7 +192,7 @@ namespace Vestris.ResourceLib
 
             ReadImage(dibBits, (UInt32) Kernel32.SizeofResource(hModule, hIconInfo));
 
-            return new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            return new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_header));
         }
 
         /// <summary>

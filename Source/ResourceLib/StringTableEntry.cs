@@ -116,10 +116,10 @@ namespace Vestris.ResourceLib
             _header = (Kernel32.RESOURCE_HEADER)Marshal.PtrToStructure(
                 lpRes, typeof(Kernel32.RESOURCE_HEADER));
 
-            IntPtr pKey = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            IntPtr pKey = new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_header));
             _key = Marshal.PtrToStringUni(pKey);
 
-            IntPtr pValue = ResourceUtil.Align(pKey.ToInt32() + (_key.Length + 1) * Marshal.SystemDefaultCharSize);
+            IntPtr pValue = ResourceUtil.Align(pKey.ToInt64() + (_key.Length + 1) * Marshal.SystemDefaultCharSize);
             _value = ((_header.wValueLength > 0)
                 ? Marshal.PtrToStringUni(pValue, _header.wValueLength)
                 : null);

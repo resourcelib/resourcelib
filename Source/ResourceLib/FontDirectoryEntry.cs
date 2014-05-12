@@ -94,18 +94,18 @@ namespace Vestris.ResourceLib
             IntPtr lpHead = lpRes;
 
             _fontOrdinal = (UInt16) Marshal.ReadInt16(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + 2);
+            lpRes = new IntPtr(lpRes.ToInt64() + 2);
 
             _font = (User32.FONTDIRENTRY)Marshal.PtrToStructure(
                 lpRes, typeof(User32.FONTDIRENTRY));
 
-            lpRes = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_font));
+            lpRes = new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_font));
 
             _deviceName = Marshal.PtrToStringAnsi(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + _deviceName.Length + 1);
+            lpRes = new IntPtr(lpRes.ToInt64() + _deviceName.Length + 1);
 
             _faceName = Marshal.PtrToStringAnsi(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + _faceName.Length + 1);
+            lpRes = new IntPtr(lpRes.ToInt64() + _faceName.Length + 1);
 
             return lpRes;
         }

@@ -60,7 +60,7 @@ namespace Vestris.ResourceLibUnitTests
             {
                 ri.Load(targetFilename);
                 Assert.AreEqual(2, ri[Kernel32.ResourceTypes.RT_STRING].Count);
-                Assert.AreEqual(StringResource.GetBlockId(1256), ri[Kernel32.ResourceTypes.RT_STRING][1].Name.Id.ToInt32());
+                Assert.AreEqual(StringResource.GetBlockId(1256), ri[Kernel32.ResourceTypes.RT_STRING][1].Name.Id.ToInt64());
                 Assert.AreEqual(sr[1256], ((StringResource) ri[Kernel32.ResourceTypes.RT_STRING][1])[1256]);
                 foreach (StringResource rc in ri[Kernel32.ResourceTypes.RT_STRING])
                 {

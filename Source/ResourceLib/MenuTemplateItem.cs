@@ -46,11 +46,11 @@ namespace Vestris.ResourceLib
             switch ((UInt16) Marshal.ReadInt16(lpRes))
             {
                 case 0:
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
+                    lpRes = new IntPtr(lpRes.ToInt64() + 2);
                     break;
                 default:
                     _menuString = Marshal.PtrToStringUni(lpRes);
-                    lpRes = new IntPtr(lpRes.ToInt32() +
+                    lpRes = new IntPtr(lpRes.ToInt64() +
                         (_menuString.Length + 1) * Marshal.SystemDefaultCharSize);
                     break;
             }

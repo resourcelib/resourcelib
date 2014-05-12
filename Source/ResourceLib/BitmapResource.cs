@@ -54,7 +54,7 @@ namespace Vestris.ResourceLib
             byte[] data = new byte[_size];
             Marshal.Copy(lpRes, data, 0, data.Length);
             _bitmap = new DeviceIndependentBitmap(data);
-            return new IntPtr(lpRes.ToInt32() + _size);
+            return new IntPtr(lpRes.ToInt64() + _size);
         }
 
         /// <summary>

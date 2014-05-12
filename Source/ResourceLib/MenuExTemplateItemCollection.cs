@@ -28,7 +28,7 @@ namespace Vestris.ResourceLib
         {
             while(true)
             {
-                lpRes = ResourceUtil.Align(lpRes.ToInt32());
+                lpRes = ResourceUtil.Align(lpRes.ToInt64());
 
                 User32.MENUEXITEMTEMPLATE childItem = (User32.MENUEXITEMTEMPLATE)Marshal.PtrToStructure(
                     lpRes, typeof(User32.MENUEXITEMTEMPLATE));

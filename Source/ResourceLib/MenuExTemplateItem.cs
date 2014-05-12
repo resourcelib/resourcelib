@@ -45,7 +45,7 @@ namespace Vestris.ResourceLib
             _header = (User32.MENUEXITEMTEMPLATE) Marshal.PtrToStructure(
                 lpRes, typeof(User32.MENUEXITEMTEMPLATE));
 
-            lpRes = new IntPtr(lpRes.ToInt32() 
+            lpRes = new IntPtr(lpRes.ToInt64() 
                 + Marshal.SizeOf(_header));
 
             switch ((UInt32) Marshal.ReadInt32(lpRes))
@@ -54,7 +54,7 @@ namespace Vestris.ResourceLib
                     break;
                 default:
                     _menuString = Marshal.PtrToStringUni(lpRes);
-                    lpRes = new IntPtr(lpRes.ToInt32() +
+                    lpRes = new IntPtr(lpRes.ToInt64() +
                         (_menuString.Length + 1) * Marshal.SystemDefaultCharSize);
                     break;
             }

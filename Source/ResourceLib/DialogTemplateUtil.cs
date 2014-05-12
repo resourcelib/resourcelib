@@ -24,16 +24,16 @@ namespace Vestris.ResourceLib
             switch ((UInt16) Marshal.ReadInt16(lpRes))
             {
                 case 0x0000: // no predefined resource
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
+                    lpRes = new IntPtr(lpRes.ToInt64() + 2);
                     break;
                 case 0xFFFF: // one additional element that specifies the ordinal value of the resource
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
+                    lpRes = new IntPtr(lpRes.ToInt64() + 2);
                     rc = new ResourceId((UInt16)Marshal.ReadInt16(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + 2);
+                    lpRes = new IntPtr(lpRes.ToInt64() + 2);
                     break;
                 default: // null-terminated Unicode string that specifies the name of the resource
                     rc = new ResourceId(Marshal.PtrToStringUni(lpRes));
-                    lpRes = new IntPtr(lpRes.ToInt32() + (rc.Name.Length + 1) * Marshal.SystemDefaultCharSize);
+                    lpRes = new IntPtr(lpRes.ToInt64() + (rc.Name.Length + 1) * Marshal.SystemDefaultCharSize);
                     break;
             }
 

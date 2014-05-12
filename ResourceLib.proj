@@ -80,7 +80,7 @@
   <Copy SourceFiles="CHANGELOG.md" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
   <Copy SourceFiles="README.md" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
   <Copy SourceFiles="LICENSE" DestinationFolder="$(ReleaseDir)" Condition="'$(Configuration)'=='Release'" />
-  <CreateItem Include="Source\**\$(Configuration)/Vestris.*.dll" Exclude="Source\**\$(Configuration)/Vestris.*UnitTests.dll">
+  <CreateItem Include="Source\**\$(Configuration)/Vestris.*.*" Exclude="Source\**\$(Configuration)/Vestris.*UnitTests.*">
    <Output TaskParameter="Include" ItemName="BinaryFiles" />
   </CreateItem>
   <Copy SourceFiles="@(BinaryFiles)" DestinationFolder="$(ReleaseDir)\Bin" />

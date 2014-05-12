@@ -112,9 +112,9 @@ namespace Vestris.ResourceLib
         internal override void ReadImage(IntPtr dibBits, UInt32 size)
         {
             _hotspotx = (UInt16) Marshal.ReadInt16(dibBits);
-            dibBits = new IntPtr(dibBits.ToInt32() + sizeof(UInt16));
+            dibBits = new IntPtr(dibBits.ToInt64() + sizeof(UInt16));
             _hotspoty = (UInt16) Marshal.ReadInt16(dibBits);
-            dibBits = new IntPtr(dibBits.ToInt32() + sizeof(UInt16));
+            dibBits = new IntPtr(dibBits.ToInt64() + sizeof(UInt16));
 
             base.ReadImage(dibBits, size - 2 * sizeof(UInt16));
         }

@@ -63,15 +63,15 @@ namespace Vestris.ResourceLib
             _languages.Clear();
             IntPtr pVar = base.Read(lpRes);
 
-            while (pVar.ToInt32() < (lpRes.ToInt32() + _header.wLength))
+            while (pVar.ToInt64() < (lpRes.ToInt64() + _header.wLength))
             {
                 Kernel32.VAR_HEADER var = (Kernel32.VAR_HEADER) Marshal.PtrToStructure(
                     pVar, typeof(Kernel32.VAR_HEADER));
                 _languages.Add(var.wLanguageIDMS, var.wCodePageIBM);
-                pVar = new IntPtr(pVar.ToInt32() + Marshal.SizeOf(var));
+                pVar = new IntPtr(pVar.ToInt64() + Marshal.SizeOf(var));
             }
 
-            return new IntPtr(lpRes.ToInt32() + _header.wLength);
+            return new IntPtr(lpRes.ToInt64() + _header.wLength);
         }
 
         /// <summary>

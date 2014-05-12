@@ -46,10 +46,10 @@ namespace Vestris.ResourceLib
             _header = (User32.MENUITEMTEMPLATE)Marshal.PtrToStructure(
                 lpRes, typeof(User32.MENUITEMTEMPLATE));
 
-            lpRes = new IntPtr(lpRes.ToInt32() + Marshal.SizeOf(_header));
+            lpRes = new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_header));
 
             _menuId = (UInt16) Marshal.ReadInt16(lpRes);
-            lpRes = new IntPtr(lpRes.ToInt32() + 2);
+            lpRes = new IntPtr(lpRes.ToInt64() + 2);
             
             lpRes = base.Read(lpRes);
 
