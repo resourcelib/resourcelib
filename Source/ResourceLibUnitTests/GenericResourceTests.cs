@@ -16,7 +16,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadSave()
         {
-            string atldll = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string atldll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\atl.dll");
             Assert.IsTrue(File.Exists(atldll));
             string targetFilename = Path.Combine(Path.GetTempPath(), "genericResourceTestLoadSave.dll");
             Console.WriteLine(targetFilename);

@@ -106,6 +106,9 @@
     <Content Include="Binaries\acppage.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Binaries\atl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Binaries\custom.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

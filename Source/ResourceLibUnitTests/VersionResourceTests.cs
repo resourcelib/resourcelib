@@ -16,7 +16,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadVersionResource()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\atl.dll");
             Assert.IsTrue(File.Exists(filename));
             VersionResource versionResource = new VersionResource();
             versionResource.Language = ResourceUtil.USENGLISHLANGID;
@@ -27,7 +28,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadVersionResourceStrings()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\atl.dll");
             Assert.IsTrue(File.Exists(filename));
             VersionResource versionResource = new VersionResource();
             versionResource.Language = ResourceUtil.USENGLISHLANGID;
@@ -90,7 +92,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestDeleteVersionResource()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\atl.dll");
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "testDeleteVersionResource.dll");
             File.Copy(filename, targetFilename, true);
@@ -122,7 +125,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestDeepCopyBytes()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\atl.dll");
             Assert.IsTrue(File.Exists(filename));
             VersionResource existingVersionResource = new VersionResource();
             existingVersionResource.Language = ResourceUtil.USENGLISHLANGID;
@@ -179,7 +183,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestDeleteDeepCopyAndSaveVersionResource()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\atl.dll");
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "atl.dll");
             File.Copy(filename, targetFilename, true);
@@ -259,7 +264,8 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestDeleteAndSaveVersionResource()
         {
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\atl.dll");
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "testDeleteAndSaveVersionResource.dll");
             File.Copy(filename, targetFilename, true);

@@ -18,7 +18,8 @@ namespace Vestris.ResourceLibUnitTests
         public void SampleEnumerateResources()
         {
             #region Example: Enumerating Resources
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\atl.dll");
             using (ResourceInfo vi = new ResourceInfo())
             {
                 vi.Load(filename);
