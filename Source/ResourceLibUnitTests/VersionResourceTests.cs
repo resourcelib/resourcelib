@@ -26,6 +26,7 @@ namespace Vestris.ResourceLibUnitTests
             versionResource.Language = ResourceUtil.USENGLISHLANGID;
             versionResource.LoadFrom(filename);
             DumpResource.Dump(versionResource);
+            AssertOneVersionResource(filename);
         }
 
         [TestCase("atl.dll")]
@@ -41,6 +42,7 @@ namespace Vestris.ResourceLibUnitTests
             versionResource.Language = ResourceUtil.USENGLISHLANGID;
             versionResource.LoadFrom(filename);
             DumpResource.Dump(versionResource);
+            AssertOneVersionResource(filename);
         }
 
         [TestCase("atl.dll")]
@@ -79,6 +81,7 @@ namespace Vestris.ResourceLibUnitTests
             newVersionResource.LoadFrom(targetFilename);
             DumpResource.Dump(versionResource);
 
+            AssertOneVersionResource(targetFilename);
             Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
             Assert.AreEqual(newVersionResource.FileFlags, versionResource.FileFlags);
@@ -127,6 +130,9 @@ namespace Vestris.ResourceLibUnitTests
                 // expected exception
                 Console.WriteLine("Expected exception: {0}", ex.Message);
             }
+
+            AssertNoVersionResource(targetFilename);
+
             using (ResourceInfo ri = new ResourceInfo())
             {
                 ri.Load(targetFilename);
@@ -265,6 +271,7 @@ namespace Vestris.ResourceLibUnitTests
             newVersionResource.LoadFrom(targetFilename);
             DumpResource.Dump(newVersionResource);
 
+            AssertOneVersionResource(targetFilename);
             Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
 
@@ -295,7 +302,7 @@ namespace Vestris.ResourceLibUnitTests
             Console.WriteLine(targetFilename);
             VersionResource existingVersionResource = new VersionResource();
             existingVersionResource.DeleteFrom(targetFilename);
-
+            
             VersionResource versionResource = new VersionResource();
             versionResource.FileVersion = "1.2.3.4";
             versionResource.ProductVersion = "4.5.6.7";
@@ -329,6 +336,7 @@ namespace Vestris.ResourceLibUnitTests
             newVersionResource.LoadFrom(targetFilename);
             DumpResource.Dump(newVersionResource);
 
+            AssertOneVersionResource(targetFilename);
             Assert.AreEqual(newVersionResource.FileVersion, versionResource.FileVersion);
             Assert.AreEqual(newVersionResource.ProductVersion, versionResource.ProductVersion);
         }
@@ -387,5 +395,54 @@ namespace Vestris.ResourceLibUnitTests
             Assert.AreEqual('\0' + guid, sr.StringValue);
             Assert.AreEqual(guid.Length + 2, sr.Header.wValueLength);
         }
+
+        #region Helper methods
+
+        private static void AssertOneVersionResource(string fileName)
+        {
+            Assert.AreEqual(
+                1,
+                GetOccurrencesOf("StringFileInfo", fileName),
+                "More than one StringFileInfo block found.");
+
+            Assert.AreEqual(
+                1,
+                GetOccurrencesOf("VarFileInfo", fileName),
+                "More than one VarFileInfo block found.");
+        }
+
+        private static void AssertNoVersionResource(string fileName)
+        {
+            Assert.AreEqual(
+                0,
+                GetOccurrencesOf("StringFileInfo", fileName),
+                "StringFileInfo block found.");
+
+            Assert.AreEqual(
+                0,
+                GetOccurrencesOf("VarFileInfo", fileName),
+                "VarFileInfo block found.");
+        }
+
+        private static int GetOccurrencesOf(string text, string fileName)
+        {
+            byte[] contentData = File.ReadAllBytes(fileName);
+
+            var chars = new char[contentData.Length / sizeof(char)];
+            Buffer.BlockCopy(contentData, 0, chars, 0, contentData.Length);
+            var content = new string(chars);
+
+            int occurrences = 0;
+            int index = -1;
+
+            while ((index = content.IndexOf(text, index + 1, StringComparison.InvariantCulture)) != -1)
+            {
+                occurrences++;
+            }
+
+            return occurrences;
+        }
+
+        #endregion
     }
 }
