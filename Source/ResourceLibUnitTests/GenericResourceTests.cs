@@ -20,11 +20,11 @@ namespace Vestris.ResourceLibUnitTests
         public void TestLoadSave(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            string atldll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
-            Assert.IsTrue(File.Exists(atldll));
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
+            Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "genericResourceTestLoadSave.dll");
             Console.WriteLine(targetFilename);
-            File.Copy(atldll, targetFilename, true);
+            File.Copy(filename, targetFilename, true);
             // write the resource to a binary
             GenericResource genericResource = new GenericResource(
                 new ResourceId("TESTTYPE"), new ResourceId("TESTNAME"), ResourceUtil.USENGLISHLANGID);
