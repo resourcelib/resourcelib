@@ -13,14 +13,15 @@ namespace Vestris.ResourceLibUnitTests
     [TestFixture]
     public class GenericResourceTests
     {
-        [Test]
-        public void TestLoadSave()
+        [TestCase("atl.dll")]
+        public void TestLoadSave(string binaryName)
         {
-            string atldll = Path.Combine(Environment.SystemDirectory, "atl.dll");
-            Assert.IsTrue(File.Exists(atldll));
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
+            Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "genericResourceTestLoadSave.dll");
             Console.WriteLine(targetFilename);
-            File.Copy(atldll, targetFilename, true);
+            File.Copy(filename, targetFilename, true);
             // write the resource to a binary
             GenericResource genericResource = new GenericResource(
                 new ResourceId("TESTTYPE"), new ResourceId("TESTNAME"), ResourceUtil.USENGLISHLANGID);

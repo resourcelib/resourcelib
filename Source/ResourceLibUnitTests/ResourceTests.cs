@@ -14,11 +14,12 @@ namespace Vestris.ResourceLibUnitTests
     [TestFixture]
     public class ResourceTests
     {
-        [Test]
-        public void SampleEnumerateResources()
+        [TestCase("atl.dll")]
+        public void SampleEnumerateResources(string binaryName)
         {
             #region Example: Enumerating Resources
-            string filename = Path.Combine(Environment.SystemDirectory, "atl.dll");
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             using (ResourceInfo vi = new ResourceInfo())
             {
                 vi.Load(filename);
