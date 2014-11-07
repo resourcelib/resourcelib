@@ -14,9 +14,6 @@ namespace Vestris.ResourceLibUnitTests
     public class GenericResourceTests
     {
         [TestCase("atl.dll")]
-        [TestCase("ConsoleApplication_NET4.5_AnyCPU.exe")]
-        [TestCase("ConsoleApplication_NET4.5_x86.exe")]
-        [TestCase("ConsoleApplication_NET4.5_x64.exe")]
         public void TestLoadSave(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
