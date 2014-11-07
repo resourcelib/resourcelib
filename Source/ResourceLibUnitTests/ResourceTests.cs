@@ -15,6 +15,7 @@ namespace Vestris.ResourceLibUnitTests
     public class ResourceTests
     {
         [TestCase("atl.dll")]
+        [TestCase("ConsoleApplication_NET4.5.exe")]
         public void SampleEnumerateResources(string binaryName)
         {
             #region Example: Enumerating Resources

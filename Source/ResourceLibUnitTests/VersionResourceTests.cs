@@ -14,6 +14,7 @@ namespace Vestris.ResourceLibUnitTests
     public class VersionResourceTests
     {
         [TestCase("atl.dll")]
+        [TestCase("ConsoleApplication_NET4.5.exe")]
         public void TestLoadVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -27,6 +28,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ConsoleApplication_NET4.5.exe")]
         public void TestLoadVersionResourceStrings(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -40,6 +42,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ConsoleApplication_NET4.5.exe")]
         public void TestLoadAndSaveVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -93,6 +96,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ConsoleApplication_NET4.5.exe")]
         public void TestDeleteVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -129,6 +133,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ConsoleApplication_NET4.5.exe")]
         public void TestDeepCopyBytes(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -187,6 +192,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ConsoleApplication_NET4.5.exe")]
         public void TestDeleteDeepCopyAndSaveVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -269,6 +275,7 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ConsoleApplication_NET4.5.exe")]
         public void TestDeleteAndSaveVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
