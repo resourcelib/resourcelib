@@ -113,6 +113,9 @@
     <Content Include="Binaries\atl.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Binaries\ConsoleApplication_NET4.5.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Binaries\custom.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
