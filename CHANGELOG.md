@@ -4,6 +4,7 @@
 * [#10](https://github.com/dblock/resourcelib/issues/10): Fixed System.OverflowException: Arithmetic operation resulted in an overflow (64-bit systems) by replacing most calls to ToInt32 with ToInt64 - [@icnocop](https://github.com/icnocop).
 * [#16](https://github.com/dblock/resourcelib/issues/16): Fixed NuGet error "Package restore is disabled by default." when building by updating to NuGet 2.8.1 - [@icnocop](https://github.com/icnocop).
 * Including Vestris.ResourceLib.pdb and Vestris.ResourceLib.xml in release zip for documentation and easier debugging support - [@icnocop](https://github.com/icnocop).
+* [CI](https://ci.appveyor.com/project/dblock/resourcelib): Setup CI on AppVeyor - [@dblock](https://github.com/dblock).
 
 ### 1.4 (3/3/2013)
 
