@@ -305,7 +305,7 @@ namespace Vestris.ResourceLib
         /// <param name="hFile">This parameter is reserved for future use.</param>
         /// <param name="dwFlags">The action to be taken when loading the module.</param>
         /// <returns></returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = "LoadLibraryExW")]
         internal static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
 
         /// <summary>

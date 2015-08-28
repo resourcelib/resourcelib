@@ -71,6 +71,7 @@
     <Compile Include="AcceleratorResourceTests.cs" />
     <Compile Include="BitmapResourceTests.cs" />
     <Compile Include="ByteUtils.cs" />
+    <Compile Include="CheckWidePaths.cs" />
     <Compile Include="CursorResourceTests.cs" />
     <Compile Include="DialogResourceTests.cs" />
     <Compile Include="DumpResource.cs" />
