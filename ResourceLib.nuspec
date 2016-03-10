@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Vestris.ResourceLib</id>
+    <version>$version$</version>
+    <title>Vestris Resource Lib</title>
+    <authors>dblock</authors>
+    <owners>dblock</owners>
+    <licenseUrl>https://github.com/dblock/resourcelib/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/dblock/resourcelib</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C# File Resource Management Library</description>
+    <copyright>Copyright 2016</copyright>
+    <tags>Resource Win32</tags>
+  </metadata>
+  <files>
+    <file src="Source\ResourceLib\bin\$configuration$\Vestris.ResourceLib.dll" target="lib\" />
+    <file src="Source\ResourceLib\bin\$configuration$\Vestris.ResourceLib.xml" target="lib\" />
+  </files>
+</package>
