@@ -31,6 +31,7 @@
   <CallTarget Targets="code" />
   <CallTarget Targets="run_test_only" />
   <CallTarget Targets="zip" />
+  <CallTarget Targets="package" />
   <CallTarget Targets="built" />
  </Target>
  <Target Name="code_and_test" DependsOnTargets="configurations">
@@ -90,6 +91,9 @@
   <Zip ZipFileName="target\$(Configuration)\Vestris.ResourceLib.$(Major).$(Minor).zip" WorkingDirectory="target\$(Configuration)"
        Condition="'$(Configuration)'=='Release'" Files="@(PackageFiles)" />
  </Target>
+  <Target Name="package" DependsOnTargets="version;configurations">
+    <Exec Command=".nuget\nuget.exe pack ResourceLib.nuspec -version $(Major).$(Minor).$(Build).$(Revision) -Properties Configuration=$(Configuration) -OutputDirectory target\$(Configuration)" />
+  </Target>
  <Target Name="built" DependsOnTargets="version">
   <Message Text="Built version: $(Major).$(Minor).$(Build).$(Revision)"/>
  </Target>
