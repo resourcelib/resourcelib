@@ -113,7 +113,7 @@ namespace Vestris.ResourceLib
         /// <param name="value">Resource pointer.</param>
         internal static bool IsIntResource(IntPtr value)
         {
-            return (uint) value <= UInt16.MaxValue;
+            return value.ToInt64() <= UInt16.MaxValue;
         }
 
         /// <summary>

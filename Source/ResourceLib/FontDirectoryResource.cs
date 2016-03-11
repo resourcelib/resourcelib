@@ -78,7 +78,7 @@ namespace Vestris.ResourceLib
                 _fonts.Add(fontEntry);
             }
 
-            int reservedLen = _size - (lpRes.ToInt32() - lpHead.ToInt32() - 1);
+            int reservedLen = _size - (int)(lpRes.ToInt64() - lpHead.ToInt64() - 1);
             _reserved = new byte[reservedLen];
             Marshal.Copy(lpRes, _reserved, 0, reservedLen);
 

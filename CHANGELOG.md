@@ -6,6 +6,7 @@
 * Including Vestris.ResourceLib.pdb and Vestris.ResourceLib.xml in release zip for documentation and easier debugging support - [@icnocop](https://github.com/icnocop).
 * [CI](https://ci.appveyor.com/project/dblock/resourcelib): Setup CI on AppVeyor - [@dblock](https://github.com/dblock).
 * [#26](https://github.com/dblock/resourcelib/pull/26): Fixed opening PE files at non-ANSI paths by changing from ANSI to Wide version of PInvoke - [@hypersw](https://github.com/hypersw).
+* [#31](https://github.com/dblock/resourcelib/pull/31): Fixed OverflowException when running as x64 - [@thoemmi](https://github.com/thoemmi).
 
 ### 1.4 (3/3/2013)
 
