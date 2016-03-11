@@ -14,6 +14,14 @@ namespace Vestris.ResourceLibUnitTests
     public class VersionResourceTests
     {
         [TestCase("atl.dll")]
+        [TestCase("ClassLibrary_NET2.0.dll")]
+        [TestCase("ClassLibrary_NET3.0.dll")]
+        [TestCase("ClassLibrary_NET3.5.dll")]
+        [TestCase("ClassLibrary_NET3.5ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.0.dll")]
+        [TestCase("ClassLibrary_NET4.0ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.5.dll")]
+        [TestCase("ClassLibrary_NET4.5.1.dll")]
         public void TestLoadVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -27,6 +35,14 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ClassLibrary_NET2.0.dll")]
+        [TestCase("ClassLibrary_NET3.0.dll")]
+        [TestCase("ClassLibrary_NET3.5.dll")]
+        [TestCase("ClassLibrary_NET3.5ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.0.dll")]
+        [TestCase("ClassLibrary_NET4.0ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.5.dll")]
+        [TestCase("ClassLibrary_NET4.5.1.dll")]
         public void TestLoadVersionResourceStrings(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -40,6 +56,14 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ClassLibrary_NET2.0.dll")]
+        [TestCase("ClassLibrary_NET3.0.dll")]
+        [TestCase("ClassLibrary_NET3.5.dll")]
+        [TestCase("ClassLibrary_NET3.5ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.0.dll")]
+        [TestCase("ClassLibrary_NET4.0ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.5.dll")]
+        [TestCase("ClassLibrary_NET4.5.1.dll")]
         public void TestLoadAndSaveVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -93,6 +117,14 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ClassLibrary_NET2.0.dll")]
+        [TestCase("ClassLibrary_NET3.0.dll")]
+        [TestCase("ClassLibrary_NET3.5.dll")]
+        [TestCase("ClassLibrary_NET3.5ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.0.dll")]
+        [TestCase("ClassLibrary_NET4.0ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.5.dll")]
+        [TestCase("ClassLibrary_NET4.5.1.dll")]
         public void TestDeleteVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -129,6 +161,14 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ClassLibrary_NET2.0.dll")]
+        [TestCase("ClassLibrary_NET3.0.dll")]
+        [TestCase("ClassLibrary_NET3.5.dll")]
+        [TestCase("ClassLibrary_NET3.5ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.0.dll")]
+        [TestCase("ClassLibrary_NET4.0ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.5.dll")]
+        [TestCase("ClassLibrary_NET4.5.1.dll")]
         public void TestDeepCopyBytes(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -187,6 +227,14 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ClassLibrary_NET2.0.dll")]
+        [TestCase("ClassLibrary_NET3.0.dll")]
+        [TestCase("ClassLibrary_NET3.5.dll")]
+        [TestCase("ClassLibrary_NET3.5ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.0.dll")]
+        [TestCase("ClassLibrary_NET4.0ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.5.dll")]
+        [TestCase("ClassLibrary_NET4.5.1.dll")]
         public void TestDeleteDeepCopyAndSaveVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
@@ -269,6 +317,14 @@ namespace Vestris.ResourceLibUnitTests
         }
 
         [TestCase("atl.dll")]
+        [TestCase("ClassLibrary_NET2.0.dll")]
+        [TestCase("ClassLibrary_NET3.0.dll")]
+        [TestCase("ClassLibrary_NET3.5.dll")]
+        [TestCase("ClassLibrary_NET3.5ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.0.dll")]
+        [TestCase("ClassLibrary_NET4.0ClientProfile.dll")]
+        [TestCase("ClassLibrary_NET4.5.dll")]
+        [TestCase("ClassLibrary_NET4.5.1.dll")]
         public void TestDeleteAndSaveVersionResource(string binaryName)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
