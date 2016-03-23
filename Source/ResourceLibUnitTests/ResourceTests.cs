@@ -14,20 +14,17 @@ namespace Vestris.ResourceLibUnitTests
     [TestFixture]
     public class ResourceTests
     {
-        [TestCase("atl.dll")]
-        [TestCase("ClassLibrary_NET2.0.dll")]
-        [TestCase("ClassLibrary_NET3.0.dll")]
-        [TestCase("ClassLibrary_NET3.5.dll")]
-        [TestCase("ClassLibrary_NET3.5ClientProfile.dll")]
-        [TestCase("ClassLibrary_NET4.0.dll")]
-        [TestCase("ClassLibrary_NET4.0ClientProfile.dll")]
-        [TestCase("ClassLibrary_NET4.5.dll")]
-        [TestCase("ClassLibrary_NET4.5.1.dll")]
-        public void SampleEnumerateResources(string binaryName)
+        private static IEnumerable<string> TestFiles {
+            get {
+                Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+                string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
+                return Directory.GetFiles(Path.Combine(uriPath, "Binaries"));
+            }
+        }
+
+        [TestCaseSource("TestFiles")]
+        public void SampleEnumerateResources(string filename)
         {
-            #region Example: Enumerating Resources
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             using (ResourceInfo vi = new ResourceInfo())
             {
                 vi.Load(filename);
@@ -41,28 +38,22 @@ namespace Vestris.ResourceLibUnitTests
                     }
                 }
             }
-            #endregion
         }
 
-        [Test]
-        public void TestReadWriteResourceBytes()
+        [TestCaseSource("TestFiles")]
+        public void TestReadWriteResourceBytes(string filename)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
-            foreach (string filename in Directory.GetFiles(Path.Combine(uriPath, "Binaries")))
+            Console.WriteLine(filename);
+            using (ResourceInfo ri = new ResourceInfo())
             {
-                Console.WriteLine(filename);
-                using (ResourceInfo ri = new ResourceInfo())
+                ri.Load(filename);
+                foreach (Resource rc in ri)
                 {
-                    ri.Load(filename);
-                    foreach (Resource rc in ri)
-                    {
-                        Console.WriteLine("Resource: {0} - {1}", rc.TypeName, rc.Name);
-                        GenericResource genericResource = new GenericResource(rc.Type, rc.Name, rc.Language);
-                        genericResource.LoadFrom(filename);
-                        byte[] data = rc.WriteAndGetBytes();
-                        ByteUtils.CompareBytes(genericResource.Data, data);
-                    }
+                    Console.WriteLine("Resource: {0} - {1}", rc.TypeName, rc.Name);
+                    GenericResource genericResource = new GenericResource(rc.Type, rc.Name, rc.Language);
+                    genericResource.LoadFrom(filename);
+                    byte[] data = rc.WriteAndGetBytes();
+                    ByteUtils.CompareBytes(genericResource.Data, data);
                 }
             }
         }
