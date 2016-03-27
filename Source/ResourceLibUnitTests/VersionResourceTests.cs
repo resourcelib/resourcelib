@@ -13,8 +13,21 @@ namespace Vestris.ResourceLibUnitTests
     [TestFixture]
     public class VersionResourceTests
     {
-        [TestCase("atl.dll")]
-        public void TestLoadVersionResource(string binaryName)
+        private static readonly object[] TestAssemblies =
+        {
+            new object[] { "atl.dll", 1033 },
+            new object[] { "ClassLibrary_NET2.0.dll", 0 },
+            new object[] { "ClassLibrary_NET3.0.dll", 0 },
+            new object[] { "ClassLibrary_NET3.5.dll", 0 },
+            new object[] { "ClassLibrary_NET3.5ClientProfile.dll", 0 },
+            new object[] { "ClassLibrary_NET4.0.dll", 0 },
+            new object[] { "ClassLibrary_NET4.0ClientProfile.dll", 0 },
+            new object[] { "ClassLibrary_NET4.5.dll", 0 },
+            new object[] { "ClassLibrary_NET4.5.1.dll", 0 },
+        };
+
+        [TestCaseSource("TestAssemblies")]
+        public void TestLoadVersionResource(string binaryName, int language)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
@@ -26,8 +39,8 @@ namespace Vestris.ResourceLibUnitTests
             AssertOneVersionResource(filename);
         }
 
-        [TestCase("atl.dll")]
-        public void TestLoadVersionResourceStrings(string binaryName)
+        [TestCaseSource("TestAssemblies")]
+        public void TestLoadVersionResourceStrings(string binaryName, int language)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
@@ -39,15 +52,15 @@ namespace Vestris.ResourceLibUnitTests
             AssertOneVersionResource(filename);
         }
 
-        [TestCase("atl.dll")]
-        public void TestLoadAndSaveVersionResource(string binaryName)
+        [TestCaseSource("TestAssemblies")]
+        public void TestLoadAndSaveVersionResource(string binaryName, int language)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
 
             VersionResource versionResource = new VersionResource();
-            versionResource.Language = ResourceUtil.USENGLISHLANGID;
+            versionResource.Language = (ushort)language;
             versionResource.LoadFrom(filename);
             DumpResource.Dump(versionResource);
 
@@ -68,7 +81,7 @@ namespace Vestris.ResourceLibUnitTests
             versionResource.SaveTo(targetFilename);
 
             VersionResource newVersionResource = new VersionResource();
-            newVersionResource.Language = ResourceUtil.USENGLISHLANGID;
+            newVersionResource.Language = (ushort)language;
             newVersionResource.LoadFrom(targetFilename);
             DumpResource.Dump(versionResource);
 
@@ -92,8 +105,8 @@ namespace Vestris.ResourceLibUnitTests
             }
         }
 
-        [TestCase("atl.dll")]
-        public void TestDeleteVersionResource(string binaryName)
+        [TestCaseSource("TestAssemblies")]
+        public void TestDeleteVersionResource(string binaryName, int language)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
@@ -102,7 +115,7 @@ namespace Vestris.ResourceLibUnitTests
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             VersionResource versionResource = new VersionResource();
-            versionResource.Language = ResourceUtil.USENGLISHLANGID;
+            versionResource.Language = (ushort)language;
             versionResource.LoadFrom(targetFilename);
             Console.WriteLine("Name: {0}", versionResource.Name);
             Console.WriteLine("Type: {0}", versionResource.Type);
@@ -128,14 +141,14 @@ namespace Vestris.ResourceLibUnitTests
             }
         }
 
-        [TestCase("atl.dll")]
-        public void TestDeepCopyBytes(string binaryName)
+        [TestCaseSource("TestAssemblies")]
+        public void TestDeepCopyBytes(string binaryName, int language)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
             VersionResource existingVersionResource = new VersionResource();
-            existingVersionResource.Language = ResourceUtil.USENGLISHLANGID;
+            existingVersionResource.Language = (ushort)language;
             Console.WriteLine("Loading {0}", filename);
             existingVersionResource.LoadFrom(filename);
             DumpResource.Dump(existingVersionResource);
@@ -149,7 +162,6 @@ namespace Vestris.ResourceLibUnitTests
 
             // copy string resources, data only
             StringFileInfo stringFileInfo = new StringFileInfo();
-            versionResource["StringFileInfo"] = stringFileInfo;
             {
                 Dictionary<string, StringTable>.Enumerator enumerator = existingVersionResourceStringFileInfo.Strings.GetEnumerator();
                 while (enumerator.MoveNext())
@@ -168,7 +180,6 @@ namespace Vestris.ResourceLibUnitTests
 
             // copy var resources, data only
             VarFileInfo varFileInfo = new VarFileInfo();
-            versionResource["VarFileInfo"] = varFileInfo;
             {
                 Dictionary<string, VarTable>.Enumerator enumerator = existingVersionResourceVarFileInfo.Vars.GetEnumerator();
                 while (enumerator.MoveNext())
@@ -183,11 +194,23 @@ namespace Vestris.ResourceLibUnitTests
                 }
             }
 
+            bool firstResourceIsStringFileInfo = existingVersionResource[0] == existingVersionResourceStringFileInfo;
+            if (firstResourceIsStringFileInfo)
+            {
+                versionResource["StringFileInfo"] = stringFileInfo;
+                versionResource["VarFileInfo"] = varFileInfo;
+            }
+            else
+            {
+                versionResource["VarFileInfo"] = varFileInfo;
+                versionResource["StringFileInfo"] = stringFileInfo;
+            }
+
             ByteUtils.CompareBytes(existingVersionResource.WriteAndGetBytes(), versionResource.WriteAndGetBytes());
         }
 
-        [TestCase("atl.dll")]
-        public void TestDeleteDeepCopyAndSaveVersionResource(string binaryName)
+        [TestCaseSource("TestAssemblies")]
+        public void TestDeleteDeepCopyAndSaveVersionResource(string binaryName, int language)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
@@ -196,7 +219,7 @@ namespace Vestris.ResourceLibUnitTests
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             VersionResource existingVersionResource = new VersionResource();
-            existingVersionResource.Language = ResourceUtil.USENGLISHLANGID;
+            existingVersionResource.Language = (ushort)language;
             existingVersionResource.LoadFrom(targetFilename);
             DumpResource.Dump(existingVersionResource);
             existingVersionResource.DeleteFrom(targetFilename);
@@ -268,8 +291,8 @@ namespace Vestris.ResourceLibUnitTests
             }
         }
 
-        [TestCase("atl.dll")]
-        public void TestDeleteAndSaveVersionResource(string binaryName)
+        [TestCaseSource("TestAssemblies")]
+        public void TestDeleteAndSaveVersionResource(string binaryName, int language)
         {
             Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
@@ -278,8 +301,9 @@ namespace Vestris.ResourceLibUnitTests
             File.Copy(filename, targetFilename, true);
             Console.WriteLine(targetFilename);
             VersionResource existingVersionResource = new VersionResource();
+            existingVersionResource.Language = (ushort)language;
             existingVersionResource.DeleteFrom(targetFilename);
-            
+
             VersionResource versionResource = new VersionResource();
             versionResource.FileVersion = "1.2.3.4";
             versionResource.ProductVersion = "4.5.6.7";
@@ -287,9 +311,9 @@ namespace Vestris.ResourceLibUnitTests
             StringFileInfo stringFileInfo = new StringFileInfo();
             versionResource[stringFileInfo.Key] = stringFileInfo;
             StringTable stringFileInfoStrings = new StringTable(); // "040904b0"
-            stringFileInfoStrings.LanguageID = 1033;
+            stringFileInfoStrings.LanguageID = (ushort)language;
             stringFileInfoStrings.CodePage = 1200;
-            Assert.AreEqual(1033, stringFileInfoStrings.LanguageID);
+            Assert.AreEqual(language, stringFileInfoStrings.LanguageID);
             Assert.AreEqual(1200, stringFileInfoStrings.CodePage);
             stringFileInfo.Strings.Add(stringFileInfoStrings.Key, stringFileInfoStrings);
             stringFileInfoStrings["ProductName"] = "ResourceLib";
@@ -321,7 +345,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadNeutralDeleteEnglishResource()
         {
-            // the 6to4svc.dll has an English version info strings resource that is loaded via netural            
+            // the 6to4svc.dll has an English version info strings resource that is loaded via netural
             VersionResource vr = new VersionResource();
             string testDll = Path.Combine(Path.GetTempPath(), "testLoadNeutralDeleteEnglishResource.dll");
             Console.WriteLine(testDll);

@@ -1,15 +1,14 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Specialized;
 using System.Text;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
 using System.IO;
 
 namespace Vestris.ResourceLib
 {
     /// <summary>
     /// VS_VERSIONINFO
-    /// This structure depicts the organization of data in a file-version resource. It is the root structure 
+    /// This structure depicts the organization of data in a file-version resource. It is the root structure
     /// that contains all other file-version information structures.
     /// http://msdn.microsoft.com/en-us/library/aa914916.aspx
     /// </summary>
@@ -17,7 +16,7 @@ namespace Vestris.ResourceLib
     {
         ResourceTableHeader _header = new ResourceTableHeader("VS_VERSION_INFO");
         FixedFileInfo _fixedfileinfo = new FixedFileInfo();
-        private Dictionary<string, ResourceTableHeader> _resources = new Dictionary<string, ResourceTableHeader>();
+        private OrderedDictionary _resources = new OrderedDictionary();
 
         /// <summary>
         /// The resource header.
@@ -33,7 +32,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// A dictionary of resource tables.
         /// </summary>
-        public Dictionary<string, ResourceTableHeader> Resources
+        public OrderedDictionary Resources
         {
             get
             {
@@ -60,11 +59,11 @@ namespace Vestris.ResourceLib
         /// A new language-netural version resource.
         /// </summary>
         public VersionResource()
-            : base(IntPtr.Zero, 
-                IntPtr.Zero, 
-                new ResourceId(Kernel32.ResourceTypes.RT_VERSION), 
-                new ResourceId(1), 
-                ResourceUtil.USENGLISHLANGID, 
+            : base(IntPtr.Zero,
+                IntPtr.Zero,
+                new ResourceId(Kernel32.ResourceTypes.RT_VERSION),
+                new ResourceId(1),
+                ResourceUtil.USENGLISHLANGID,
                 0)
         {
             _header.Header = new Kernel32.RESOURCE_HEADER(_fixedfileinfo.Size);
@@ -164,16 +163,15 @@ namespace Vestris.ResourceLib
         {
             long headerPos = w.BaseStream.Position;
             _header.Write(w);
-            
+
             if (_fixedfileinfo != null)
             {
                 _fixedfileinfo.Write(w);
             }
 
-            Dictionary<string, ResourceTableHeader>.Enumerator resourceEnum = _resources.GetEnumerator();
-            while (resourceEnum.MoveNext())
+            foreach (DictionaryEntry dictionaryEntry in _resources)
             {
-                resourceEnum.Current.Value.Write(w);
+                ((ResourceTableHeader)dictionaryEntry.Value).Write(w);
             }
 
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
@@ -188,11 +186,28 @@ namespace Vestris.ResourceLib
         {
             get
             {
-                return Resources[key];
+                return (ResourceTableHeader)Resources[key];
             }
             set
             {
                 Resources[key] = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns an entry within this resource table.
+        /// </summary>
+        /// <param name="index">Entry index.</param>
+        /// <returns>A resource table.</returns>
+        public ResourceTableHeader this[int index]
+        {
+            get
+            {
+                return (ResourceTableHeader)Resources[index];
+            }
+            set
+            {
+                Resources[index] = value;
             }
         }
 
@@ -208,10 +223,9 @@ namespace Vestris.ResourceLib
                 sb.Append(_fixedfileinfo.ToString());
             }
             sb.AppendLine("BEGIN");
-            Dictionary<string, ResourceTableHeader>.Enumerator resourceEnum = _resources.GetEnumerator();
-            while (resourceEnum.MoveNext())
+            foreach (DictionaryEntry dictionaryEntry in _resources)
             {
-                sb.Append(resourceEnum.Current.Value.ToString(1));
+                sb.Append(((ResourceTableHeader)dictionaryEntry.Value).ToString(1));
             }
             sb.AppendLine("END");
             return sb.ToString();
