@@ -63,6 +63,6 @@ Fork the project on Github, commit changes to your local repository, push change
 Copyright and License
 ---------------------
 
-Copyright (c) Daniel Doubrovkine, Vestris Inc., 2008-2013.
+Copyright (c) Daniel Doubrovkine, Vestris Inc., 2008-2016.
 
 This project is licensed under the MIT license.

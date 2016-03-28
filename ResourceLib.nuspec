@@ -4,8 +4,8 @@
     <id>Vestris.ResourceLib</id>
     <version>$version$</version>
     <title>Vestris Resource Lib</title>
-    <authors>dblock</authors>
-    <owners>dblock</owners>
+    <authors>dblock, icnocop, thoemmi</authors>
+    <owners>dblock, icnocop, thoemmi</owners>
     <licenseUrl>https://github.com/dblock/resourcelib/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/dblock/resourcelib</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
