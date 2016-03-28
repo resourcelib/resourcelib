@@ -4,3 +4,10 @@ version: 0.{build}
 
 build_script:
   - build all /p:Configuration=Release
+
+artifacts:
+  - path: target\Release\*.zip
+    name: ZIP
+
+  - path: target\Release\*.nupkg
+    name: NuGet package
