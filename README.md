@@ -2,6 +2,7 @@ ResourceLib C# File Resource Management Library
 ===============================================
 
 [![Build status](https://ci.appveyor.com/api/projects/status/35kx80j687p9835d/branch/master?svg=true)](https://ci.appveyor.com/project/dblock/resourcelib/branch/master)
+[![NuGet](https://img.shields.io/nuget/v/Vestris.ResourceLib.svg)](https://www.nuget.org/packages/Vestris.ResourceLib)
 
 There are several good articles about reading and writing resources from/to a compiled binary. Most focus on retrieving module version information and modifying version information, mostly in C++. Some detail the same operations for cursors, icons or dialog resources. There is, however, no single .NET library to retrieve and save any type of resources, or any library to edit version resources specifically.
 
@@ -10,7 +11,8 @@ This project is a framework that enumerates resources and implements both read a
 Essentials
 ----------
 
-* [Download Version 1.4](http://code.dblock.org/downloads/resourcelib/Vestris.ResourceLib.1.4.zip)
+* [NuGet package](https://www.nuget.org/packages/Vestris.ResourceLib)
+* [Download Version 1.5](https://github.com/dblock/resourcelib/releases/tag/v1.5)
 * [Old Versions on CodePlex](http://resourcelib.codeplex.com/)
 
 Getting Started
