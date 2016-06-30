@@ -143,6 +143,9 @@
     <Content Include="Binaries\gutils.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Binaries\idea64.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Binaries\write.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

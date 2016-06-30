@@ -25,6 +25,7 @@ namespace Vestris.ResourceLibUnitTests
                 Path.Combine(uriPath, "Binaries\\gutils.dll"),
                 Path.Combine(uriPath, "Binaries\\6to4svc.dll"),
                 Path.Combine(uriPath, "Binaries\\custom.exe"),
+                Path.Combine(uriPath, "Binaries\\idea64.exe"),
             };
 
             foreach (string filename in files)
