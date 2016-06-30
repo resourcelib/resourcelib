@@ -302,10 +302,18 @@ namespace Vestris.ResourceLib
             if (h == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            if (!Kernel32.UpdateResource(h, type.Id, name.Id,
-                lang, data, (data == null ? 0 : (uint)data.Length)))
+            try
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                if (!Kernel32.UpdateResource(h, type.Id, name.Id,
+                    lang, data, (data == null ? 0 : (uint)data.Length)))
+                {
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+                }
+            }
+            catch
+            {
+                Kernel32.EndUpdateResource(h, true);
+                throw;
             }
 
             if (!Kernel32.EndUpdateResource(h, false))
