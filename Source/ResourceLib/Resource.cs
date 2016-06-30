@@ -319,5 +319,53 @@ namespace Vestris.ResourceLib
             if (!Kernel32.EndUpdateResource(h, false))
                 throw new Win32Exception(Marshal.GetLastWin32Error());
         }
+
+
+        /// <summary>
+        /// Save a batch of resources to a given file.
+        /// </summary>
+        /// <param name="filename">Path to an executable file.</param>
+        /// <param name="resources">The resources to write.</param>
+        public static void Save(string filename, IEnumerable<Resource> resources)
+        {
+            IntPtr h = Kernel32.BeginUpdateResource(filename, false);
+
+            if (h == IntPtr.Zero)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            try
+            {
+                foreach (var resource in resources)
+                {
+                    var imageResource = resource as IconImageResource;
+                    if (imageResource != null)
+                    {
+                        var bytes = imageResource.Image.Data;
+                        if (!Kernel32.UpdateResource(h, imageResource.Type.Id, new IntPtr(imageResource.Id),
+                            imageResource.Language, bytes, (bytes == null ? 0 : (uint)bytes.Length)))
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        }
+                    }
+                    else
+                    {
+                        var bytes = resource.WriteAndGetBytes();
+                        if (!Kernel32.UpdateResource(h, resource.Type.Id, resource.Name.Id,
+                            resource.Language, bytes, (bytes == null ? 0 : (uint)bytes.Length)))
+                        {
+                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Kernel32.EndUpdateResource(h, true);
+                throw;
+            }
+
+            if (!Kernel32.EndUpdateResource(h, false))
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
     }
 }
