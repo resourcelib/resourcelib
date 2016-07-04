@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Vestris.ResourceLib
 {
@@ -140,11 +141,11 @@ namespace Vestris.ResourceLib
         /// <param name="size">Size of resource.</param>
         /// <returns>A specialized or a generic resource.</returns>
         protected Resource CreateResource(
-            IntPtr hModule,
-            IntPtr hResourceGlobal,
-            ResourceId type,
-            ResourceId name,
-            UInt16 wIDLanguage,
+            IntPtr hModule, 
+            IntPtr hResourceGlobal, 
+            ResourceId type, 
+            ResourceId name, 
+            UInt16 wIDLanguage, 
             int size)
         {
             if (type.IsIntResource())
@@ -173,13 +174,6 @@ namespace Vestris.ResourceLib
                         return new FontResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                     case Kernel32.ResourceTypes.RT_ACCELERATOR:
                         return new AcceleratorResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                    case Kernel32.ResourceTypes.RT_ICON:
-                        return new IconResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                    case Kernel32.ResourceTypes.RT_CURSOR:
-                        return new CursorResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
-                    default:
-                        System.Diagnostics.Debug.WriteLine(string.Format("CreateResource: unhandled type {0}, returning GenericResource", type.ResourceType));
-                        break;
                 }
             }
 
@@ -216,10 +210,11 @@ namespace Vestris.ResourceLib
             }
             catch (Exception ex)
             {
-                _innerException = new Exception(string.Format("Error loading resource '{0}' {1} ({2}).", name, type.TypeName, wIDLanguage), ex);
+                _innerException = new Exception(string.Format("Error loading resource '{0}' {1} ({2}).",
+                    name, type.TypeName, wIDLanguage), ex);
                 throw ex;
             }
-
+            
             return true;
         }
 
@@ -289,7 +284,7 @@ namespace Vestris.ResourceLib
                 while (resourceEnumerator.MoveNext())
                 {
                     yield return resourceEnumerator.Current;
-                }
+                }                
             }
         }
 
