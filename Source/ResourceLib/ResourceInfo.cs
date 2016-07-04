@@ -178,7 +178,7 @@ namespace Vestris.ResourceLib
                     case Kernel32.ResourceTypes.RT_CURSOR:
                         return new CursorResource(hModule, hResourceGlobal, type, name, wIDLanguage, size);
                     default:
-                        System.Diagnostics.Debug.WriteLine($"CreateResource: unhandled type {type.ResourceType}, returning GenericResource");
+                        System.Diagnostics.Debug.WriteLine(string.Format("CreateResource: unhandled type {0}, returning GenericResource", type.ResourceType));
                         break;
                 }
             }
@@ -216,8 +216,7 @@ namespace Vestris.ResourceLib
             }
             catch (Exception ex)
             {
-                _innerException = new Exception(string.Format("Error loading resource '{0}' {1} ({2}).",
-                    name, type.TypeName, wIDLanguage), ex);
+                _innerException = new Exception(string.Format("Error loading resource '{0}' {1} ({2}).", name, type.TypeName, wIDLanguage), ex);
                 throw ex;
             }
 
