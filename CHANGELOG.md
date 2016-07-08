@@ -1,3 +1,9 @@
+### v.Next
+
+**New Features**
+
+* [#40](https://github.com/dblock/resourcelib/pull/40): Added `Resource.Save(string filename, IEnumerable<Resource> resources)` for saving multiple resources in one batch - [@thoemmi](https://github.com/thoemmi).
+
 ### 1.5 (3/28/2016)
 
 **Misc**
