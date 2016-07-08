@@ -5,6 +5,7 @@ using Vestris.ResourceLib;
 #endregion
 
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using System.Reflection;
 using System.Web;
@@ -87,6 +88,41 @@ namespace Vestris.ResourceLibUnitTests
                 Assert.AreEqual(customResource.Name.ToString(), "RES_CONFIGURATION");
                 Assert.AreEqual(customResource.Type.ToString(), "CUSTOM");
             }
+        }
+
+        [Test]
+        public void TestBatchUpdate()
+        {
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            string originalFilename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils.dll");
+            string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils_changed.dll");
+            if (File.Exists(filename)) File.Delete(filename);
+            File.Copy(originalFilename, filename);
+            Assert.IsTrue(File.Exists(filename));
+            Console.WriteLine("Filename: {0}", filename);
+
+            // read existing string table
+            var sr = new StringResource();
+            sr.Name = new ResourceId(StringResource.GetBlockId(402));
+            sr.Language = 1033;
+            sr.LoadFrom(filename);
+            Console.WriteLine("StringResource before patching: {0}, {1}, {2}", sr.Name, sr.TypeName, sr.Language);
+            DumpResource.Dump(sr);
+            Assert.IsNotNull(sr);
+            Assert.AreEqual("Out Of Memory", sr[402]);
+
+            // change string and save it
+            sr[402] = "OOM";
+            Resource.Save(filename, new[] { sr });
+
+            // re-read string table and verify the changed string table entry
+            sr = new StringResource();
+            sr.Name = new ResourceId(StringResource.GetBlockId(402));
+            sr.Language = 1033;
+            sr.LoadFrom(filename);
+            Console.WriteLine("StringResource after patching: {0}, {1}, {2}", sr.Name, sr.TypeName, sr.Language);
+            DumpResource.Dump(sr);
+            Assert.AreEqual("OOM", sr[402]);
         }
     }
 }
