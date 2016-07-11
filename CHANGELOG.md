@@ -1,4 +1,4 @@
-### v.Next
+### 1.6 (not released yet)
 
 **New Features**
 
