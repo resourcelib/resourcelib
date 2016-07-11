@@ -5,7 +5,6 @@ using Vestris.ResourceLib;
 #endregion
 
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using System.Reflection;
 using System.Web;
