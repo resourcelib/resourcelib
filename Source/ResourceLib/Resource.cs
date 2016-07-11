@@ -304,6 +304,10 @@ namespace Vestris.ResourceLib
 
             try
             {
+                if (data != null && data.Length == 0)
+                {
+                    data = null;
+                }
                 if (!Kernel32.UpdateResource(h, type.Id, name.Id,
                     lang, data, (data == null ? 0 : (uint)data.Length)))
                 {
@@ -340,7 +344,7 @@ namespace Vestris.ResourceLib
                     var imageResource = resource as IconImageResource;
                     if (imageResource != null)
                     {
-                        var bytes = imageResource.Image.Data;
+                        var bytes = imageResource.Image == null ? null : imageResource.Image.Data;
                         if (!Kernel32.UpdateResource(h, imageResource.Type.Id, new IntPtr(imageResource.Id),
                             imageResource.Language, bytes, (bytes == null ? 0 : (uint)bytes.Length)))
                         {
@@ -350,6 +354,10 @@ namespace Vestris.ResourceLib
                     else
                     {
                         var bytes = resource.WriteAndGetBytes();
+                        if (bytes != null && bytes.Length == 0)
+                        {
+                            bytes = null;
+                        }
                         if (!Kernel32.UpdateResource(h, resource.Type.Id, resource.Name.Id,
                             resource.Language, bytes, (bytes == null ? 0 : (uint)bytes.Length)))
                         {
