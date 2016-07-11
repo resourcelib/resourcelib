@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
 
@@ -9,7 +8,7 @@ namespace Vestris.ResourceLib
     /// <summary>
     /// Resource utilities.
     /// </summary>
-    public abstract class ResourceUtil
+    public static class ResourceUtil
     {
         /// <summary>
         /// Align an address to a 4-byte boundary.
