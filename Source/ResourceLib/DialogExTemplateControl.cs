@@ -165,17 +165,21 @@ namespace Vestris.ResourceLib
             StringBuilder sb = new StringBuilder();
 
             sb.AppendFormat("{0} \"{1}\" {2}, {3}, {4}, {5}, {6}, {7}, {8}",
-                ControlClass, CaptionId, Id, ControlClass, x, y, cx, cy,
+                ControlClassId, CaptionId, Id, ControlClassId, x, y, cx, cy,
                 DialogTemplateUtil.StyleToString<User32.WindowStyles, User32.StaticControlStyles>(Style, ExtendedStyle));
 
-            switch (ControlClass)
+            if (ControlClassId.IsIntResource())
             {
-                case User32.DialogItemClass.Button:
-                    sb.AppendFormat("| {0}", (User32.ButtonControlStyles)(Style & 0xFFFF));
-                    break;
-                case User32.DialogItemClass.Edit:
-                    sb.AppendFormat("| {0}", DialogTemplateUtil.StyleToString<User32.EditControlStyles>(Style & 0xFFFF));
-                    break;
+                switch (ControlClass)
+                {
+                    case User32.DialogItemClass.Button:
+                        sb.AppendFormat("| {0}", (User32.ButtonControlStyles) (Style & 0xFFFF));
+                        break;
+                    case User32.DialogItemClass.Edit:
+                        sb.AppendFormat("| {0}",
+                            DialogTemplateUtil.StyleToString<User32.EditControlStyles>(Style & 0xFFFF));
+                        break;
+                }
             }
 
             return sb.ToString();

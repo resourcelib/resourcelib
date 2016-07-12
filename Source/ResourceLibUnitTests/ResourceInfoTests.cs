@@ -12,30 +12,33 @@ namespace Vestris.ResourceLibUnitTests
     [TestFixture]
     public class ResourceInfoTests
     {
-        [Test]
-        public void TestLoad()
+        private static IEnumerable<string> TestFiles
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
-
-            string[] files = 
+            get
             {
-                // Path.Combine(Environment.SystemDirectory, "regedt32.exe"),
-                // Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe"),
-                Path.Combine(uriPath, "Binaries\\gutils.dll"),
-                Path.Combine(uriPath, "Binaries\\6to4svc.dll"),
-                Path.Combine(uriPath, "Binaries\\custom.exe"),
-            };
-
-            foreach (string filename in files)
-            {
-                Console.WriteLine(filename);
-                Assert.IsTrue(File.Exists(filename));
-                using (ResourceInfo vi = new ResourceInfo())
+                Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+                string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
+                string[] files =
                 {
-                    vi.Load(filename);
-                    DumpResource.Dump(vi);
-                }
+                    // Path.Combine(Environment.SystemDirectory, "regedt32.exe"),
+                    // Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe"),
+                    Path.Combine(uriPath, "Binaries\\gutils.dll"),
+                    Path.Combine(uriPath, "Binaries\\6to4svc.dll"),
+                    Path.Combine(uriPath, "Binaries\\custom.exe"),
+                };
+                return files;
+            }
+        }
+
+        [TestCaseSource("TestFiles")]
+        public void TestLoad(string filename)
+        {
+            Console.WriteLine(filename);
+            Assert.IsTrue(File.Exists(filename));
+            using (ResourceInfo vi = new ResourceInfo())
+            {
+                vi.Load(filename);
+                DumpResource.Dump(vi);
             }
         }
 
