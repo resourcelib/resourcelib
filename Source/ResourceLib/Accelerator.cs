@@ -19,7 +19,7 @@ namespace Vestris.ResourceLib
         /// <param name="lpRes">Address in memory.</param>
         internal IntPtr Read(IntPtr lpRes)
         {
-            _accel = (User32.ACCEL) Marshal.PtrToStructure(
+            _accel = (User32.ACCEL)Marshal.PtrToStructure(
                 lpRes, typeof(User32.ACCEL));
 
             return new IntPtr(lpRes.ToInt64() + Marshal.SizeOf(_accel));
@@ -55,7 +55,7 @@ namespace Vestris.ResourceLib
                     _accel.key = (UInt16)i;
                 }
                 catch (Exception e)//otherwise, use ASCII-code of given Key e.g. key "Z" == 90
-                {  
+                {
                     char c = value.ToCharArray()[0];
                     UInt16 i = (UInt16)c;
                     _accel.key = i;
@@ -66,18 +66,37 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// String representation of the used flags.
         /// When using set method, several flags have to be split with ',' e.g. "VIRTKEY, NOINVERT, CONTROL"
+        /// get method will return flags in the same way, e.g. "VIRTKEY,SHIFT,ALT"
         /// </summary>
         public string Flags
         {
+            get
+            {
+                uint flags = _accel.fVirt;
+                List<string> sA=new List<string>();
+
+                if ((flags & (uint)User32.AcceleratorVirtualKey.VIRTKEY) != 0)
+                    sA.Add("VIRTKEY");
+                if ((flags & (uint)User32.AcceleratorVirtualKey.NOINVERT) != 0)
+                    sA.Add("NOINVERT");
+                if ((flags & (uint)User32.AcceleratorVirtualKey.SHIFT) != 0)
+                    sA.Add("SHIFT");
+                if ((flags & (uint)User32.AcceleratorVirtualKey.CONTROL) != 0)
+                    sA.Add("CONTROL");
+                if ((flags & (uint)User32.AcceleratorVirtualKey.ALT) != 0)
+                    sA.Add("ALT");
+
+               return string.Join(",", sA.ToArray());
+            }
             set
             {
-                    string[] sArgs = value.Split(',');
-                    uint itmp=0;
-                    foreach(string s in sArgs)
-                    {
-                        itmp+= (uint)Enum.Parse(typeof(User32.AcceleratorVirtualKey), s);
-                    }
-                    _accel.fVirt = (UInt16)itmp;
+                string[] sArgs = value.Split(',');
+                uint itmp = 0;
+                foreach (string s in sArgs)
+                {
+                    itmp += (uint)Enum.Parse(typeof(User32.AcceleratorVirtualKey), s);
+                }
+                _accel.fVirt = (UInt16)itmp;
             }
         }
 
