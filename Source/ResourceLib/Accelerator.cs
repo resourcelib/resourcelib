@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -45,7 +45,39 @@ namespace Vestris.ResourceLib
             get
             {
                 string key = Enum.GetName(typeof(User32.VirtualKeys), _accel.key);
-                return string.IsNullOrEmpty(key) ? ((char) _accel.key).ToString() : key;
+                return string.IsNullOrEmpty(key) ? ((char)_accel.key).ToString() : key;
+            }
+            set
+            {
+                try//will work if given string is a Virtual Key e.g. "VK_NUMPAD1"
+                {
+                    uint i = (uint)Enum.Parse(typeof(User32.VirtualKeys), value);
+                    _accel.key = (UInt16)i;
+                }
+                catch (Exception e)//otherwise, use ASCII-code of given Key e.g. key "Z" == 90
+                {  
+                    char c = value.ToCharArray()[0];
+                    UInt16 i = (UInt16)c;
+                    _accel.key = i;
+                }
+            }
+        }
+
+        /// <summary>
+        /// String representation of the used flags.
+        /// When using set method, several flags have to be split with ',' e.g. "VIRTKEY, NOINVERT, CONTROL"
+        /// </summary>
+        public string Flags
+        {
+            set
+            {
+                    string[] sArgs = value.Split(',');
+                    uint itmp=0;
+                    foreach(string s in sArgs)
+                    {
+                        itmp+= (uint)Enum.Parse(typeof(User32.AcceleratorVirtualKey), s);
+                    }
+                    _accel.fVirt = (UInt16)itmp;
             }
         }
 
