@@ -53,7 +53,7 @@ The Accelerator will excecute command 41008, when the User presses Ctrl + Tab
 | `VK_TAB`      | key top press for Accelerator | Virtual Key or ASCII character |
 | `41008`      | command / identifier to execute      |   Integer-Value |
 | `VIRTKEY , NOINVERT , CONTROL` |   options    |    string, entries separated with ',' |
-For more Information, please look at the [MSDN reference](https://msdn.microsoft.com/en-us/library/windows/desktop/aa380610(v=vs.85).aspx "ACCELERATOR resources")
+For more Information, please look at the [MSDN reference](https://msdn.microsoft.com/en-us/library/windows/desktop/aa380610(v=vs.85).aspx "ACCELERATOR resources").
 
 Reading Specific Accelerator Resources
 --------------------------------------
@@ -88,25 +88,26 @@ In order to add an accelerator into an executable (`.exe` or `.dll`) create a ne
 The following example loads the accelerators from explorer.exe, removes accelerator 6, and adds a new accelarator instead
 
 ``` csharp
-            string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
-            using (ResourceInfo ri = new ResourceInfo())
-                {
-                    ri.Load(filename);
-                    Accelerator acOpen = new Accelerator();
-                    acReload.Command = 41061; //==reload
-                    acReload.Key = "VK_NUMPAD1";
-                    acReload.Flags = "VIRTKEY, NOINVERT";
-                    foreach (AcceleratorResource rc in ri[Kernel32.ResourceTypes.RT_ACCELERATOR])
-                    {
-                        Console.WriteLine(rc);
-                        rc.Accelerators.RemoveAt(5);//zero-based index - removing Acceleator 6
-                        rc.Accelerators.Insert(5, acReload);
-                        Console.WriteLine(rc);
-                        ri.Unload();
-                    }
-                    Console.ReadLine();
-                }
+string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
+using (ResourceInfo ri = new ResourceInfo())
+{
+    ri.Load(filename);
+    Accelerator acOpen = new Accelerator();
+    acReload.Command = 41061; //reload
+    acReload.Key = "VK_NUMPAD1";
+    acReload.Flags = "VIRTKEY, NOINVERT";
+    foreach (AcceleratorResource rc in ri[Kernel32.ResourceTypes.RT_ACCELERATOR])
+    {
+        Console.WriteLine(rc);
+        rc.Accelerators.RemoveAt(5);//zero-based index - removing Acceleator 6
+        rc.Accelerators.Insert(5, acReload);
+        Console.WriteLine(rc);
+        ri.Unload();
+    }
+    Console.ReadLine();
+}
 ```
 You can save your new accelerator table with
 ``` csharp 
-rc.SaveTo(filename);```
+rc.SaveTo(filename);
+```
