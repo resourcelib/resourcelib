@@ -42,6 +42,18 @@ BEGIN
  M, 419, VIRTKEY , NOINVERT , ALT
 END
 ```
+**How to interpret these values, with the following example:**
+
+`VK_TAB, 41008, VIRTKEY , NOINVERT , CONTROL`
+
+The Accelerator will excecute command 41008, when the User presses Ctrl + Tab
+
+| Entry        | Explatation           | Type  |
+| ------------- |:-------------:| -----:|
+| `VK_TAB`      | key top press for Accelerator | Virtual Key or ASCII character |
+| `41008`      | command / identifier to execute      |   Integer-Value |
+| `VIRTKEY , NOINVERT , CONTROL` |   options    |    string, entries separated with ',' |
+For more Information, please look at the [MSDN reference](https://msdn.microsoft.com/en-us/library/windows/desktop/aa380610(v=vs.85).aspx "ACCELERATOR resources")
 
 Reading Specific Accelerator Resources
 --------------------------------------
@@ -61,3 +73,4 @@ Writing an Accelerator Table
 ----------------------------
 
 In order to add an accelerator into an executable (`.exe` or `.dll`) create a new instance of `AcceleratorResource` or load an existing one and add instances of `Accelerator` to its `Accelerators` collection. 
+
