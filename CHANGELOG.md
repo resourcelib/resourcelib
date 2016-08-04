@@ -3,9 +3,10 @@
 **New Features**
 
 * [#40](https://github.com/dblock/resourcelib/pull/40): Added `Resource.Save(string filename, IEnumerable<Resource> resources)` for saving multiple resources in one batch - [@thoemmi](https://github.com/thoemmi).
-* [#46](https://github.com/dblock/resourcelib/pull/46): Added set-method for `Accelerator.Keys`, 
-set / get-method for `Accelerator.Flags` 
-and implemented `Accelerator.addFlag(User32.AcceleratorVirtualKey)` + `Accelerator.removeFlag(User32.AcceleratorVirtualKey)` - [@GerRudi](https://github.com/GerRudi/).
+* [#46](https://github.com/dblock/resourcelib/pull/46): Added set method for `Accelerator.Keys` - [@GerRudi](https://github.com/GerRudi/).
+* [#46](https://github.com/dblock/resourcelib/pull/46): Added `Accelerator.Flags` - [@GerRudi](https://github.com/GerRudi/).
+* [#46](https://github.com/dblock/resourcelib/pull/46): Added `Accelerator.addFlag(User32.AcceleratorVirtualKey)` and `Accelerator.removeFlag(User32.AcceleratorVirtualKey)` - [@GerRudi](https://github.com/GerRudi/).
+
 
 **Bugs**
 
