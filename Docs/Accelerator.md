@@ -69,8 +69,44 @@ Console.WriteLine("AcceleratorResource: {0}, {1}", rc.Name, rc.TypeName);
 Console.WriteLine(rc);
 ```
 
+Creating a new Accelerator
+----------------------------
+To add a new `Accelerator` to an `AcceleratorResource`, you need to create the `Accelerator` first and assign a key, command and flags.
+The Example below creates a new `Accelerator` that executes command **1337** when **NUMPAD2** is pressed.
+``` csharp
+  Accelerator acNew = new Accelerator();
+                    acNew.Command = 1337;
+                    acNew.Key = "VK_NUMPAD2";
+                    acNew.Flags = "VIRTKEY, NOINVERT";
+```
+
 Writing an Accelerator Table
 ----------------------------
 
 In order to add an accelerator into an executable (`.exe` or `.dll`) create a new instance of `AcceleratorResource` or load an existing one and add instances of `Accelerator` to its `Accelerators` collection. 
 
+The following example loads the accelerators from explorer.exe, removes accelerator 6, and adds a new accelarator instead
+
+``` csharp
+            string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
+            using (ResourceInfo ri = new ResourceInfo())
+                {
+                    ri.Load(filename);
+                    Accelerator acOpen = new Accelerator();
+                    acReload.Command = 41061; //==reload
+                    acReload.Key = "VK_NUMPAD1";
+                    acReload.Flags = "VIRTKEY, NOINVERT";
+                    foreach (AcceleratorResource rc in ri[Kernel32.ResourceTypes.RT_ACCELERATOR])
+                    {
+                        Console.WriteLine(rc);
+                        rc.Accelerators.RemoveAt(5);//zero-based index - removing Acceleator 6
+                        rc.Accelerators.Insert(5, acReload);
+                        Console.WriteLine(rc);
+                        ri.Unload();
+                    }
+                    Console.ReadLine();
+                }
+```
+You can save your new accelerator table with
+``` csharp 
+rc.SaveTo(filename);```
