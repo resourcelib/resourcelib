@@ -83,7 +83,7 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// An unsigned integer value that identifies the accelerator.
+        /// An unsigned Integer that identifies the accelerator.
         /// </summary>
         public UInt32 Command
         {
@@ -95,6 +95,26 @@ namespace Vestris.ResourceLib
             {
                 _accel.cmd = value;
             }
+        }
+
+        /// <summary>
+        /// Adds a single flag to the Accelerator bitflags
+        /// </summary>
+        /// <param name="f">the User32.AcceleratorVirtualKey flag to add</param>
+        public void addFlag(User32.AcceleratorVirtualKey f)
+        {
+            if (!((_accel.fVirt & (uint)f) == (uint)f))
+                _accel.fVirt += (UInt16)f;
+        }
+
+        /// <summary>
+        /// Removes a single flag from the Accelerator bitflags
+        /// </summary>
+        /// <param name="f">the User32.AcceleratorVirtualKey flag to remove</param>
+        public void removeFlag(User32.AcceleratorVirtualKey f)
+        {
+            if ((_accel.fVirt & (uint)f) == (uint)f)
+                _accel.fVirt -= (UInt16)f;
         }
 
         /// <summary>
