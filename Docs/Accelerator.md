@@ -46,16 +46,16 @@ END
 
 `VK_TAB, 41008, VIRTKEY , NOINVERT , CONTROL`
 
-The Accelerator will excecute command 41008, when the User presses Ctrl + Tab
+The Accelerator will excecute command 41008, when the user presses `Ctrl + Tab`
 
-| Entry        | Explatation           | Type  |
-| ------------- |:-------------:| -----:|
-| `VK_TAB`      | key top press for Accelerator | Virtual Key or ASCII character |
-| `41008`      | command / identifier to execute      |   Integer-Value |
-| `VIRTKEY , NOINVERT , CONTROL` |   options    |    string, entries separated with ',' |
-For more Information, please look at the [MSDN reference](https://msdn.microsoft.com/en-us/library/windows/desktop/aa380610(v=vs.85).aspx "ACCELERATOR resources").
+| Entry        | Explanation           | Type  |
+| ------------- |-------------| -----|
+| `VK_TAB`      | key to press for Accelerator | Virtual Key or ASCII Character |
+| `41008`      | command / identifier to execute      |   Integer |
+| `VIRTKEY , NOINVERT , CONTROL` |   options    |    `String`, entries separated with ',' |
+For more information, see [MSDN reference](https://msdn.microsoft.com/en-us/library/windows/desktop/aa380610(v=vs.85).aspx "ACCELERATOR resources").
 
-Reading Specific Accelerator Resources
+Reading specific Accelerator Resources
 --------------------------------------
 
 The following example loads a single accelerator resource directly, without enumerating all resources. 
@@ -71,13 +71,13 @@ Console.WriteLine(rc);
 
 Creating a new Accelerator
 ----------------------------
-To add a new `Accelerator` to an `AcceleratorResource`, you need to create the `Accelerator` first and assign a key, command and flags.
+To add a new `Accelerator` to an `AcceleratorResource`, create the `Accelerator` first and assign a key, command and flags.
 The Example below creates a new `Accelerator` that executes command **1337** when **NUMPAD2** is pressed.
 ``` csharp
   Accelerator acNew = new Accelerator();
-                    acNew.Command = 1337;
-                    acNew.Key = "VK_NUMPAD2";
-                    acNew.Flags = "VIRTKEY, NOINVERT";
+  acNew.Command = 1337;
+  acNew.Key     = "VK_NUMPAD2";
+  acNew.Flags   = "VIRTKEY, NOINVERT";
 ```
 
 Writing an Accelerator Table
@@ -85,7 +85,7 @@ Writing an Accelerator Table
 
 In order to add an accelerator into an executable (`.exe` or `.dll`) create a new instance of `AcceleratorResource` or load an existing one and add instances of `Accelerator` to its `Accelerators` collection. 
 
-The following example loads the accelerators from explorer.exe, removes accelerator 6, and adds a new accelarator instead
+The following example loads the accelerators from explorer.exe, removes `Accelerator` 6, and adds a new `Accelerator` to the table.
 
 ``` csharp
 string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
@@ -93,13 +93,13 @@ using (ResourceInfo ri = new ResourceInfo())
 {
     ri.Load(filename);
     Accelerator acOpen = new Accelerator();
-    acReload.Command = 41061; //reload
+    acReload.Command = 41061;       // reload
     acReload.Key = "VK_NUMPAD1";
     acReload.Flags = "VIRTKEY, NOINVERT";
     foreach (AcceleratorResource rc in ri[Kernel32.ResourceTypes.RT_ACCELERATOR])
     {
         Console.WriteLine(rc);
-        rc.Accelerators.RemoveAt(5);//zero-based index - removing Acceleator 6
+        rc.Accelerators.RemoveAt(5);        // zero-based index - removing 6th Accelerator
         rc.Accelerators.Insert(5, acReload);
         Console.WriteLine(rc);
         ri.Unload();
