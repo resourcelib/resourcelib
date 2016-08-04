@@ -42,7 +42,7 @@ BEGIN
  M, 419, VIRTKEY , NOINVERT , ALT
 END
 ```
-**How to interpret these values, with the following example:**
+**Interpreting these values using the following example:**
 
 `VK_TAB, 41008, VIRTKEY , NOINVERT , CONTROL`
 
@@ -52,8 +52,8 @@ The Accelerator will excecute command 41008, when the user presses `Ctrl + Tab`
 | ------------- |-------------| -----|
 | `VK_TAB`      | key to press for Accelerator | Virtual Key or ASCII Character |
 | `41008`      | command / identifier to execute      |   Integer |
-| `VIRTKEY , NOINVERT , CONTROL` |   options    |    `String`, entries separated with ',' |
-For more information, see [MSDN reference](https://msdn.microsoft.com/en-us/library/windows/desktop/aa380610(v=vs.85).aspx "ACCELERATOR resources").
+| `VIRTKEY , NOINVERT , CONTROL` |   options / flags    |    `AcceleratorVirtualKey` bit-flags |
+For more information see [MSDN reference](https://msdn.microsoft.com/en-us/library/windows/desktop/aa380610(v=vs.85).aspx "ACCELERATOR resources").
 
 Reading specific Accelerator Resources
 --------------------------------------
@@ -77,7 +77,7 @@ The Example below creates a new `Accelerator` that executes command **1337** whe
   Accelerator acNew = new Accelerator();
   acNew.Command = 1337;
   acNew.Key     = "VK_NUMPAD2";
-  acNew.Flags   = "VIRTKEY, NOINVERT";
+  acNew.Flags   = User32.AcceleratorVirtualKey.VIRTKEY | User32.AcceleratorVirtualKey.NOINVERT;
 ```
 
 Writing an Accelerator Table
@@ -95,7 +95,7 @@ using (ResourceInfo ri = new ResourceInfo())
     Accelerator acOpen = new Accelerator();
     acReload.Command = 41061;       // reload
     acReload.Key = "VK_NUMPAD1";
-    acReload.Flags = "VIRTKEY, NOINVERT";
+    acReload.Flags = User32.AcceleratorVirtualKey.VIRTKEY | User32.AcceleratorVirtualKey.NOINVERT;
     foreach (AcceleratorResource rc in ri[Kernel32.ResourceTypes.RT_ACCELERATOR])
     {
         Console.WriteLine(rc);
