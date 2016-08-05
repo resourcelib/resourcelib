@@ -103,8 +103,7 @@ namespace Vestris.ResourceLib
         /// <param name="f">the User32.AcceleratorVirtualKey flag to add</param>
         public void addFlag(User32.AcceleratorVirtualKey f)
         {
-            if (!((_accel.fVirt & (uint)f) == (uint)f))
-                _accel.fVirt += (UInt16)f;
+            _accel.fVirt |= (UInt16)f;
         }
 
         /// <summary>
@@ -113,8 +112,7 @@ namespace Vestris.ResourceLib
         /// <param name="f">the User32.AcceleratorVirtualKey flag to remove</param>
         public void removeFlag(User32.AcceleratorVirtualKey f)
         {
-            if ((_accel.fVirt & (uint)f) == (uint)f)
-                _accel.fVirt -= (UInt16)f;
+            _accel.fVirt = (ushort)(this.Flags &= ~f);
         }
 
         /// <summary>
