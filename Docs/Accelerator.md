@@ -42,8 +42,20 @@ BEGIN
  M, 419, VIRTKEY , NOINVERT , ALT
 END
 ```
+**Interpreting these values using the following example:**
 
-Reading Specific Accelerator Resources
+`VK_TAB, 41008, VIRTKEY , NOINVERT , CONTROL`
+
+The Accelerator will excecute command 41008, when the user presses `Ctrl + Tab`
+
+| Entry        | Explanation           | Type  |
+| ------------- |-------------| -----|
+| `VK_TAB`      | key to press for Accelerator | Virtual Key or ASCII Character |
+| `41008`      | command / identifier to execute      |   Integer |
+| `VIRTKEY , NOINVERT , CONTROL` |   options / flags    |    `AcceleratorVirtualKey` bit-flags |
+For more information see [MSDN reference](https://msdn.microsoft.com/en-us/library/windows/desktop/aa380610(v=vs.85).aspx "ACCELERATOR resources").
+
+Reading specific Accelerator Resources
 --------------------------------------
 
 The following example loads a single accelerator resource directly, without enumerating all resources. 
@@ -57,7 +69,45 @@ Console.WriteLine("AcceleratorResource: {0}, {1}", rc.Name, rc.TypeName);
 Console.WriteLine(rc);
 ```
 
+Creating a new Accelerator
+----------------------------
+To add a new `Accelerator` to an `AcceleratorResource`, create the `Accelerator` first and assign a key, command and flags.
+The Example below creates a new `Accelerator` that executes command **1337** when **NUMPAD2** is pressed.
+``` csharp
+  Accelerator acNew = new Accelerator();
+  acNew.Command = 1337;
+  acNew.Key     = "VK_NUMPAD2";
+  acNew.Flags   = User32.AcceleratorVirtualKey.VIRTKEY | User32.AcceleratorVirtualKey.NOINVERT;
+```
+
 Writing an Accelerator Table
 ----------------------------
 
 In order to add an accelerator into an executable (`.exe` or `.dll`) create a new instance of `AcceleratorResource` or load an existing one and add instances of `Accelerator` to its `Accelerators` collection. 
+
+The following example loads the accelerators from explorer.exe, removes `Accelerator` 6, and adds a new `Accelerator` to the table.
+
+``` csharp
+string filename = Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), "explorer.exe");
+using (ResourceInfo ri = new ResourceInfo())
+{
+    ri.Load(filename);
+    Accelerator acOpen = new Accelerator();
+    acReload.Command = 41061;       // reload
+    acReload.Key = "VK_NUMPAD1";
+    acReload.Flags = User32.AcceleratorVirtualKey.VIRTKEY | User32.AcceleratorVirtualKey.NOINVERT;
+    foreach (AcceleratorResource rc in ri[Kernel32.ResourceTypes.RT_ACCELERATOR])
+    {
+        Console.WriteLine(rc);
+        rc.Accelerators.RemoveAt(5);        // zero-based index - removing 6th Accelerator
+        rc.Accelerators.Insert(5, acReload);
+        Console.WriteLine(rc);
+        ri.Unload();
+    }
+    Console.ReadLine();
+}
+```
+You can save your new accelerator table with
+``` csharp 
+rc.SaveTo(filename);
+```
