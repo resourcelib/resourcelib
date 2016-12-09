@@ -30,6 +30,25 @@ foreach (IconResource icon in rc.Icons)
 IconDirectoryResource: 1, RT_GROUP_ICON
 Icon 1: 32x32 4-bit 16 Colors (744 byte(s))
 ```
+Special case handling:
+
+Currently when loading an `IconDirectoryResource` from file `RT_GROUP_ICON` resource will be searched by default ID = 1. 
+In many executables though the `RT_GROUP_ICON` resource will be named differently so you might expect exception to be 
+thrown when loading some executables, saying that the resource with given ID cannot be found. In order to handle this
+you should explicitly define `RT_GROUP_ICON` resource ID and Language as follows:
+
+``` csharp
+const ushort DEFAULT_LANG_ID = 1033;
+const uint RT_GROUP_ICON_ID = 10; //whatever was spot 
+
+IconDirectoryResource rc = new IconDirectoryResource();
+rc.Name = new ResourceId(RT_GROUP_ICON_ID);
+rc.Language = DEFAULT_LANG_ID;
+rc.LoadFrom(@"d:\test.exe");
+```
+
+Both `DEFAULT_LANG_ID` and `RT_GROUP_ICON_ID` may be spot by either any resource viewer available or
+by custom methods. 
 
 The default implementation of `IconDirectoryResource` loads a US-English resource of type `RT_GROUP_ICON` with ID 1. This may not be the case in your executable. You can also load a resource with a different ID and language.
 
@@ -49,4 +68,32 @@ In order to embed an existing icon from an `.ico` file into an executable (`.exe
 IconFile iconFile = new IconFile("Icon1.ico");
 IconDirectoryResource iconDirectoryResource = new IconDirectoryResource(iconFile);
 iconDirectoryResource.SaveTo("test.dll");
+```
+
+Special case handling:
+
+For the same reason described in `Reading Icon Resources` section you may encounter problem updating existing icon
+in executable. At this moment following workaround to be used to achieve the goal correctly:
+
+```csharp
+const ushort DEFAULT_LANG_ID = 1033;
+const uint RT_GROUP_ICON_ID = 10;
+string fileName = @"d:\test.exe";
+//load executable to be modified
+IconDirectoryResource rc = new IconDirectoryResource();
+rc.Name = new ResourceId(RT_GROUP_ICON_ID);
+rc.Language = DEFAULT_LANG_ID;
+rc.LoadFrom(fileName);
+//clear existing icons
+rc.Icons.Clear();
+
+//load new icon to embed
+IconFile iconFile = new IconFile(@"d:\icon.ico");
+//embed new icons instead
+uint id = 1;
+foreach (IconFileIcon icon in iconFile.Icons)
+{
+    rc.Icons.Add(new IconResource(icon, new ResourceId(id++), DEFAULT_LANG_ID));
+}
+rc.SaveTo(fileName);
 ```
