@@ -7,6 +7,7 @@
 **Bugs**
 
 * [#41](https://github.com/resourcelib/resourcelib/pull/41): Fixed `OverflowException` when a dialog template contains a `SysListView32` control - [@thoemmi](https://github.com/thoemmi).
+* [#50](https://github.com/resourcelib/resourcelib/issues/50): Fixed semantic version of NuGet package - [@thoemmi](https://github.com/thoemmi).
 
 ### 1.5 (3/28/2016)
 

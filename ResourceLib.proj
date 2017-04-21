@@ -92,7 +92,7 @@
        Condition="'$(Configuration)'=='Release'" Files="@(PackageFiles)" />
  </Target>
   <Target Name="package" DependsOnTargets="version;configurations">
-    <Exec Command=".nuget\nuget.exe pack ResourceLib.nuspec -version $(Major).$(Minor).$(Build).$(Revision) -Properties Configuration=$(Configuration) -OutputDirectory target\$(Configuration)" />
+    <Exec Command=".nuget\nuget.exe pack ResourceLib.nuspec -version $(Major).$(Minor).$(Build) -Properties Configuration=$(Configuration) -OutputDirectory target\$(Configuration)" />
   </Target>
  <Target Name="built" DependsOnTargets="version">
   <Message Text="Built version: $(Major).$(Minor).$(Build).$(Revision)"/>
