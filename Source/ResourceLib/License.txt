@@ -2,7 +2,7 @@ MIT License
 
 Copyright (c) Daniel Doubrovkine, 2008-2012, Vestris Inc.
 
-https://github.com/dblock/resourcelib/
+https://github.com/resourcelib/resourcelib/
 
 You may freely use and distribute this software under the terms of the following license agreement.
 

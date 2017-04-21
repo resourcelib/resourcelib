@@ -12,7 +12,7 @@ Essentials
 ----------
 
 * [NuGet package](https://www.nuget.org/packages/Vestris.ResourceLib)
-* [Download Version 1.5](https://github.com/dblock/resourcelib/releases/tag/v1.5)
+* [Download Version 1.5](https://github.com/resourcelib/resourcelib/releases/tag/v1.5)
 * [Old Versions on CodePlex](http://resourcelib.codeplex.com/)
 
 Getting Started
@@ -46,21 +46,21 @@ using (ResourceInfo vi = new ResourceInfo())
 Reference
 ---------
 
-* [Bitmap (RT_BITMAP)](https://github.com/dblock/resourcelib/blob/master/Docs/Bitmap.md)
-* [Version (RT_VERSION)](https://github.com/dblock/resourcelib/blob/master/Docs/Version.md)
-* [Icon (RT_ICON, RT_GROUP_ICON)](https://github.com/dblock/resourcelib/blob/master/Docs/Icon.md)
-* [Menu (RT_MENU)](https://github.com/dblock/resourcelib/blob/master/Docs/Menu.md)
-* [Dialog (RT_DIALOG)](https://github.com/dblock/resourcelib/blob/master/Docs/Dialog.md)
-* [String (RT_STRING)](https://github.com/dblock/resourcelib/blob/master/Docs/String.md)
-* [Font (RT_FONT, RT_FONTDIR)](https://github.com/dblock/resourcelib/blob/master/Docs/Font.md)
-* [Accelerator (RT_ACCELERATOR)](https://github.com/dblock/resourcelib/blob/master/Docs/Accelerator.md)
-* [Cursor (RT_CURSOR, RT_GROUP_CURSOR)](https://github.com/dblock/resourcelib/blob/master/Docs/Cursor.md)
-* [Manifest (RT_MANIFEST)](https://github.com/dblock/resourcelib/blob/master/Docs/Manifest.md)
+* [Bitmap (RT_BITMAP)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Bitmap.md)
+* [Version (RT_VERSION)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Version.md)
+* [Icon (RT_ICON, RT_GROUP_ICON)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Icon.md)
+* [Menu (RT_MENU)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Menu.md)
+* [Dialog (RT_DIALOG)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Dialog.md)
+* [String (RT_STRING)](https://github.com/resourcelib/resourcelib/blob/master/Docs/String.md)
+* [Font (RT_FONT, RT_FONTDIR)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Font.md)
+* [Accelerator (RT_ACCELERATOR)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Accelerator.md)
+* [Cursor (RT_CURSOR, RT_GROUP_CURSOR)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Cursor.md)
+* [Manifest (RT_MANIFEST)](https://github.com/resourcelib/resourcelib/blob/master/Docs/Manifest.md)
 
 Contributing
 ------------
 
-Fork the project on Github, commit changes to your local repository, push changes to your fork, and make a pull request. Bonus points for topic branches. Also see [Setting up a Development Environment](https://github.com/dblock/resourcelib/blob/master/Docs/Contributing.md).
+Fork the project on Github, commit changes to your local repository, push changes to your fork, and make a pull request. Bonus points for topic branches. Also see [Setting up a Development Environment](https://github.com/resourcelib/resourcelib/blob/master/Docs/Contributing.md).
 
 Copyright and License
 ---------------------

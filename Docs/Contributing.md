@@ -1,7 +1,7 @@
 Contributing
 ============
 
-You're encouraged to contribute to the ResourceLib project. The latest information about this project and source code can be found at [https://github.com/dblock/resourcelib](https://github.com/dblock/resourcelib). 
+You're encouraged to contribute to the ResourceLib project. The latest information about this project and source code can be found at [https://github.com/resourcelib/resourcelib](https://github.com/resourcelib/resourcelib). 
 
 Setting Up a Development Environment
 ------------------------------------

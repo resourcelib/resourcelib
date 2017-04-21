@@ -2,33 +2,33 @@
 
 **New Features**
 
-* [#40](https://github.com/dblock/resourcelib/pull/40): Added `Resource.Save(string filename, IEnumerable<Resource> resources)` for saving multiple resources in one batch - [@thoemmi](https://github.com/thoemmi).
+* [#40](https://github.com/resourcelib/resourcelib/pull/40): Added `Resource.Save(string filename, IEnumerable<Resource> resources)` for saving multiple resources in one batch - [@thoemmi](https://github.com/thoemmi).
 
 **Bugs**
 
-* [#41](https://github.com/dblock/resourcelib/pull/41): Fixed `OverflowException` when a dialog template contains a `SysListView32` control - [@thoemmi](https://github.com/thoemmi).
+* [#41](https://github.com/resourcelib/resourcelib/pull/41): Fixed `OverflowException` when a dialog template contains a `SysListView32` control - [@thoemmi](https://github.com/thoemmi).
 
 ### 1.5 (3/28/2016)
 
 **Misc**
 
-* [#9](https://github.com/dblock/resourcelib/pull/9): Added a strong signature to the .NET assembly - [@dwmkerr](https://github.com/dwmkerr).
+* [#9](https://github.com/resourcelib/resourcelib/pull/9): Added a strong signature to the .NET assembly - [@dwmkerr](https://github.com/dwmkerr).
 * Including Vestris.ResourceLib.pdb and Vestris.ResourceLib.xml in release zip for documentation and easier debugging support - [@icnocop](https://github.com/icnocop).
 * [CI](https://ci.appveyor.com/project/dblock/resourcelib): Setup CI on AppVeyor - [@dblock](https://github.com/dblock).
-* [#32](https://github.com/dblock/resourcelib/pull/32): Creation of NuGet package - [@thoemmi](https://github.com/thoemmi).
+* [#32](https://github.com/resourcelib/resourcelib/pull/32): Creation of NuGet package - [@thoemmi](https://github.com/thoemmi).
 
 **Bugs**
 
-* [#10](https://github.com/dblock/resourcelib/issues/10): Fixed System.OverflowException: Arithmetic operation resulted in an overflow (64-bit systems) by replacing most calls to `ToInt32` with `ToInt64` - [@icnocop](https://github.com/icnocop).
-* [#16](https://github.com/dblock/resourcelib/issues/16): Fixed NuGet error "Package restore is disabled by default." when building by updating to NuGet 2.8.1 - [@icnocop](https://github.com/icnocop).
-* [#26](https://github.com/dblock/resourcelib/pull/26): Fixed opening PE files at non-ANSI paths by changing from ANSI to Wide version of PInvoke - [@hypersw](https://github.com/hypersw).
-* [#31](https://github.com/dblock/resourcelib/pull/31): Fixed OverflowException when running as x64 - [@thoemmi](https://github.com/thoemmi).
+* [#10](https://github.com/resourcelib/resourcelib/issues/10): Fixed System.OverflowException: Arithmetic operation resulted in an overflow (64-bit systems) by replacing most calls to `ToInt32` with `ToInt64` - [@icnocop](https://github.com/icnocop).
+* [#16](https://github.com/resourcelib/resourcelib/issues/16): Fixed NuGet error "Package restore is disabled by default." when building by updating to NuGet 2.8.1 - [@icnocop](https://github.com/icnocop).
+* [#26](https://github.com/resourcelib/resourcelib/pull/26): Fixed opening PE files at non-ANSI paths by changing from ANSI to Wide version of PInvoke - [@hypersw](https://github.com/hypersw).
+* [#31](https://github.com/resourcelib/resourcelib/pull/31): Fixed OverflowException when running as x64 - [@thoemmi](https://github.com/thoemmi).
 
 ### 1.4 (3/3/2013)
 
 **New Features**
 
-  * [#2](https://github.com/dblock/resourcelib/pull/2): Added `VersionResource.FileFlags` - [@alaendle](https://github.com/alaendle).
+  * [#2](https://github.com/resourcelib/resourcelib/pull/2): Added `VersionResource.FileFlags` - [@alaendle](https://github.com/alaendle).
 
 **Misc**
 
@@ -41,7 +41,7 @@
 
 **Misc**
 
-  * First release off [Github](https://github.com/dblock/resourcelib).
+  * First release off [Github](https://github.com/resourcelib/resourcelib).
   * Added `LoadException` that is thrown on a resource enumeration failure that contains both the resource load (inner) exception and the outer Win32 resource enumeration (outer) exception.
   * Added `ResourceId.TypeName` that returns the string representation of the resource type when the ID represents one.
   * Added documentation on contributing and setting up a development environment.

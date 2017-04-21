@@ -6,11 +6,11 @@
     <title>Vestris Resource Lib</title>
     <authors>dblock, icnocop, thoemmi</authors>
     <owners>dblock, icnocop, thoemmi</owners>
-    <licenseUrl>https://github.com/dblock/resourcelib/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/dblock/resourcelib</projectUrl>
+    <licenseUrl>https://github.com/resourcelib/resourcelib/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/resourcelib/resourcelib</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>C# File Resource Management Library</description>
-    <copyright>Copyright 2016</copyright>
+    <copyright>Copyright 2016-2017</copyright>
     <tags>Resource Win32</tags>
   </metadata>
   <files>
