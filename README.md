@@ -12,7 +12,7 @@ Essentials
 ----------
 
 * [NuGet package](https://www.nuget.org/packages/Vestris.ResourceLib)
-* [Download Version 1.5](https://github.com/resourcelib/resourcelib/releases/tag/v1.5)
+* [Download Version 1.6](https://github.com/resourcelib/resourcelib/releases/tag/v1.6)
 * [Old Versions on CodePlex](http://resourcelib.codeplex.com/)
 
 Getting Started

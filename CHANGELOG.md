@@ -1,4 +1,4 @@
-### 1.6 (not released yet)
+### 1.6 (4/22/2017)
 
 **New Features**
 

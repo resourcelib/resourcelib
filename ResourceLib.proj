@@ -22,7 +22,7 @@
   <Copyright>Copyright (c) Vestris Inc.</Copyright>
   <Trademark>All Rights Reserved</Trademark>
   <MajorVersion>1</MajorVersion>
-  <MinorVersion>5</MinorVersion>
+  <MinorVersion>6</MinorVersion>
   <RevisionVersion>0</RevisionVersion>
  </PropertyGroup>
  <Target Name="all" DependsOnTargets="configurations">
