@@ -12,6 +12,16 @@ namespace Vestris.ResourceLibUnitTests
     [TestFixture]
     public class IconResourceTests
     {
+        private static void CheckIconIds(IconDirectoryResource iconDirectoryResource)
+        {
+            Assert.IsTrue(iconDirectoryResource.Icons.Count > 0);
+            for (var i = 0; i < iconDirectoryResource.Icons.Count; i++)
+            {
+                var icon = iconDirectoryResource.Icons[i];
+                Assert.AreEqual(i + 1, icon.Id);
+            }
+        }
+
         [Test]
         public void TestLoadIconResources()
         {
@@ -19,6 +29,7 @@ namespace Vestris.ResourceLibUnitTests
             Assert.IsTrue(File.Exists(filename));
             IconDirectoryResource iconDirectoryResource = new IconDirectoryResource();
             iconDirectoryResource.LoadFrom(filename);
+            CheckIconIds(iconDirectoryResource);
             DumpResource.Dump(iconDirectoryResource);
         }
 
@@ -40,6 +51,7 @@ namespace Vestris.ResourceLibUnitTests
             IconDirectoryResource iconDirectoryResource = new IconDirectoryResource(iconFile);
             DumpResource.Dump(iconDirectoryResource);
             Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
+            CheckIconIds(iconDirectoryResource);
 
             string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
             Assert.IsTrue(File.Exists(filename));
@@ -51,6 +63,7 @@ namespace Vestris.ResourceLibUnitTests
             Console.WriteLine("Written IconDirectoryResource:");
             IconDirectoryResource newIconDirectoryResource = new IconDirectoryResource();
             newIconDirectoryResource.LoadFrom(targetFilename);
+            CheckIconIds(newIconDirectoryResource);
             DumpResource.Dump(newIconDirectoryResource);
         }
 
@@ -73,6 +86,7 @@ namespace Vestris.ResourceLibUnitTests
             iconDirectoryResource.Language = ResourceUtil.USENGLISHLANGID;
             DumpResource.Dump(iconDirectoryResource);
             Assert.AreEqual(iconFile.Icons.Count, iconDirectoryResource.Icons.Count);
+            CheckIconIds(iconDirectoryResource);
 
             string filename = Path.Combine(Environment.SystemDirectory, "write.exe");
             Assert.IsTrue(File.Exists(filename));
@@ -84,6 +98,7 @@ namespace Vestris.ResourceLibUnitTests
             Console.WriteLine("Written IconDirectoryResource:");
             IconDirectoryResource newIconDirectoryResource = new IconDirectoryResource();
             newIconDirectoryResource.LoadFrom(targetFilename);
+            CheckIconIds(newIconDirectoryResource);
             DumpResource.Dump(newIconDirectoryResource);
         }
     }

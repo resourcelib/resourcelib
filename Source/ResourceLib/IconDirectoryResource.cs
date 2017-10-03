@@ -42,10 +42,9 @@ namespace Vestris.ResourceLib
         public IconDirectoryResource(IconFile iconFile)
             : base(Kernel32.ResourceTypes.RT_GROUP_ICON)
         {            
-            for (UInt16 id = 0; id < iconFile.Icons.Count; id++)
+            for (var id = 0; id < iconFile.Icons.Count; id++)
             {
-                IconResource iconResource = new IconResource(
-                    iconFile.Icons[id], new ResourceId(id), _language);
+                IconResource iconResource = new IconResource(iconFile.Icons[id], new ResourceId((uint)id + 1), _language);
                 Icons.Add(iconResource);
             }
         }
