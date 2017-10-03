@@ -1,3 +1,9 @@
+### 1.7
+
+**Bugs**
+
+* [#48](https://github.com/resourcelib/resourcelib/pull/56) Fixed IconDirectoryResource.SaveTo has bugs with some .ico file
+
 ### 1.6 (4/22/2017)
 
 **New Features**
