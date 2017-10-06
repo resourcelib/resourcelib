@@ -2,7 +2,7 @@
 
 **Bugs**
 
-* [#48](https://github.com/resourcelib/resourcelib/pull/56): Fixed `IconDirectoryResource.SaveTo` has bugs with some .ico file - [@jairbubbles](https://github.com/jairbubbles).
+* [#48](https://github.com/resourcelib/resourcelib/issues/48): Fixed `IconDirectoryResource.SaveTo` has bugs with some .ico file - [@jairbubbles](https://github.com/jairbubbles).
 
 ### 1.6 (4/22/2017)
 
