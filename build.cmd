@@ -8,39 +8,19 @@ if "%~1"=="" (
 pushd "%~dp0"
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
-rem sync up packages
-echo Installing missing packages
-.\.nuget\nuget.exe install .\.nuget\packages.config -o .\packages\
+rem Use vswhere to find MsBuild (https://github.com/Microsoft/vswhere/wiki/Find-MSBuild)
 
-set ProgramFilesDir=%ProgramFiles%
-if NOT "%ProgramFiles(x86)%"=="" set ProgramFilesDir=%ProgramFiles(x86)%
+set VsWhere="%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 
-set VisualStudioCmd=%ProgramFilesDir%\Microsoft Visual Studio 8.0\VC\vcvarsall.bat
-if EXIST "%VisualStudioCmd%" call "%VisualStudioCmd%"
-
-for /D %%n in ( "%ProgramFilesDir%\NUnit*" ) do (
- set NUnitDir=%%~n
+for /f "usebackq tokens=*" %%i in (`%VsWhere% -latest -products * -requires Microsoft.Component.MSBuild -property installationPath`) do (
+  set InstallDir=%%i
 )
 
-if EXIST ".\packages" (
-  for /D %%n in ( ".\packages\NUnit.Runners.*" ) do (
-   set NUnitDir=%%~n
-  )
+if exist "%InstallDir%\MSBuild\15.0\Bin\MSBuild.exe" (
+  "%InstallDir%\MSBuild\15.0\Bin\MSBuild.exe" ResourceLib.proj /t:%*
+  if NOT %ERRORLEVEL%==0 exit /b %ERRORLEVEL%
 )
 
-if EXIST "%NUnitDir%\bin" set NUnitBinDir=%NUnitDir%\bin
-if EXIST "%NUnitDir%\bin\net-2.0" set NUnitBinDir=%NUnitDir%\bin\net-2.0
-if EXIST "%NUnitDir%\tools" set NUnitBinDir=%NUnitDir%\tools
-
-if NOT EXIST "%NUnitBinDir%" echo Missing NUnit, expected in %NUnitDir%
-if NOT EXIST "%NUnitBinDir%" exit /b -1
-
-set FrameworkVersion=v4.0.30319
-set FrameworkDir=%SystemRoot%\Microsoft.NET\Framework
-
-PATH=%FrameworkDir%\%FrameworkVersion%;%PATH%
-msbuild.exe ResourceLib.proj /t:%*
-if NOT %ERRORLEVEL%==0 exit /b %ERRORLEVEL%
 popd
 endlocal
 exit /b 0
