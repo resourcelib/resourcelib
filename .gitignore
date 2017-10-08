@@ -6,3 +6,4 @@ Source/Version/Properties/GlobalAssemblyInfo.cs
 TestResult.xml
 /*.suo
 *.user
+/.vs
