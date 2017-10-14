@@ -194,8 +194,8 @@
     <PropertyGroup>
       <_BatchFileContent>
         @echo off%0D%0A
-        if not EXIST "$(SolutionDir)\Source\Version\Properties\GlobalAssemblyInfo.cs" (%0D%0A
-        call "$(SolutionDir)\build.cmd" version /p:Configuration=$(ConfigurationName)%0D%0A
+        if not EXIST "$(ProjectDir)\..\Version\Properties\GlobalAssemblyInfo.cs" (%0D%0A
+        call "$(ProjectDir)\..\..\build.cmd" version /p:Configuration=$(ConfigurationName)%0D%0A
         )%0D%0A
       </_BatchFileContent>
     </PropertyGroup>
