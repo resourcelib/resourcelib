@@ -3,8 +3,10 @@
     <TargetFramework>netstandard1.3</TargetFramework>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>Vestris.ResourceLib</AssemblyName>
     <RootNamespace>Vestris.ResourceLib</RootNamespace>
     <DefineConstants>NETSTANDARD</DefineConstants>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
