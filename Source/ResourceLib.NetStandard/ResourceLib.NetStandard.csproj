@@ -187,4 +187,22 @@
     <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
     <PackageReference Include="System.Xml.XmlDocument" Version="4.0.1" />
   </ItemGroup>
+
+  <Target Name="GenerateVersionIfRequired" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <_BatchFileContent>
+        @echo off%0D%0A
+        if not EXIST "$(SolutionDir)\Source\Version\Properties\GlobalAssemblyInfo.cs" (%0D%0A
+        call "$(SolutionDir)\build.cmd" version /p:Configuration=$(ConfigurationName)%0D%0A
+        )%0D%0A
+      </_BatchFileContent>
+    </PropertyGroup>
+
+    <WriteLinesToFile Lines="$(_BatchFileContent)" File="$(IntermediateOutputPath)\version.bat" />
+    <Exec Command="cmd.exe /c &quot;$(IntermediateOutputPath)\version.bat&quot;" />
+
+    <ItemGroup>
+      <FileWrites Include="$(IntermediateOutputPath)\version.bat" />
+    </ItemGroup>
+  </Target>
 </Project>
