@@ -14,7 +14,7 @@
     <tags>Resource Win32</tags>
   </metadata>
   <files>
-    <file src="Source\ResourceLib\bin\$configuration$\Vestris.ResourceLib.dll" target="lib\" />
-    <file src="Source\ResourceLib\bin\$configuration$\Vestris.ResourceLib.xml" target="lib\" />
+    <file src="Source\ResourceLib\bin\$configuration$\Vestris.ResourceLib.dll" target="lib\net20" />
+    <file src="Source\ResourceLib\bin\$configuration$\Vestris.ResourceLib.xml" target="lib\net20" />
   </files>
 </package>
