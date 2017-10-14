@@ -188,6 +188,7 @@
   <Target Name="Tests">
     <NUnit3 Assemblies="$(OutputPath)/$(TargetFileName)" ToolPath="$(NuGetPackageRoot)\nunit.consolerunner\3.7.0\tools\" />
   </Target>
+  <Import Project="$(SolutionDir)\Build\MSBuild.Community.Tasks.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
