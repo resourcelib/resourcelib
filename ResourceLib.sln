@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Article", "Article", "{8C34CEDC-B5FB-42FD-A408-B0EA599AFBB8}"
 	ProjectSection(SolutionItems) = preProject
@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLibUnitTests", "Sou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Version", "Source\Version\Version.csproj", "{1DA8F5AA-2EE1-4204-A72F-0373BF541395}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceLib.NetStandard", "Source\ResourceLib.NetStandard\ResourceLib.NetStandard.csproj", "{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

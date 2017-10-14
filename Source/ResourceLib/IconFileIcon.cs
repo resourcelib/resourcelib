@@ -4,7 +4,9 @@ using System.Text;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.IO;
+#if !NETSTANDARD
 using System.Drawing.Imaging;
+#endif
 
 namespace Vestris.ResourceLib
 {

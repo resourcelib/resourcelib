@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
+#if !NETSTANDARD
 using System.Drawing.Imaging;
+#endif
 
 namespace Vestris.ResourceLib
 {
