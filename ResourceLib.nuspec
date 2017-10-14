@@ -16,5 +16,7 @@
   <files>
     <file src="Source\ResourceLib\bin\$configuration$\Vestris.ResourceLib.dll" target="lib\net20" />
     <file src="Source\ResourceLib\bin\$configuration$\Vestris.ResourceLib.xml" target="lib\net20" />
+    <file src="Source\ResourceLib.NetStandard\bin\$configuration$\netstandard1.3\Vestris.ResourceLib.dll" target="lib\netstandard1.3" />
+    <file src="Source\ResourceLib.NetStandard\bin\$configuration$\netstandard1.3\Vestris.ResourceLib.xml" target="lib\netstandard1.3" />
   </files>
 </package>
