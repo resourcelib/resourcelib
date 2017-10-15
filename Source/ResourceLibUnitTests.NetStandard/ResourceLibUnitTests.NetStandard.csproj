@@ -1,0 +1,181 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>ResourceLibUnitTests</AssemblyName>
+    <RootNamespace>Vestris.ResourceLibUnitTests</RootNamespace>
+    <DefineConstants>NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.8.1" />
+    <PackageReference Include="NUnit.ConsoleRunner" Version="3.7.0" />
+    <ProjectReference Include="../ResourceLib.NetStandard/ResourceLib.NetStandard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Version\Properties\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
+
+    <Compile Include="../ResourceLibUnitTests/AcceleratorResourceTests.cs">
+      <Link>AcceleratorResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/BitmapResourceTests.cs">
+      <Link>BitmapResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/ByteUtils.cs">
+      <Link>ByteUtils.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/CheckWidePaths.cs">
+      <Link>CheckWidePaths.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/CursorResourceTests.cs">
+      <Link>CursorResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/DialogResourceTests.cs">
+      <Link>DialogResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/DumpResource.cs">
+      <Link>DumpResource.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/FontDirectoryResourceTests.cs">
+      <Link>FontDirectoryResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/FontResourceTests.cs">
+      <Link>FontResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/GenericResourceTests.cs">
+      <Link>GenericResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/IconResourceTests.cs">
+      <Link>IconResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/ManifestResourceTests.cs">
+      <Link>ManifestResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/MenuResourceTests.cs">
+      <Link>MenuResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/ResourceIdTests.cs">
+      <Link>ResourceIdTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/ResourceInfoTests.cs">
+      <Link>ResourceInfoTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/ResourceTests.cs">
+      <Link>ResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/StringResourceTests.cs">
+      <Link>StringResourceTests.cs</Link>
+    </Compile>
+    <Compile Include="../ResourceLibUnitTests/VersionResourceTests.cs">
+      <Link>VersionResourceTests.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="../ResourceLibUnitTests/Binaries/6840.dll">
+      <Link>Binaries/6840.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/6to4svc.dll">
+      <Link>Binaries/6to4svc.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/6to4svcgreek.dll">
+      <Link>Binaries/6to4svcgreek.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/acppage.dll">
+      <Link>Binaries/acppage.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/atl.dll">
+      <Link>Binaries/atl.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/ClassLibrary_NET2.0.dll">
+      <Link>Binaries/ClassLibrary_NET2.0.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/ClassLibrary_NET3.0.dll">
+      <Link>Binaries/ClassLibrary_NET3.0.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/ClassLibrary_NET3.5.dll">
+      <Link>Binaries/ClassLibrary_NET3.5.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/ClassLibrary_NET3.5ClientProfile.dll">
+      <Link>Binaries/ClassLibrary_NET3.5ClientProfile.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/ClassLibrary_NET4.0.dll">
+      <Link>Binaries/ClassLibrary_NET4.0.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/ClassLibrary_NET4.0ClientProfile.dll">
+      <Link>Binaries/ClassLibrary_NET4.0ClientProfile.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/ClassLibrary_NET4.5.1.dll">
+      <Link>Binaries/ClassLibrary_NET4.5.1.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/ClassLibrary_NET4.5.dll">
+      <Link>Binaries/ClassLibrary_NET4.5.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/custom.exe">
+      <Link>Binaries/custom.exe</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/gutils.dll">
+      <Link>Binaries/gutils.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Binaries/write.exe">
+      <Link>Binaries/write.exe</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <Content Include="../ResourceLibUnitTests/Bitmaps/Bitmap1.bmp">
+      <Link>Bitmaps/Bitmap1.bmp</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Bitmaps/Bitmap2.bmp">
+      <Link>Bitmaps/Bitmap2.bmp</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
+    <Content Include="../ResourceLibUnitTests/Cursors/cursor1.cur">
+      <Link>Cursors/cursor1.cur</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../ResourceLibUnitTests/Icons/icon1.ico">
+      <Link>Icons/icon1.ico</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="GenerateVersionIfRequired" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <_BatchFileContent>
+        @echo off%0D%0A
+        if not EXIST "$(ProjectDir)\..\Version\Properties\GlobalAssemblyInfo.cs" (%0D%0A
+        call "$(ProjectDir)\..\..\build.cmd" version /p:Configuration=$(ConfigurationName)%0D%0A
+        )%0D%0A
+      </_BatchFileContent>
+    </PropertyGroup>
+
+    <WriteLinesToFile Lines="$(_BatchFileContent)" File="$(IntermediateOutputPath)\version.bat" />
+    <Exec Command="cmd.exe /c &quot;$(IntermediateOutputPath)\version.bat&quot;" />
+
+    <ItemGroup>
+      <FileWrites Include="$(IntermediateOutputPath)\version.bat" />
+    </ItemGroup>
+  </Target>
+</Project>

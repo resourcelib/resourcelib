@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Version", "Source\Version\V
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceLib.NetStandard", "Source\ResourceLib.NetStandard\ResourceLib.NetStandard.csproj", "{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceLibUnitTests.NetStandard", "Source\ResourceLibUnitTests.NetStandard\ResourceLibUnitTests.NetStandard.csproj", "{317A8F67-542E-49BB-A257-EA053B10960C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8C9B63F-3E2F-4993-A420-BF30BA51DB68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{317A8F67-542E-49BB-A257-EA053B10960C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{317A8F67-542E-49BB-A257-EA053B10960C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{317A8F67-542E-49BB-A257-EA053B10960C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{317A8F67-542E-49BB-A257-EA053B10960C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
