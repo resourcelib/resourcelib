@@ -9,7 +9,6 @@
  </PropertyGroup>
  <PropertyGroup>
   <ReleaseDir>target\$(Configuration)\ResourceLib</ReleaseDir>
-  <MSBuild_4_0_ExeFilePath>%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe</MSBuild_4_0_ExeFilePath>
  </PropertyGroup>
  <Target Name="configurations">
   <CreateItem Include="$(Configuration)">
@@ -51,15 +50,11 @@
  </Target>
  <Target Name="code" DependsOnTargets="version;configurations">
   <Message Importance="high" Text="Compiling and linking project, $(Configuration) ..." />
+  <MSBuild Projects="ResourceLib.sln" Targets="Restore" Properties="Configuration=$(Configuration)" />
   <MSBuild Projects="ResourceLib.sln" Targets="Build" Properties="Configuration=$(Configuration)" />
  </Target>
  <Target Name="run_test_only" DependsOnTargets="configurations">
-  <Message Importance="high" Text="Running tests, $(Configuration) ..." />
-  <CreateItem Include="Source\**\bin\$(Configuration)\Vestris.*UnitTests.dll">
-   <Output TaskParameter="Include" ItemName="UnitTestAssemblies"/>
-  </CreateItem>
-  <Message Text="@(UnitTestAssemblies)" />
-  <NUnit Assemblies="@(UnitTestAssemblies)" ToolPath="$(NUnitBinDir)" />
+  <MSBuild Projects="Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj" Targets="Tests" Properties="Configuration=$(Configuration)" />
  </Target>
  <ItemGroup>
   <SourceCodeFiles Include="*.sln" />

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Vestris.ResourceLib;
 using System.Globalization;
+#if !NETSTANDARD
 using System.Drawing;
+#endif
 using System.IO;
 
 namespace Vestris.ResourceLibUnitTests
@@ -118,9 +120,11 @@ namespace Vestris.ResourceLibUnitTests
             Console.WriteLine("Image: {0}x{1}, {2}",
                 rc.Bitmap.Header.biWidth, rc.Bitmap.Header.biHeight, rc.Bitmap.Header.PixelFormatString);
 
+#if !NETSTANDARD
             Console.Write(" Mask: {0}x{1}", rc.Bitmap.Mask.Width, rc.Bitmap.Mask.Height);
             Console.Write(" Color: {0}x{1}", rc.Bitmap.Color.Width, rc.Bitmap.Color.Height);
             Console.WriteLine(" Image: {0}x{1}", rc.Bitmap.Image.Width, rc.Bitmap.Image.Height);
+#endif
         }
 
         public static void Dump(DialogResource rc)

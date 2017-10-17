@@ -238,9 +238,17 @@ namespace Vestris.ResourceLib
         public byte[] WriteAndGetBytes()
         {
             MemoryStream ms = new MemoryStream();
+#if NETSTANDARD
+            BinaryWriter w = new BinaryWriter(ms, Encoding.UTF8);
+#else
             BinaryWriter w = new BinaryWriter(ms, Encoding.Default);
+#endif
             Write(w);
+#if NETSTANDARD
+            w.Dispose();
+#else
             w.Close();
+#endif
             return ms.ToArray();
         }
 

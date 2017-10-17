@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
+#if !NETSTANDARD
 using System.Drawing.Imaging;
+#endif
 
 namespace Vestris.ResourceLib
 {
@@ -103,6 +105,7 @@ namespace Vestris.ResourceLib
                 }
             }
 
+#if !NETSTANDARD
             /// <summary>
             /// Bitmap pixel format.
             /// </summary>
@@ -154,6 +157,7 @@ namespace Vestris.ResourceLib
                     return "Unknown";
                 }
             }
+#endif
         }
 
         /// <summary>

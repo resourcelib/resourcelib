@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+#if !NETSTANDARD
 using System.Drawing;
+#endif
 using System.IO;
 
 namespace Vestris.ResourceLib
@@ -18,9 +20,11 @@ namespace Vestris.ResourceLib
     {
         private Gdi32.BITMAPINFOHEADER _header = new Gdi32.BITMAPINFOHEADER();
         private byte[] _data = null;
+#if !NETSTANDARD
         private Bitmap _mask = null;
         private Bitmap _color = null;
         private Bitmap _image = null;
+#endif
 
         /// <summary>
         /// Raw image data.
@@ -180,6 +184,7 @@ namespace Vestris.ResourceLib
             return (Int32)((width + 31) / 32) * 4;
         }
 
+#if !NETSTANDARD
         /// <summary>
         /// Bitmap monochrome mask.
         /// </summary>
@@ -360,5 +365,6 @@ namespace Vestris.ResourceLib
                 return _image;
             }
         }
+#endif
     }
 }

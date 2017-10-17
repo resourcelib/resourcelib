@@ -4,7 +4,6 @@ using System.Text;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.IO;
-using System.Drawing.Imaging;
 
 namespace Vestris.ResourceLib
 {

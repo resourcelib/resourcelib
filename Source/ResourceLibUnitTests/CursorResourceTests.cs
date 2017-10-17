@@ -83,10 +83,12 @@ namespace Vestris.ResourceLibUnitTests
             IconFile cursorFile = new IconFile(cursor1filename);
             Assert.AreEqual(cursorDirectoryResource.Icons[0].Image.Data.Length, 
                 cursorFile.Icons[0].Image.Data.Length);
+#if !NETSTANDARD
             Assert.AreEqual(32, cursorDirectoryResource.Icons[0].Image.Mask.Width);
             Assert.AreEqual(32, cursorDirectoryResource.Icons[0].Image.Mask.Height);
             Assert.AreEqual(32, cursorDirectoryResource.Icons[0].Image.Color.Width);
             Assert.AreEqual(32, cursorDirectoryResource.Icons[0].Image.Color.Height);
+#endif
         }
 
         [Test]
