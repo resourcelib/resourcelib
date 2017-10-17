@@ -207,6 +207,7 @@ namespace Vestris.ResourceLib
             _image.Read(dibBits, size);
         }
 
+#if !NETSTANDARD
         /// <summary>
         /// Icon pixel format.
         /// </summary>
@@ -258,6 +259,7 @@ namespace Vestris.ResourceLib
                 return "Unknown";
             }
         }
+#endif
 
         /// <summary>
         /// String representation of the icon.
@@ -265,8 +267,13 @@ namespace Vestris.ResourceLib
         /// <returns>A string in a format of width x height followed by the pixel format.</returns>
         public override string ToString()
         {
+#if NETSTANDARD
+            return string.Format("{0}x{1} {2}bpp",
+                Width, Height, _header.wBitsPerPixel);
+#else
             return string.Format("{0}x{1} {2}",
                 Width, Height, PixelFormatString);
+#endif
         }
 
         /// <summary>

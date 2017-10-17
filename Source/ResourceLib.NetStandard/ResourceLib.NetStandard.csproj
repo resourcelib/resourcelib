@@ -14,7 +14,6 @@
     <Compile Include="..\Version\Properties\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="PixelFormat.cs" />
 
     <Compile Include="../ResourceLib/Accelerator.cs">
       <Link>Accelerator.cs</Link>

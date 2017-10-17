@@ -105,6 +105,7 @@ namespace Vestris.ResourceLib
                 }
             }
 
+#if !NETSTANDARD
             /// <summary>
             /// Bitmap pixel format.
             /// </summary>
@@ -156,6 +157,7 @@ namespace Vestris.ResourceLib
                     return "Unknown";
                 }
             }
+#endif
         }
 
         /// <summary>
