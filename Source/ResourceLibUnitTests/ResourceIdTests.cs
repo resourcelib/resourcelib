@@ -46,11 +46,11 @@ namespace Vestris.ResourceLibUnitTests
             Assert.AreEqual("CUSTOM", Marshal.PtrToStringUni(stringRid.Id));
         }
 
-        [Test, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void TestResourceTypeInvalid()
         {
             ResourceId invalidRid = new ResourceId("CUSTOM");
-            Console.WriteLine(invalidRid.ResourceType);
+            Assert.Throws<InvalidCastException>(() => Console.WriteLine(invalidRid.ResourceType));
         }
 
         [Test]
