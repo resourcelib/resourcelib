@@ -10,5 +10,7 @@ before_build:
 build_script:
   - cmd: msbuild ResourceLib.sln /t:build /p:Configuration=%CONFIGURATION% /p:GeneratePackageOnBuild=true
 
+test: auto
+
 artifacts:
   - path: '**\*.nupkg'
