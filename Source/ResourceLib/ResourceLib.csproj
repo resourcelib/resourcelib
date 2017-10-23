@@ -3,6 +3,17 @@
     <TargetFrameworks>net452;netcoreapp2.0</TargetFrameworks>
 
     <GeneratePackageOnBuild Condition="'$(APPVEYOR)' != '' And '$(APPVEYOR)'">true</GeneratePackageOnBuild>
+
+    <PackageId>Vestris.ResourceLib</PackageId>
+    <PackageProjectUrl>https://github.com/resourcelib/resourcelib</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/resourcelib/resourcelib/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/resourcelib/resourcelib</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>C# File Resource Management Library</Description>
+    <Copyright>Copyright 2016-2017</Copyright>
+    <PackageTags>Resource Win32</PackageTags>
+    <PackageIconUrl>https://avatars0.githubusercontent.com/u/27870198?s=64</PackageIconUrl>
+    <Authors>dblock, icnocop, thoemmi</Authors>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
     <PackageReference Include="System.Drawing.Common">
