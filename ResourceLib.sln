@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Article", "Article", "{8C34
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D703E923-FE2E-4B4D-B67F-55BC8E4D52CD}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
 		build.cmd = build.cmd
 		ResourceLib.proj = ResourceLib.proj
 		Version.proj = Version.proj
@@ -37,9 +38,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C
 		Docs\Version.md = Docs\Version.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLibUnitTests", "Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceLibUnitTests", "Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
