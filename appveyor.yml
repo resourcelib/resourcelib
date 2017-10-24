@@ -8,6 +8,7 @@ before_build:
   - cmd: gitversion /l console /output buildserver
 
 build_script:
+  - cmd: msbuild ResourceLib.sln /t:restore
   - cmd: msbuild ResourceLib.sln /t:build /p:Configuration=%CONFIGURATION%
 
 test: auto
