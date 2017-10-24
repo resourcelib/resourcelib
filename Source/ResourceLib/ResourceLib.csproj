@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net20;net35;net452;netcoreapp2.0</TargetFrameworks>
 
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild Condition="'$(APPVEYOR)' != '' And '$(APPVEYOR)'">true</GeneratePackageOnBuild>
 
     <PackageId>Vestris.ResourceLib</PackageId>
@@ -15,11 +16,13 @@
     <PackageIconUrl>https://avatars0.githubusercontent.com/u/27870198?s=64</PackageIconUrl>
     <Authors>dblock, icnocop, thoemmi</Authors>
   </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
     <PackageReference Include="System.Drawing.Common">
       <Version>4.5.0-preview1-25718-03</Version>
     </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012">
       <PrivateAssets>All</PrivateAssets>
