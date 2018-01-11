@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Article", "Article", "{8C34CEDC-B5FB-42FD-A408-B0EA599AFBB8}"
 	ProjectSection(SolutionItems) = preProject
 		Article\resourcelibdotnet.html = Article\resourcelibdotnet.html
@@ -8,9 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Article", "Article", "{8C34
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{D703E923-FE2E-4B4D-B67F-55BC8E4D52CD}"
 	ProjectSection(SolutionItems) = preProject
-		build.cmd = build.cmd
-		ResourceLib.proj = ResourceLib.proj
-		Version.proj = Version.proj
+		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{AD64D826-875E-44FB-8DC4-95E2D37CC0BE}"
@@ -35,25 +35,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{642C
 		Docs\Version.md = Docs\Version.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1DA8F5AA-2EE1-4204-A72F-0373BF541395} = {1DA8F5AA-2EE1-4204-A72F-0373BF541395}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceLib", "Source\ResourceLib\ResourceLib.csproj", "{AC9AF16F-7BF8-4400-95DE-6BC6CA53181E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceLibUnitTests", "Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1DA8F5AA-2EE1-4204-A72F-0373BF541395} = {1DA8F5AA-2EE1-4204-A72F-0373BF541395}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Version", "Source\Version\Version.csproj", "{1DA8F5AA-2EE1-4204-A72F-0373BF541395}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D1FA5916-F7B4-4774-8608-721D50FA276D}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\nuget.exe = .nuget\nuget.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceLibUnitTests", "Source\ResourceLibUnitTests\ResourceLibUnitTests.csproj", "{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,15 +53,14 @@ Global
 		{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{523467E0-EE78-463F-ADC7-00CB0A9AB2A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DA8F5AA-2EE1-4204-A72F-0373BF541395}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{642C46FF-FC48-496B-9C03-E48B91A8EBAB} = {AD64D826-875E-44FB-8DC4-95E2D37CC0BE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8ACA02D0-5A84-4988-99F0-3584E660681F}
 	EndGlobalSection
 EndGlobal

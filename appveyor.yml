@@ -1,13 +1,25 @@
-skip_tags: true
+image: Visual Studio 2017
+configuration: Release
 
-version: 0.{build}
+install:
+  - choco install gitversion.portable -pre -y
+
+before_build:
+  - cmd: gitversion /l console /output buildserver
 
 build_script:
-  - build all /p:Configuration=Release
+  - cmd: msbuild ResourceLib.sln /t:restore
+  - cmd: msbuild ResourceLib.sln /t:build /p:Configuration=%CONFIGURATION%
+
+test: auto
 
 artifacts:
-  - path: target\Release\*.zip
-    name: ZIP
+  - path: '**\*.nupkg'
 
-  - path: target\Release\*.nupkg
-    name: NuGet package
+deploy:
+  - provider: NuGet
+    api_key:
+      secure: I5guFdbMGxFD44SCB8SGPeizUhozYTz65isgHpQVITsf1HQUA1Eh0ovG16t41S+4
+    on:
+      branch:
+        - master
