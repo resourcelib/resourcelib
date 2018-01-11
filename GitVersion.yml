@@ -1,4 +1,5 @@
 next-version: 2.0
 mode: ContinuousDeployment
+continuous-delivery-fallback-tag: beta
 ignore:
   sha: []
