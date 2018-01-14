@@ -1,4 +1,9 @@
-### 1.7 (Next)
+### 2.0 (Next)
+
+**Misc**
+
+* [#59](https://github.com/resourcelib/resourcelib/pull/59): Update to Visual Studio 2017; resourcelib now targets .NET Frameworks 2.0, 3.5, 4.0, and 4.5, and .NET Standard 2.0 - [@thoemmi](https://github.com/thoemmi).
+* [#62](https://github.com/resourcelib/resourcelib/issues/62): ResourceLib 2.0 beta is no longer strong-named.
 
 **Bugs**
 
