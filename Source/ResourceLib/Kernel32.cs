@@ -608,5 +608,14 @@ namespace Vestris.ResourceLib
             /// </summary>
             IsolationAwareNonstaticImport = ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID
         }
+
+        /// <summary>
+        /// Copies a block of memory from one location to another.
+        /// </summary>
+        /// <param name="dest">A pointer to the starting address of the copied block's destination.</param>
+        /// <param name="src">A pointer to the starting address of the block of memory to copy.</param>
+        /// <param name="count">The size of the block of memory to copy, in bytes.</param>
+        [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
+        internal static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
     }
 }

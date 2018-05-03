@@ -210,11 +210,22 @@ namespace Vestris.ResourceLib
             if (_size <= 0)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            _type = type;
-            _name = name;
-            _language = lang;
+            IntPtr lpResAligned = Marshal.AllocHGlobal(_size);
 
-            Read(hModule, lpRes);
+            try
+            {
+                Kernel32.CopyMemory(lpResAligned, lpRes, (uint)_size);
+
+                _type = type;
+                _name = name;
+                _language = lang;
+
+                Read(hModule, lpResAligned);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(lpResAligned);
+            }
         }
 
         /// <summary>
