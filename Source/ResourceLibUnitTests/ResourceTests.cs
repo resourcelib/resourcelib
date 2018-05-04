@@ -46,7 +46,7 @@ namespace Vestris.ResourceLibUnitTests
             var filename = Path.GetFileName(path);
             if (filename.StartsWith("ClassLibrary_NET") || filename == "idea64.exe")
             {
-                Assert.Ignore(".NET assemblies will fail because they use a padding different from the specification");
+                Assert.Ignore(".NET assemblies fail because they consider padding for length in a StringTableEntry");
             }
 
             using (ResourceInfo ri = new ResourceInfo())
