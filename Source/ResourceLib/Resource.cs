@@ -144,7 +144,8 @@ namespace Vestris.ResourceLib
             if (lpRes == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            Read(hModule, lpRes);
+            using (var aligned = new Aligned(lpRes, _size))
+                Read(hModule, aligned.Ptr);
         }
 
         /// <summary>
@@ -210,21 +211,13 @@ namespace Vestris.ResourceLib
             if (_size <= 0)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            IntPtr lpResAligned = Marshal.AllocHGlobal(_size);
-
-            try
+            using (var aligned = new Aligned(lpRes, _size))
             {
-                Kernel32.CopyMemory(lpResAligned, lpRes, (uint)_size);
-
                 _type = type;
                 _name = name;
                 _language = lang;
 
-                Read(hModule, lpResAligned);
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(lpResAligned);
+                Read(hModule, aligned.Ptr);
             }
         }
 

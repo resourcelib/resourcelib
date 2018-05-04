@@ -203,22 +203,18 @@ namespace Vestris.ResourceLib
             IntPtr hResource = Kernel32.FindResourceEx(hModule, lpszType, lpszName, wIDLanguage);
             IntPtr hResourceGlobal = Kernel32.LoadResource(hModule, hResource);
             int size = Kernel32.SizeofResource(hModule, hResource);
-            IntPtr hResourceGlobalAligned = Marshal.AllocHGlobal(size);                  
-
-            try
+            using (var aligned = new Aligned(hResourceGlobal, size))
             {
-                Kernel32.CopyMemory(hResourceGlobalAligned, hResourceGlobal, (uint)size);
-                resources.Add(CreateResource(hModule, hResourceGlobalAligned, type, name, wIDLanguage, size));
-            }
-            catch (Exception ex)
-            {
-                _innerException = new Exception(string.Format("Error loading resource '{0}' {1} ({2}).",
-                    name, type.TypeName, wIDLanguage), ex);
-                throw ex;
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(hResourceGlobalAligned);
+                try
+                {                    
+                    resources.Add(CreateResource(hModule, aligned.Ptr, type, name, wIDLanguage, size));
+                }
+                catch (Exception ex)
+                {
+                    _innerException = new Exception(string.Format("Error loading resource '{0}' {1} ({2}).",
+                        name, type.TypeName, wIDLanguage), ex);
+                    throw ex;
+                }
             }
             
             return true;
