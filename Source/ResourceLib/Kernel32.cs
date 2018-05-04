@@ -615,7 +615,7 @@ namespace Vestris.ResourceLib
         /// <param name="dest">A pointer to the starting address of the copied block's destination.</param>
         /// <param name="src">A pointer to the starting address of the block of memory to copy.</param>
         /// <param name="count">The size of the block of memory to copy, in bytes.</param>
-        [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
+        [DllImport("kernel32.dll", EntryPoint = "RtlCopyMemory", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         internal static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
     }
 }
