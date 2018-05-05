@@ -23,6 +23,12 @@ namespace Vestris.ResourceLib
         private string _value;
 
         /// <summary>
+        /// When set to true the length in the header will also contain the padding bytes when writing to a stream.
+        /// The MSDN reference (http://www.webcitation.org/6zBLYbvww) does not clarify which variant is 'right'.
+        /// </summary>
+        public static bool ConsiderPaddingForLength = false;
+
+        /// <summary>
         /// String resource header.
         /// </summary>
         public Kernel32.RESOURCE_HEADER Header
@@ -153,6 +159,10 @@ namespace Vestris.ResourceLib
             }
             // wValueLength
             ResourceUtil.WriteAt(w, (w.BaseStream.Position - valuePos) / Marshal.SystemDefaultCharSize, headerPos + 2);
+
+            if (ConsiderPaddingForLength)
+                ResourceUtil.PadToDWORD(w);
+
             // wLength
             ResourceUtil.WriteAt(w, w.BaseStream.Position - headerPos, headerPos);
         }
