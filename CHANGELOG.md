@@ -4,10 +4,12 @@
 
 * [#59](https://github.com/resourcelib/resourcelib/pull/59): Update to Visual Studio 2017; resourcelib now targets .NET Frameworks 2.0, 3.5, 4.0, and 4.5, and .NET Standard 2.0 - [@thoemmi](https://github.com/thoemmi).
 * [#62](https://github.com/resourcelib/resourcelib/issues/62): ResourceLib 2.0 beta is no longer strong-named.
+* [#66](https://github.com/resourcelib/resourcelib/pull/66): Added support for unaligned resources.
 
 **Bugs**
 
 * [#48](https://github.com/resourcelib/resourcelib/issues/48): Fixed `IconDirectoryResource.SaveTo` has bugs with some .ico file - [@jairbubbles](https://github.com/jairbubbles).
+* [#66](https://github.com/resourcelib/resourcelib/pull/66): Fixed `FontDirectoryResource` was was reading outside of the lpRes buffer. `FontDirectoryEntry` did not write null terminated strings.
 
 ### 1.6 (4/22/2017)
 
