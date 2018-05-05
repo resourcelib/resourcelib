@@ -120,24 +120,20 @@ namespace Vestris.ResourceLib
             w.Write(ResourceUtil.GetBytes(_font));
             
             // device name
-            if (string.IsNullOrEmpty(_deviceName))
-            {
-                w.Write((byte)0);
-            }
-            else
+            if (!string.IsNullOrEmpty(_deviceName))
             {
                 w.Write(Encoding.ASCII.GetBytes(_deviceName));
             }
+            w.Write((byte)0);
+
 
             // face name
-            if (string.IsNullOrEmpty(_faceName))
-            {
-                w.Write((byte)0);
-            }
-            else
+            if (!string.IsNullOrEmpty(_faceName))
             {
                 w.Write(Encoding.ASCII.GetBytes(_faceName));
             }
+            w.Write((byte)0);
+
         }
     }
 }

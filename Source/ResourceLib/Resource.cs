@@ -144,7 +144,8 @@ namespace Vestris.ResourceLib
             if (lpRes == IntPtr.Zero)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            Read(hModule, lpRes);
+            using (var aligned = new Aligned(lpRes, _size))
+                Read(hModule, aligned.Ptr);
         }
 
         /// <summary>
@@ -210,11 +211,14 @@ namespace Vestris.ResourceLib
             if (_size <= 0)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
-            _type = type;
-            _name = name;
-            _language = lang;
+            using (var aligned = new Aligned(lpRes, _size))
+            {
+                _type = type;
+                _name = name;
+                _language = lang;
 
-            Read(hModule, lpRes);
+                Read(hModule, aligned.Ptr);
+            }
         }
 
         /// <summary>
