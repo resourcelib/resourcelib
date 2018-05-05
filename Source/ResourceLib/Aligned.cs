@@ -8,43 +8,46 @@ namespace Vestris.ResourceLib
     /// </summary>
     internal sealed class Aligned : IDisposable
     {
-        private IntPtr lp;
-        private IntPtr lpAligned = IntPtr.Zero;
-        private int _size;
-        private bool disposed = false;
+        private IntPtr _ptr;
+        private bool allocated;
+        private bool Disposed => _ptr == IntPtr.Zero;
 
         public IntPtr Ptr
         {
             get
             {
-                if (disposed)
+                if (Disposed)
                     throw new ObjectDisposedException(nameof(Aligned));
 
-                if (this.lpAligned != IntPtr.Zero)
-                    return this.lpAligned;
-
-                if (lp.ToInt64() % 8 == 0)
-                    return lp;                
-
-                IntPtr lpAligned = Marshal.AllocHGlobal(_size);
-                Kernel32.CopyMemory(lpAligned, lp, (uint)_size);
-                return lpAligned;
+                return _ptr;
             }
         }
 
         public Aligned(IntPtr lp, int size)
         {
-            this.lp = lp;
-            _size = size;
+            if (lp == IntPtr.Zero)
+                throw new ArgumentException("Cannot align a null pointer.", nameof(lp));
+
+            if (lp.ToInt64() % 8 == 0)
+            {
+                _ptr = lp;
+                allocated = false;
+            }
+            else
+            {
+                _ptr = Marshal.AllocHGlobal(size);
+                allocated = true;
+                Kernel32.CopyMemory(_ptr, lp, (uint)size);
+            }
         }
 
         public void Dispose()
         {
-            if (disposed || lpAligned == IntPtr.Zero)
+            if (!allocated || Disposed)
                 return;
 
-            disposed = true;
-            Marshal.FreeHGlobal(lpAligned);
+            Marshal.FreeHGlobal(_ptr);
+            _ptr = IntPtr.Zero;
         }
     }
 }
