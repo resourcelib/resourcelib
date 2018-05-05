@@ -45,10 +45,10 @@ namespace Vestris.ResourceLibUnitTests
         public void TestReadWriteResourceBytes(string path)
         {
             var filename = Path.GetFileName(path);
-            var isDotNet = filename.StartsWith("ClassLibrary_NET");
+            var isDotNet = filename.StartsWith("ClassLibrary_NET") || filename == "idea64.exe";
             if (filename == "idea64.exe")
             {
-                Assert.Ignore("idea64.exe still fails.");
+                Assert.Ignore("idea64.exe doesn't consider null byte for StringTableEntry length");
             }
 
             using (ResourceInfo ri = new ResourceInfo())

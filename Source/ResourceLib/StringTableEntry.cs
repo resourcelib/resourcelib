@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Vestris.ResourceLib
 {
@@ -126,9 +125,12 @@ namespace Vestris.ResourceLib
             _key = Marshal.PtrToStringUni(pKey);
 
             IntPtr pValue = ResourceUtil.Align(pKey.ToInt64() + (_key.Length + 1) * Marshal.SystemDefaultCharSize);
-            _value = ((_header.wValueLength > 0)
-                ? Marshal.PtrToStringUni(pValue, _header.wValueLength)
-                : null);
+            if (_header.wValueLength > 0)
+            {
+                _value = Marshal.PtrToStringUni(pValue, _header.wValueLength);
+                if (_value.Length == 0 || _value[_value.Length - 1] != '\0')
+                    _value += '\0';
+            }
         }
 
         /// <summary>
