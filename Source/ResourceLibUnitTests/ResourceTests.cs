@@ -40,13 +40,15 @@ namespace Vestris.ResourceLibUnitTests
             }
         }
 
-        [TestCaseSource("TestFiles")]
+        [NonParallelizable]
+        [TestCaseSource("TestFiles")]        
         public void TestReadWriteResourceBytes(string path)
         {
             var filename = Path.GetFileName(path);
-            if (filename.StartsWith("ClassLibrary_NET") || filename == "idea64.exe")
+            var isDotNet = filename.StartsWith("ClassLibrary_NET") || filename == "idea64.exe";
+            if (filename == "idea64.exe")
             {
-                Assert.Ignore(".NET assemblies fail because they consider padding for length in a StringTableEntry");
+                Assert.Ignore("idea64.exe doesn't consider null byte for StringTableEntry length");
             }
 
             using (ResourceInfo ri = new ResourceInfo())
@@ -55,10 +57,18 @@ namespace Vestris.ResourceLibUnitTests
                 foreach (Resource rc in ri)
                 {
                     Console.WriteLine("Resource: {0} - {1}", rc.TypeName, rc.Name);
-                    GenericResource genericResource = new GenericResource(rc.Type, rc.Name, rc.Language);
+                    GenericResource genericResource = new GenericResource(rc.Type, rc.Name, rc.Language);                    
                     genericResource.LoadFrom(path);
-                    byte[] data = rc.WriteAndGetBytes();
-                    ByteUtils.CompareBytes(genericResource.Data, data);
+                    try
+                    {
+                        StringTableEntry.ConsiderPaddingForLength = isDotNet;
+                        byte[] data = rc.WriteAndGetBytes();                        
+                        ByteUtils.CompareBytes(genericResource.Data, data);
+                    }
+                    finally
+                    {
+                        StringTableEntry.ConsiderPaddingForLength = false;
+                    }                    
                 }
             }
         }
