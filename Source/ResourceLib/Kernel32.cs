@@ -610,12 +610,12 @@ namespace Vestris.ResourceLib
         }
 
         /// <summary>
-        /// Copies a block of memory from one location to another.
+        /// Copies the contents of a source memory block to a destination memory block, and supports overlapping source and destination memory blocks.
         /// </summary>
         /// <param name="dest">A pointer to the starting address of the copied block's destination.</param>
         /// <param name="src">A pointer to the starting address of the block of memory to copy.</param>
         /// <param name="count">The size of the block of memory to copy, in bytes.</param>
-        [DllImport("kernel32.dll", EntryPoint = "RtlCopyMemory", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-        internal static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
+        [DllImport("kernel32.dll", EntryPoint = "RtlMoveMemory", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        internal static extern void MoveMemory(IntPtr dest, IntPtr src, uint count);
     }
 }

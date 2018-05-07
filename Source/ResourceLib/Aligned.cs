@@ -37,7 +37,7 @@ namespace Vestris.ResourceLib
             {
                 _ptr = Marshal.AllocHGlobal(size);
                 allocated = true;
-                Kernel32.CopyMemory(_ptr, lp, (uint)size);
+                Kernel32.MoveMemory(_ptr, lp, (uint)size);
             }
         }
 
