@@ -3,7 +3,7 @@
 **Misc**
 
 * [#59](https://github.com/resourcelib/resourcelib/pull/59): Update to Visual Studio 2017; resourcelib now targets .NET Frameworks 2.0, 3.5, 4.0, and 4.5, and .NET Standard 2.0 - [@thoemmi](https://github.com/thoemmi).
-* [#62](https://github.com/resourcelib/resourcelib/issues/62): ResourceLib 2.0 beta is no longer strong-named.
+* [#62](https://github.com/resourcelib/resourcelib/issues/62): ResourceLib 2.0 is no longer strong-named - [@icnocop](https://github.com/icnocop).
 * [#66](https://github.com/resourcelib/resourcelib/pull/66): Added support for unaligned resources. - [@hakito](https://github.com/hakito).
 * [#68](https://github.com/resourcelib/resourcelib/pull/68): Support for writing .NET like `StringTableEntries` - [@hakito](https://github.com/hakito).
 
