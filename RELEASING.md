@@ -50,8 +50,6 @@ repository at [nuget.org](https://www.nuget.org/packages/Vestris.ResourceLib).
   * Your contribution here.
   ```
 
-* Increment the third version number in [lib/iex/version.rb](lib/iex/version.rb).
-
 * Commit your changes.
 
   ```
