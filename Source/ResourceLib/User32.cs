@@ -81,7 +81,7 @@ namespace Vestris.ResourceLib
         /// If the function succeeds, the return value is a handle to the icon or cursor that is created.
         /// If the function fails, the return value is NULL.
         /// </returns>
-        [DllImport("user32,dll", SetLastError = true)]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr CreateIconIndirect(ref ICONINFO piconInfo);
 
         /// <summary>
