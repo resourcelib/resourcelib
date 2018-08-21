@@ -1,4 +1,4 @@
-next-version: 2.0
+next-version: 2.1
 mode: ContinuousDeployment
 continuous-delivery-fallback-tag: beta
 ignore:

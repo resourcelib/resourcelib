@@ -50,6 +50,12 @@ repository at [nuget.org](https://www.nuget.org/packages/Vestris.ResourceLib).
   * Your contribution here.
   ```
 
+* Update the next version in [GitVersion.yml](GitVersion.yml)
+
+  ```yaml
+  next-version: 2.1
+  ```
+
 * Commit your changes.
 
   ```bash
