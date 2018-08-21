@@ -10,7 +10,7 @@ frequently, features not so frequently and breaking API changes rarely.
 
 * Run tests, check that all tests succeed locally.
 
-  ```
+  ```bash
   vstest.console .\Source\ResourceLibUnitTests\bin\Debug\netcoreapp2.0\ResourceLibUnitTests.dll
   ```
 
@@ -21,15 +21,15 @@ frequently, features not so frequently and breaking API changes rarely.
 
 * Change "Next" in [CHANGELOG.md](CHANGELOG.md) to the current date.
 
-  ```
+  ```markdown
   ### 2.0 (5/15/2018)
   ```
 
-* Commit your changes, tag the branch with the current version (resourcelib uses
+* Commit your changes in the **master** branch, tag it with the current version (resourcelib uses
   [GitVersion](https://github.com/GitTools/GitVersion) to generate semantic version
   numbers) and push it to GitHub:
 
-  ```
+  ```bash
   git add CHANGELOG.md
   git commit -m "Releasing v2.0."
   git tag -a v2.0 -m "Releasing v2.0."
@@ -44,7 +44,7 @@ repository at [nuget.org](https://www.nuget.org/packages/Vestris.ResourceLib).
 
 * Add the next release to [CHANGELOG.md](CHANGELOG.md).
 
-  ```
+  ```markdown
   ### 2.1 (Next)
 
   * Your contribution here.
@@ -52,7 +52,7 @@ repository at [nuget.org](https://www.nuget.org/packages/Vestris.ResourceLib).
 
 * Commit your changes.
 
-  ```
+  ```bash
   git add CHANGELOG.md
   git commit -m "Preparing for next development iteration, 2.1. [skip ci]"
   git push origin master
