@@ -15,6 +15,8 @@
     <PackageTags>Resource Win32</PackageTags>
     <PackageIconUrl>https://avatars0.githubusercontent.com/u/27870198?s=64</PackageIconUrl>
     <Authors>dblock, icnocop, thoemmi</Authors>
+    <AssemblyName>Vestris.ResourceLib</AssemblyName>
+    <RootNamespace>Vestris.ResourceLib</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
