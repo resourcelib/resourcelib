@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+    <AssemblyName>Vestris.ResourceLibUnitTests</AssemblyName>
+    <RootNamespace>Vestris.ResourceLibUnitTests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012">
