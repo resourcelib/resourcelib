@@ -14,7 +14,7 @@ frequently, features not so frequently and breaking API changes rarely.
   vstest.console .\Source\ResourceLibUnitTests\bin\Debug\netcoreapp2.0\ResourceLibUnitTests.dll
   ```
 
-  (`dotnet test` is not supported yet due to restricitons of GitVersion, see
+  (`dotnet test` is not supported yet due to restrictions of GitVersion, see
   [GitTools/GitVersion#1269](https://github.com/GitTools/GitVersion/pull/1269))
 
 * Check that the last build succeeded in [AppVeyor](https://ci.appveyor.com/project/thoemmi/resourcelib/branch/master).

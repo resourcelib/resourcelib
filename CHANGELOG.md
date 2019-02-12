@@ -1,6 +1,12 @@
-### 2.1 (Next)
+### 2.2 (Next)
 
 * Your contribution here.
+
+### 2.1 (2/12/2019)
+
+**Bugs**
+
+* [#73](https://github.com/resourcelib/resourcelib/issues/73): Assembly name was wrong in version 2.0, _ResourceLib_ instead of _Vestris.ResourceLib_ - [@jairbubbles](https://github.com/jairbubbles).
 
 ### 2.0 (8/21/2018)
 
