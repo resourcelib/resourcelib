@@ -1,6 +1,8 @@
 ### 2.2 (Next)
 
-* Your contribution here.
+**Bugs**
+
+* [#79](https://github.com/resourcelib/resourcelib/pull/79): Setting `Language` on an `IconDirectoryResource` did not update the language of contained icons - [@xiangsxuan](https://github.com/xiangsxuan).
 
 ### 2.1 (2/12/2019)
 

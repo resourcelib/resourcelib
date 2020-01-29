@@ -13,6 +13,22 @@ namespace Vestris.ResourceLib
     public class IconDirectoryResource : DirectoryResource<IconResource>
     {
         /// <summary>
+        /// Set Language ID
+        /// </summary>
+        public override ushort Language
+        {
+            get => base.Language;
+            set
+            {
+                base.Language = value;
+                foreach (var icon in Icons)
+                {
+                    icon.Language = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// A hardware-independent icon resource.
         /// </summary>
         /// <param name="hModule">Module handle.</param>

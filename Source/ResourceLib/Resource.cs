@@ -51,7 +51,7 @@ namespace Vestris.ResourceLib
         /// <summary>
         /// Language ID.
         /// </summary>
-        public UInt16 Language
+        public virtual UInt16 Language
         {
             get
             {
