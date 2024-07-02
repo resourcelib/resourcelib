@@ -23,6 +23,10 @@ jobs:
       with:
         versionSpec: '5.x'
 
+    - name: Determine Version
+      id: version_step # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v1.1.1
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -60,7 +64,7 @@ jobs:
     - name: Pack
       run: dotnet pack --output ./artifacts --configuration Release
 
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v4
       with:
         name: artifacts
         path: ./artifacts
@@ -75,7 +79,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v4
       with:
         name: artifacts
         path: ./artifacts
