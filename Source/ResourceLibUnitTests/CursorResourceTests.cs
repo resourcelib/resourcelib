@@ -16,7 +16,7 @@ namespace Vestris.ResourceLibUnitTests
         public void TestLoadCursorResources()
         {
             // gutils.dll has two cursors
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils.dll");
             Assert.IsTrue(File.Exists(filename));
             string[] cursorNames = { "HORZLINE", "VERTLINE" };
@@ -35,7 +35,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadAndSaveCursorResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = HttpUtility.UrlDecode(uri.AbsolutePath);
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "testLoadAndSaveCursorResource.exe");
@@ -69,7 +69,7 @@ namespace Vestris.ResourceLibUnitTests
         public void TestCompareCursor1()
         {
             // load from gutils
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string gutilsfilename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils.dll");
             Assert.IsTrue(File.Exists(gutilsfilename));
             CursorDirectoryResource cursorDirectoryResource = new CursorDirectoryResource();
@@ -92,7 +92,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestAddCursorResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string cursor1filename = Path.Combine(Path.GetDirectoryName(
                 HttpUtility.UrlDecode(uri.AbsolutePath)), "Cursors\\Cursor1.cur");
             Assert.IsTrue(File.Exists(cursor1filename));

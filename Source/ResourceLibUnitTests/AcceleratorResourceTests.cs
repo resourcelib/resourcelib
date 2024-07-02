@@ -16,7 +16,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadAcceleratorResources()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string filename = Path.Combine(uriPath, @"Binaries\custom.exe");
             using (ResourceInfo ri = new ResourceInfo())

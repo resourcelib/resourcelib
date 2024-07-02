@@ -25,7 +25,7 @@ namespace Vestris.ResourceLibUnitTests
                 Directory.CreateDirectory(widedir);
 
                 // Some binary file
-                string pefileSrc = Path.Combine(Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().EscapedCodeBase, UriKind.Absolute).LocalPath), "Binaries\\" + pefile);
+                string pefileSrc = Path.Combine(Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().Location, UriKind.Absolute).LocalPath), "Binaries\\" + pefile);
                 Assert.That(File.Exists(pefileSrc), Is.True);
                 string pefileDest = Path.Combine(widedir, pefile);
                 File.Copy(pefileSrc, pefileDest);

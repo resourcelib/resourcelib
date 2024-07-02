@@ -16,7 +16,7 @@ namespace Vestris.ResourceLibUnitTests
         public void TestLoadManifestResources()
         {
             ManifestResource manifestResource = new ManifestResource();
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\write.exe");
             manifestResource.LoadFrom(dll, Kernel32.ManifestType.CreateProcess);
             DumpResource.Dump(manifestResource);
@@ -26,7 +26,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadAndSaveCreateProcessManifestResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\write.exe");
             string targetFilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".exe");
             File.Copy(filename, targetFilename, true);
@@ -43,7 +43,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadAndSaveIsolationAwareManifestResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\write.exe");
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".exe");
@@ -63,7 +63,7 @@ namespace Vestris.ResourceLibUnitTests
         {
             // the 6840.dll has a manifest with a BOM marker (the actual file)
             ManifestResource mr = new ManifestResource();
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\6840.dll");
             mr.LoadFrom(dll, Kernel32.ManifestType.IsolationAware);
             Assert.IsNotNull(mr.Manifest);

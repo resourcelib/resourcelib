@@ -24,7 +24,7 @@ namespace Vestris.ResourceLibUnitTests
         [TestCase("ClassLibrary_NET4.5.1.dll")]
         public void TestLoadSave(string binaryName)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "genericResourceTestLoadSave.dll");

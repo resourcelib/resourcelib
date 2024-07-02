@@ -29,7 +29,7 @@ namespace Vestris.ResourceLibUnitTests
         [TestCaseSource("TestAssemblies")]
         public void TestLoadVersionResource(string binaryName, int language)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
             VersionResource versionResource = new VersionResource();
@@ -42,7 +42,7 @@ namespace Vestris.ResourceLibUnitTests
         [TestCaseSource("TestAssemblies")]
         public void TestLoadVersionResourceStrings(string binaryName, int language)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
             VersionResource versionResource = new VersionResource();
@@ -55,7 +55,7 @@ namespace Vestris.ResourceLibUnitTests
         [TestCaseSource("TestAssemblies")]
         public void TestLoadAndSaveVersionResource(string binaryName, int language)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
 
@@ -108,7 +108,7 @@ namespace Vestris.ResourceLibUnitTests
         [TestCaseSource("TestAssemblies")]
         public void TestDeleteVersionResource(string binaryName, int language)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "testDeleteVersionResource.dll");
@@ -144,7 +144,7 @@ namespace Vestris.ResourceLibUnitTests
         [TestCaseSource("TestAssemblies")]
         public void TestDeepCopyBytes(string binaryName, int language)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
             VersionResource existingVersionResource = new VersionResource();
@@ -212,7 +212,7 @@ namespace Vestris.ResourceLibUnitTests
         [TestCaseSource("TestAssemblies")]
         public void TestDeleteDeepCopyAndSaveVersionResource(string binaryName, int language)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), binaryName);
@@ -294,7 +294,7 @@ namespace Vestris.ResourceLibUnitTests
         [TestCaseSource("TestAssemblies")]
         public void TestDeleteAndSaveVersionResource(string binaryName, int language)
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\" + binaryName);
             Assert.IsTrue(File.Exists(filename));
             string targetFilename = Path.Combine(Path.GetTempPath(), "testDeleteAndSaveVersionResource.dll");
@@ -349,7 +349,7 @@ namespace Vestris.ResourceLibUnitTests
             VersionResource vr = new VersionResource();
             string testDll = Path.Combine(Path.GetTempPath(), "testLoadNeutralDeleteEnglishResource.dll");
             Console.WriteLine(testDll);
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\6to4svc.dll");
             File.Copy(dll, testDll, true);
             vr.LoadFrom(testDll);
@@ -365,7 +365,7 @@ namespace Vestris.ResourceLibUnitTests
             vr.Language = 1032;
             string testDll = Path.Combine(Path.GetTempPath(), "testLoadDeleteGreekResource.dll");
             Console.WriteLine(testDll);
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string dll = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\6to4svcgreek.dll");
             File.Copy(dll, testDll, true);
             vr.LoadFrom(testDll);

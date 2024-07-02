@@ -36,7 +36,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadAndSaveIconResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string icon1filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Icons\\Icon1.ico");
             Assert.IsTrue(File.Exists(icon1filename));
             IconFile iconFile = new IconFile(icon1filename);
@@ -70,7 +70,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestReplaceIconResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string icon1filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Icons\\Icon1.ico");
             Assert.IsTrue(File.Exists(icon1filename));
             IconFile iconFile = new IconFile(icon1filename);
