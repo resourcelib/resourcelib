@@ -16,7 +16,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadMenuResources()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string filename = Path.Combine(uriPath, @"Binaries\custom.exe");
             using (ResourceInfo ri = new ResourceInfo())
@@ -36,7 +36,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestReadWriteMenuMixedResourceBytes()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string filename = Path.Combine(uriPath, @"Binaries\custom.exe");
             using (ResourceInfo ri = new ResourceInfo())
@@ -59,7 +59,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadMenuResourcesEx()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string filename = Path.Combine(uriPath, @"Binaries\custom.exe");
             using (ResourceInfo ri = new ResourceInfo())

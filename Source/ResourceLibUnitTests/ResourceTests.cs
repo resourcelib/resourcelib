@@ -16,7 +16,7 @@ namespace Vestris.ResourceLibUnitTests
     {
         private static IEnumerable<string> TestFiles {
             get {
-                Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+                Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
                 string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
                 return Directory.GetFiles(Path.Combine(uriPath, "Binaries"));
             }
@@ -76,7 +76,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestCustom()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\custom.exe");
             Assert.IsTrue(File.Exists(filename));
             using (ResourceInfo vi = new ResourceInfo())
@@ -103,7 +103,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestBatchUpdate()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string originalFilename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils.dll");
             string filename = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Binaries\\gutils_changed.dll");
             if (File.Exists(filename)) File.Delete(filename);

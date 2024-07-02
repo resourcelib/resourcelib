@@ -43,7 +43,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadAndSaveBitmapResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string bitmapsdirectory = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Bitmaps");
             foreach (string bitmapfilename in Directory.GetFiles(bitmapsdirectory))
             {
@@ -82,7 +82,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestReplaceBitmapResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string bitmapsdirectory = Path.Combine(Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath)), "Bitmaps");
             foreach (string bitmapfilename in Directory.GetFiles(bitmapsdirectory))
             {

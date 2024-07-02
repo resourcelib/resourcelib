@@ -56,7 +56,7 @@ namespace Vestris.ResourceLibUnitTests
 
         public DialogResourceTests()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
 
             testdata.Add(
@@ -73,7 +73,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadDialogResources()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string filename = Path.Combine(uriPath, @"Binaries\gutils.dll");
             using (ResourceInfo ri = new ResourceInfo())
@@ -130,7 +130,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestAddDialogResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string gutilsdll = Path.Combine(uriPath, @"Binaries\gutils.dll");
             int dialogsBefore = 0;

@@ -16,7 +16,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadStringResources()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string filename = Path.Combine(uriPath, @"Binaries\gutils.dll");
             using (ResourceInfo ri = new ResourceInfo())
@@ -34,7 +34,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestLoadStringResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string filename = Path.Combine(uriPath, @"Binaries\gutils.dll");
             StringResource sr = new StringResource();
@@ -46,7 +46,7 @@ namespace Vestris.ResourceLibUnitTests
         [Test]
         public void TestSaveStringResource()
         {
-            Uri uri = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            Uri uri = new Uri(Assembly.GetExecutingAssembly().Location);
             string uriPath = Path.GetDirectoryName(HttpUtility.UrlDecode(uri.AbsolutePath));
             string sourceFilename = Path.Combine(uriPath, @"Binaries\gutils.dll");
             string targetFilename = Path.Combine(Path.GetTempPath(), "testSaveStringResource.dll");
