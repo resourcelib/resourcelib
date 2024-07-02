@@ -1,4 +1,8 @@
-### 2.2 (Next)
+### 2.2 (7/2/2024)
+
+**Misc**
+
+* [#88](https://github.com/resourcelib/resourcelib/pull/88): Update system.drawing.common nuget package to v4.7.3 - [@ryfu-msft](https://github.com/ryfu-msft).
 
 **Bugs**
 
