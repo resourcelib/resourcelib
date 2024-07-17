@@ -1,7 +1,7 @@
 ResourceLib C# File Resource Management Library
 ===============================================
 
-[![Build status](https://github.com/resourcelib/resourcelib/actions/workflows/dotnet.yml/badge.svg)](https://github.com/resourcelib/resourcelib/actions/dotnet.yml)
+[![Build status](https://github.com/resourcelib/resourcelib/actions/workflows/dotnet.yml/badge.svg)](https://github.com/resourcelib/resourcelib/actions/workflows/dotnet.yml)
 [![NuGet](https://img.shields.io/nuget/v/Vestris.ResourceLib.svg)](https://www.nuget.org/packages/Vestris.ResourceLib/)
 [![NuGet](https://img.shields.io/nuget/vpre/Vestris.ResourceLib.svg)](https://www.nuget.org/packages/Vestris.ResourceLib/absoluteLatest)
 
